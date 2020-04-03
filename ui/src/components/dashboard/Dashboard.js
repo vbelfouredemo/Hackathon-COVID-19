@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import Statistics from './Statistics';
 import Campaigns from './Campaigns';
 import Neededhelp from './Neededhelp';
+import Markets from './Markets';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -31,15 +32,22 @@ export default function CenteredGrid() {
                 <div className={classes.root} style={{ marginTop: 20, padding: 30, backgroundColor: 'slategray' }} >
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <Paper className={classes.paper}>xs=12</Paper>
+                        <Card className={classes.root} variant="outlined">
+                                <CardHeader
+                                    title="COVID-19 Statistics"
+                                />
+                                <CardContent>
+                                    <Statistics />
+                                </CardContent>
+                            </Card>
                         </Grid>
                         <Grid item xs={3}>
                             <Card className={classes.root} variant="outlined">
                             <CardHeader
-                                    title="COVID-19 Statistics "
+                                    title="Market Watch "
                                 />
                                 <CardContent >
-                                    <Statistics />
+                                    <Markets />
                                 </CardContent>
                             </Card>
                         </Grid>
