@@ -8,7 +8,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Typography from '@material-ui/core/Typography';
 import Statistics from './Statistics';
-import Campaigns from './Campaigns'
+import Campaigns from './Campaigns';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -27,15 +27,15 @@ export default function CenteredGrid() {
     return (
         <React.Fragment>
             <Container maxWidth="xl">
-                <div className={classes.root} style={{ marginTop: 20, padding: 30 }}>
+                <div className={classes.root} style={{ marginTop: 20, padding: 30, backgroundColor:'slategray' }} >
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <Paper className={classes.paper}>xs=12</Paper>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <Statistics />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <Card className={classes.root} variant="outlined">
                                 <CardHeader
                                     title="Supplies Near You"
@@ -47,31 +47,17 @@ export default function CenteredGrid() {
                                 </CardContent>
                             </Card>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <Card className={classes.root} variant="outlined">
-                                <CardHeader
-                                    title="Campaigns Near You"
-                                />
-                                <CardContent>
-                                    <Campaigns />
+                                <CardContent >
+                                    <Campaigns/>
                                 </CardContent>
                             </Card>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <Paper className={classes.paper}>xs=6</Paper>
                         </Grid>
-                        <Grid item xs={6}>
-                        <Card className={classes.root} variant="outlined">
-                                <CardHeader
-                                    title="GoFundMe Near You"
-                                />
-                                <CardContent>
-                                    <Typography className={classes.title} color="textSecondary" gutterBottom>
-                                        GoFundMe Near You
-                                    </Typography>
-                                </CardContent>
-                            </Card>
-                        </Grid>
+                        
                     </Grid>
                 </div>
             </Container>
