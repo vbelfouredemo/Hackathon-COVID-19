@@ -27,22 +27,15 @@ export default function CenteredGrid() {
     return (
         <React.Fragment>
             <Container maxWidth="xl">
-                <div className={classes.root} style={{ marginTop: 20, padding: 30 }}>
+                <div className={classes.root} style={{ marginTop: 20, padding: 30, backgroundColor:'slategray' }} >
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <Paper className={classes.paper}>xs=12</Paper>
                         </Grid>
-                        <Grid item xs={6}>
-                            <Card variant="outlined" >
-                                <CardHeader
-                                    title="COVID-19 Statistics"
-                                />
-                                <CardContent>
-                                    <Statistics />
-                                </CardContent>
-                            </Card >
+                        <Grid item xs={3}>
+                            <Statistics />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <Card className={classes.root} variant="outlined">
                                 <CardHeader
                                     title="Supplies Near You"
@@ -54,31 +47,17 @@ export default function CenteredGrid() {
                                 </CardContent>
                             </Card>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <Card className={classes.root} variant="outlined">
-                                <CardHeader
-                                    title="Campaigns Near You"
-                                />
-                                <CardContent>
-
+                                <CardContent >
+                                    <Campaigns/>
                                 </CardContent>
                             </Card>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <Paper className={classes.paper}>xs=6</Paper>
                         </Grid>
-                        <Grid item xs={6}>
-                            <Card className={classes.root} variant="outlined">
-                                <CardHeader
-                                    title="GoFundMe Near You"
-                                />
-                                <CardContent>
-                                    <Typography className={classes.title} color="textSecondary" gutterBottom>
-                                        GoFundMe Near You
-                                    </Typography>
-                                </CardContent>
-                            </Card>
-                        </Grid>
+                        
                     </Grid>
                 </div>
             </Container>
