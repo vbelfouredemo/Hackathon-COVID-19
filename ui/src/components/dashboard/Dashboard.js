@@ -9,6 +9,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Typography from '@material-ui/core/Typography';
 import Statistics from './Statistics';
 import Campaigns from './Campaigns';
+import Neededhelp from './Neededhelp';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -27,13 +28,20 @@ export default function CenteredGrid() {
     return (
         <React.Fragment>
             <Container maxWidth="xl">
-                <div className={classes.root} style={{ marginTop: 20, padding: 30, backgroundColor:'slategray' }} >
+                <div className={classes.root} style={{ marginTop: 20, padding: 30, backgroundColor: 'slategray' }} >
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <Paper className={classes.paper}>xs=12</Paper>
                         </Grid>
                         <Grid item xs={3}>
-                            <Statistics />
+                            <Card className={classes.root} variant="outlined">
+                            <CardHeader
+                                    title="COVID-19 Statistics "
+                                />
+                                <CardContent >
+                                    <Statistics />
+                                </CardContent>
+                            </Card>
                         </Grid>
                         <Grid item xs={3}>
                             <Card className={classes.root} variant="outlined">
@@ -50,14 +58,21 @@ export default function CenteredGrid() {
                         <Grid item xs={3}>
                             <Card className={classes.root} variant="outlined">
                                 <CardContent >
-                                    <Campaigns/>
+                                    <Campaigns />
                                 </CardContent>
                             </Card>
                         </Grid>
                         <Grid item xs={3}>
-                            <Paper className={classes.paper}>xs=6</Paper>
+                        <Card className={classes.root} variant="outlined">
+                            <CardHeader
+                                    title="Needed Help"
+                                />
+                                <CardContent >
+                                    <Neededhelp />
+                                </CardContent>
+                            </Card>
                         </Grid>
-                        
+
                     </Grid>
                 </div>
             </Container>

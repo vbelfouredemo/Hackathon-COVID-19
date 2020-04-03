@@ -55,7 +55,7 @@ class Campaigns extends Component{
         this.refreshlist();
     }
     refreshlist(){
-        fetch('http://localhost:8080/api/mongo/campaigns', {
+        fetch('https://1e10c271567ad134793f520871ded1f590218981.cloudapp-enterprise.appcelerator.com/api/mongo/campaigns', {
             method: "GET",
             headers: new Headers({
                 'Accept': 'application/json',
