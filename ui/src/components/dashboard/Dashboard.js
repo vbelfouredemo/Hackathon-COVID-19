@@ -8,7 +8,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Typography from '@material-ui/core/Typography';
 import Statistics from './Statistics';
-import Campaigns from './Campaigns'
+import Campaigns from './Campaigns';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -33,7 +33,14 @@ export default function CenteredGrid() {
                             <Paper className={classes.paper}>xs=12</Paper>
                         </Grid>
                         <Grid item xs={6}>
-                            <Statistics />
+                            <Card variant="outlined" >
+                                <CardHeader
+                                    title="COVID-19 Statistics"
+                                />
+                                <CardContent>
+                                    <Statistics />
+                                </CardContent>
+                            </Card >
                         </Grid>
                         <Grid item xs={6}>
                             <Card className={classes.root} variant="outlined">
@@ -53,7 +60,7 @@ export default function CenteredGrid() {
                                     title="Campaigns Near You"
                                 />
                                 <CardContent>
-                                    <Campaigns />
+
                                 </CardContent>
                             </Card>
                         </Grid>
@@ -61,7 +68,7 @@ export default function CenteredGrid() {
                             <Paper className={classes.paper}>xs=6</Paper>
                         </Grid>
                         <Grid item xs={6}>
-                        <Card className={classes.root} variant="outlined">
+                            <Card className={classes.root} variant="outlined">
                                 <CardHeader
                                     title="GoFundMe Near You"
                                 />

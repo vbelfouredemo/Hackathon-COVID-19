@@ -11,6 +11,7 @@
     "fast-json-patch": "^3.0.0-1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-geolocated": "^3.0.1",
     "react-scripts": "3.4.1",
     "streamdataio-js-sdk": "^2.0.2",
     "streamdataio-js-sdk-auth": "^2.0.0"
