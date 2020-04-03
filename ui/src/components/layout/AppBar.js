@@ -24,7 +24,7 @@ export default function NavBar() {
             <AppBar position="static">
                 <Toolbar>
                     <Typography variant="h6" className={classes.title}>
-                        Hackathon COVID-19
+                    The Social Isolation Blues Brothers Dashboard
                     </Typography>
                 </Toolbar>
             </AppBar>

@@ -38,7 +38,7 @@ export default function CenteredGrid() {
                         <Grid item xs={3}>
                             <Card className={classes.root} variant="outlined">
                                 <CardHeader
-                                    title="Supplies Near You"
+                                    title="Supplies Near You "
                                 />
                                 <CardContent>
                                     <Typography className={classes.title} color="textSecondary" gutterBottom>
