@@ -28,7 +28,6 @@ class Statistics extends Component {
 
         var eventSource = streamdataio.createEventSource(targetUrl, appToken, []);
         var result = [];
-        console.log("result: ", this.state);
 
         const localSetState = (data) => {
             this.setState({data})
@@ -65,17 +64,11 @@ class Statistics extends Component {
     render() {
         console.log("State: ", this.state);
         return (
-            <Card variant="outlined" >
-                <CardHeader
-                    title="COVID-19 Statistics"
-                />
-                <CardContent>
-                    <Typography color="textSecondary" gutterBottom>
+            <div>
 
-                </Typography>
-                </CardContent>
-            </Card >
-        )
+            </div>
+        );
+ 
     }
 }
 
