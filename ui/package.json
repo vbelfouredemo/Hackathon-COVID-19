@@ -13,7 +13,11 @@
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.0",
     "react-dom": "^16.13.1",
+<<<<<<< HEAD
     "react-geolocated": "^3.0.1",
+=======
+    "react-modal": "^3.11.2",
+>>>>>>> ef449e6e24916ad926ea1d423e3fe3be3a267a4c
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
     "react-show-more-text": "^1.4.0",
