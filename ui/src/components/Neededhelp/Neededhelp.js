@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { geolocated } from 'react-geolocated';
 import axios from 'axios';
+import NeededhelpItem from './NeededhelpItem';
+
 
 class Neededhelp extends Component {
 
@@ -22,8 +23,8 @@ class Neededhelp extends Component {
         
         axios.get('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/neededHelp', options)
           .then(res => {
-              this.setState({ results: res.data.neededhelps});
-              console.log(res.data);
+              this.setState({ result: res.data.neededhelps});
+              console.log("Result: ", res.data.neededhelps);
           })
     }
 
@@ -32,10 +33,14 @@ class Neededhelp extends Component {
     }
 
     render() {
-
+        console.log("this.state.result: ", this.state.result);
         return(
-            <div>
-                Hello
+            <div className="neededhelp-list section">
+                {this.state.result && this.state.result.map(result => {
+                    return (
+                        <NeededhelpItem item={result} key={result.id} />
+                    )
+                })}
             </div>
         )
     }

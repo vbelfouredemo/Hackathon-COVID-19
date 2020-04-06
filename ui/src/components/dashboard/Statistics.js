@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import streams from '../../support/streams';
 
 
 import Card from '@material-ui/core/Card';
@@ -18,7 +17,6 @@ class Statistics extends Component {
     };
 
     getData = () => {
-        // streams.getStream();
 
         var streamdataio = require('streamdataio-js-sdk/dist/bundles/streamdataio-node');
         var jsonPatch = require('fast-json-patch');
@@ -73,3 +71,15 @@ class Statistics extends Component {
 }
 
 export default Statistics;
+
+
+/*
+
+const uniqueTags = [];
+images.map(img => {
+    if (uniqueTags.indexOf(img.tag) === -1) {
+        uniqueTags.push(img.tag)
+    }
+});
+
+*/
