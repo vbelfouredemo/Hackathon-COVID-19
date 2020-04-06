@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 //import {Button} from 'react-bootstrap';
 //import Modal from 'react-modal';
-import {Modal, Row, Col, Form} from 'react-bootstrap'
-import Button from '@material-ui/core/Button';
+import {Button, Modal, Row, Col, Form} from 'react-bootstrap'
+//import Button from '@material-ui/core/Button';
 //import ReactPaginate from 'react-paginate';
 
 //import AddCampaign from './AddCampaign';
@@ -18,12 +18,43 @@ class Campaigns extends Component{
             campaigns: [],
             currentLocation: this.props.currentLocation,
             modal: false,
+            filterModal: false,
             loading: false,
             currentPage: 1,
             camPaignsPerPage: 3
         };
-        console.log('In Campaign==>'+JSON.stringify(this.state
-            ));
+        console.log('In Campaign==>'+JSON.stringify(this.state));
+    };
+    onOpenFilterModal = () => { 
+        this.setState({ filterModal: true });
+    };
+
+    onCloseFilterModal = () => {
+        this.setState({ filterModal: false });
+        //this.refreshlist();
+    };
+    filterCampaign(event){
+        event.preventDefault();
+        const data = JSON.stringify({
+            type : event.target.type.value,
+            propValue : event.target.city.value
+        });
+        fetch('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/campaigns', {
+            method: "POST",
+            headers: new Headers({
+                'Accept': 'application/json',
+                'Content-Type': ' application/json',
+                'Authorization': 'Apikey ae1528d0-fc6a-4235-89bd-f9d4ae46e122'
+            }),
+            body: data
+        }).then(function(response) {
+            if(response.ok) {
+              alert('Campaign successfully added!');
+              //document.getElementById("caddCampaignForm").reset();
+            }
+         }).then(function(data) { 
+           //console.log(data)
+         }).catch(console.log)
     }
     onOpenModal = () => { 
         this.setState({ modal: true });
@@ -77,13 +108,13 @@ class Campaigns extends Component{
             <div className="campaigns" >
                 <h4>Local businesses need your help</h4>
                 <span className="text-left">
-                    <a href="#">
+                    <a href="#" onClick={this.onOpenFilterModal}>
                         <img alt="donate" src="../img/filter.png" />
                     </a>
                 </span>
-                <span className="text-right" align="right">
+                <span className="text-right" style={{float: 'right'}}>
                     <Button 
-                        variant="contained" color="primary"
+                        variant="primary"
                         onClick={this.onOpenModal}>
                         Add New Campaign
                     </Button>
@@ -135,6 +166,46 @@ class Campaigns extends Component{
                                             Add Campaign
                                         </Button>
                                         <Button onClick={this.onCloseModal} variant="secondary" style={{float: 'right'}}>Close</Button>
+                                    </Form.Group>
+                                </Form>
+                            </Col>
+                        </Row>
+                    </div>
+                </Modal.Body>
+            </Modal>
+            <Modal
+                show={this.state.filterModal}
+                onHide={this.onCloseModal}
+                size="lg"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+                >
+                <Modal.Header>
+                    <Modal.Title id="contained-modal-title-vcenter">
+                        Add your Filter for local Business Campaign
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <div className="container">
+                        <Row>
+                            <Col>
+                                <Form onSubmit={this.filterCampaign} id="addCampaignFilter">
+                                    <Form.Group controlId="name" >
+                                        <Form.Control as="select" name="type" placeholder="Type">
+                                            <option value="">Select Type of filter</option>
+                                            <option value="name">Name</option>
+                                            <option value="zipcode">Zipcode</option>
+                                            <option value="neighbourhood">Neighbourhood</option>
+                                            <option value="city">City</option>
+                                            <option value="state">State</option>
+                                        </Form.Control><br/>
+                                        <Form.Control type="text" name="propValue" required placeholder="Value of the type"/><br/>
+                                    </Form.Group>
+                                    <Form.Group>
+                                        <Button variant="primary" type="submit">
+                                            Apply Filter
+                                        </Button>
+                                        <Button onClick={this.onCloseFilterModal} variant="secondary" style={{float: 'right'}}>Close</Button>
                                     </Form.Group>
                                 </Form>
                             </Col>
