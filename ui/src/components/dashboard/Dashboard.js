@@ -9,7 +9,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Typography from '@material-ui/core/Typography';
 import Statistics from './Statistics';
 import Campaigns from './Campaigns';
-import Neededhelp from './Neededhelp';
+import Neededhelp from '../NeededHelp/Neededhelp';
 import Markets from './Markets';
 
 const useStyles = makeStyles(theme => ({
