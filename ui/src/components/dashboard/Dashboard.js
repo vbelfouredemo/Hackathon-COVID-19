@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{ Component } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -23,67 +23,80 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default function CenteredGrid() {
-    const classes = useStyles();
+//export default function CenteredGrid({props}) {
+class Dashboard extends Component{
+    constructor(props){
+        super(props);
 
-    return (
-        <React.Fragment>
-            <Container maxWidth="xl">
-                <div className={classes.root} style={{ marginTop: 20, padding: 30, backgroundColor: 'slategray' }} >
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                        <Card className={classes.root} variant="outlined">
-                                <CardHeader
-                                    title="COVID-19 Statistics"
-                                />
-                                <CardContent>
-                                    <Statistics />
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <Card className={classes.root} variant="outlined">
-                            <CardHeader
-                                    title="Market Watch "
-                                />
-                                <CardContent >
-                                    <Markets />
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <Card className={classes.root} variant="outlined">
-                                <CardHeader
-                                    title="Supplies Near You "
-                                />
-                                <CardContent>
-                                    <Typography className={classes.title} color="textSecondary" gutterBottom>
-                                        Supplies Near You
-                                    </Typography>
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <Card className={classes.root} variant="outlined">
-                                <CardContent >
-                                    <Campaigns />
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                        <Grid item xs={3}>
-                        <Card className={classes.root} variant="outlined">
-                            <CardHeader
-                                    title="Needed Help"
-                                />
-                                <CardContent >
-                                    <Neededhelp />
-                                </CardContent>
-                            </Card>
-                        </Grid>
+    }  
 
-                    </Grid>
-                </div>
-            </Container>
-        </React.Fragment>
-    )
+    render(props){
+        const classes = this.props;
+        console.log('dashboard', JSON.stringify(classes));
+        return (
+            <React.Fragment>
+                <Container maxWidth="xl">
+                    <div style={{ marginTop: 20, padding: 30, backgroundColor: 'slategray' }} >
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                            <Card variant="outlined">
+                                    <CardHeader
+                                        title="COVID-19 Statistics"
+                                    />
+                                    <CardContent>
+                                        <Statistics />
+                                        <p>
+                                                Your location: {classes.currentLocation.neighbourhood}
+                                        </p>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid item xs={3}>
+                                <Card variant="outlined">
+                                <CardHeader
+                                        title="Market Watch "
+                                    />
+                                    <CardContent >
+                                        <Markets />
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid item xs={3}>
+                                <Card  variant="outlined">
+                                    <CardHeader
+                                        title="Supplies Near You "
+                                    />
+                                    <CardContent>
+                                        <Typography color="textSecondary" gutterBottom>
+                                            Supplies Near You
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid item xs={3}>
+                                <Card variant="outlined">
+                                    <CardContent >
+                                        <Campaigns currentLocation={classes.currentLocation}/>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid item xs={3}>
+                            <Card variant="outlined">
+                                <CardHeader
+                                        title="Needed Help"
+                                    />
+                                    <CardContent >
+                                        <Neededhelp />
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+    
+                        </Grid>
+                    </div>
+                </Container>
+            </React.Fragment>
+        )
+    }
 }
+
+export default Dashboard;
