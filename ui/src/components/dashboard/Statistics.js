@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { makeStyles } from '@material-ui/styles';
 
 
 import Card from '@material-ui/core/Card';
@@ -6,6 +7,13 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Typography from '@material-ui/core/Typography';
 import { JsonPatchError } from 'fast-json-patch/module/core';
+
+const useStyles = makeStyles(theme => ({
+    root: {
+        padding: theme.spacing(4)
+    }
+}));
+
 
 
 class Statistics extends Component {
@@ -59,11 +67,12 @@ class Statistics extends Component {
         this.getData();
     }
 
+
     render() {
         console.log("State: ", this.state);
         return (
-            <div>
-
+            <div className={useStyles.root}> 
+                Hello
             </div>
         );
  
