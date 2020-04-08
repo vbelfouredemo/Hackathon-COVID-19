@@ -32,15 +32,17 @@ class Neededhelp extends Component {
         axios.get('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/neededHelp', options)
           .then(res => {
                 var neededHelps = res.data.neededhelps;
-                neededHelps.forEach(function (element) {
-                    element.offeredhelpIds = ['test@gmail.com'];
-                });
+                // neededHelps.forEach(function (element) {
+                //     element.offeredhelpIds = ['test@gmail.com'];
+                // });
                 for(var i = 0; i < neededHelps.length; i++) {
                     var offeredhelpIds =  neededHelps[i].offeredhelpIds;
-                    if(offeredhelpIds.indexOf(this.state.loggedInUser.email) > -1){
-                        neededHelps[i].signedUp = true;
-                    }else{
-                        neededHelps[i].signedUp = false;
+                    if (undefined !== offeredhelpIds){
+                        if(offeredhelpIds.indexOf(this.state.loggedInUser.email) > -1){
+                            neededHelps[i].signedUp = true;
+                        }else{
+                            neededHelps[i].signedUp = false;
+                        }
                     }
                     var count = parseInt(neededHelps[i].count);
                     var offeredHelpCount = parseInt(neededHelps[i].offeredHelpCount);

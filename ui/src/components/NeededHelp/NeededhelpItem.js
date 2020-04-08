@@ -20,7 +20,7 @@ const NeededhelpItem = ({ items, loggedInUser, removeIds, addIds }) => {
                 <span >
                     {(item.signedUp)
                         ? <Button variant="outlined" color="primary"  onClick= { () =>removeIds(item.id)}>Thank You for signing up for help</Button>
-                        : (item.moreHelpNeeded)? <Button variant="outlined" color="primary" onClick= { () =>addIds(item.id)} >Signup for help!</Button>:<Button variant="outlined" color="inherit">We\'ve got enough help, Thank You!</Button>
+                        : (item.moreHelpNeeded)? <Button variant="outlined" color="primary" onClick= { () =>addIds(item.id)} >Signup for help!</Button>:<Button variant="outlined" color="inherit">We have got enough help, Thank You!</Button>
                     }
                 </span>
                 <hr></hr>

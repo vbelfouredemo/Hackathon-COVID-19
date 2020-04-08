@@ -28,7 +28,7 @@ class Supplies extends Component{
         console.log(geocodedPrediction, originalPrediction) // eslint-disable-line
         this.setState({
             search: "",
-            value: geocodedPrediction.formatted_address,
+            value: originalPrediction.structured_formatting.main_text,
         })
     }
  
@@ -136,17 +136,11 @@ class Supplies extends Component{
                                                             </div>
                                                         )}
                                                     >
-                                                        <input
-                                                            type="text"
-                                                            value={value}
-                                                            placeholder="Search a location"
-                                                            onChange={this.handleInputChange}
-                                                        />
+                                                    <Form.Control type="text" name="storeName" value={value} onChange={this.handleInputChange} required placeholder="Name of the local store"/><br/>
                                                     </ReactGooglePlacesSuggest>
                                                 )
                                             }
                                         />
-                                            <Form.Control type="text" name="storeName" required placeholder="Name of the local store"/><br/>
                                             <Form.Control as="textarea" rows="3" name="statement"  required  placeholder="Description, availability, count, etc. of the item"/>
                                         </Form.Group>
                                         <Form.Group>
