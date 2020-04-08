@@ -4,7 +4,11 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import {Modal, Row, Col, Form} from 'react-bootstrap'
+import {Modal, Row, Col, Form} from 'react-bootstrap';
+import Login from '../LogIn/Login';
+import Geocode from "react-geocode"
+Geocode.setApiKey("AIzaSyB_Idu-JfFY9FeTmEJO9mihrD5MUYvgMjw");
+Geocode.setLanguage("en");
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -31,7 +35,8 @@ class NavBar extends Component{
         super(props);
         this.state = {
             modal: false,
-            currentLocation: this.props.currentLocation
+            currentLocation: this.props.currentLocation,
+            isUserLoggedIn: false
         };
     }
     onOpenModal = () => { 
@@ -43,15 +48,43 @@ class NavBar extends Component{
     };
     changeLocation= (event) =>{
         event.preventDefault();
-        const newLocation = {
-            zipcode : event.target.zipcode.value,
-            state : event.target.state.value,
-            city : event.target.city.value,
-            neighbourhood : event.target.neighbourhood.value
-        };
-        this.setState({currentLocation:newLocation});
-        this.setState({ modal: false });
+        // const newLocation = {
+        //     zipcode : event.target.zipcode.value,
+        //     state : event.target.state.value,
+        //     city : event.target.city.value,
+        //     neighbourhood : event.target.neighbourhood.value
+        // };
+        //this.setState({currentLocation:newLocation});        
+        //this.setState({ modal: false });
+        var latitude, longitude, neighbourhood, sublocality, city, zipcode;
+        Geocode.fromAddress(event.target.address.value).then(
+            response => {
+              const addressComponents = response.results[0].address_components;
+              //console.log(addressComponents);
+              if(addressComponents !=null){
+                  for(var i = 0; i < addressComponents.length; i++) {
+                      var obj = addressComponents[i];
+                      var types = obj.types;
+                    if(types.indexOf('neighborhood') > -1){
+                        neighbourhood = obj.long_name;
+                    }else if(types.indexOf('locality') > -1){
+                        city = obj.long_name;
+                    }else if(types.indexOf('administrative_area_level_1') > -1){
+                      sublocality = obj.long_name;
+                    }else if(types.indexOf('postal_code') > -1){
+                        zipcode = obj.long_name;
+                    }
+                } 
+              }
+              //console.log(addressComponents);
+              alert(JSON.stringify(addressComponents));
+            },
+            error => {
+              console.error(error);
+            });
+            //console.log('details from geocode api '+ JSON.stringify(this.state.currentLocation));
     }
+
     componentWillReceiveProps(props) {
         //console.log('updating props.............')
         this.setState({ currentLocation: props.currentLocation });  
@@ -63,13 +96,17 @@ class NavBar extends Component{
             <div >
                <AppBar position="static">
                    <Toolbar>
-                       <Typography variant="h6" style={{ marginRight: 700 }}>
+                       <Typography variant="h6" >
                        The Social Isolation Blues Brothers Dashboard
+                       </Typography>
+                       <Typography >
+                           <Login/>
                        </Typography>
                        <Typography >
                               Your location: {this.state.currentLocation.neighbourhood}, {this.state.currentLocation.city}, {this.state.currentLocation.zipcode}
                        </Typography>
-                       <Button variant="outlined" color="inherit" style={{ marginLeft: 10 }} onClick={this.onOpenModal}>
+                       &nbsp;&nbsp;&nbsp;
+                       <Button variant="outlined" color="inherit"  onClick={this.onOpenModal}>
                         Change Location
                        </Button>
                    </Toolbar>
@@ -93,10 +130,7 @@ class NavBar extends Component{
                        <Col>
                            <Form onSubmit={this.changeLocation} id="addLocationForm">
                                <Form.Group controlId="name" >
-                                   <Form.Control type="text" name="zipcode" required placeholder="Zipcode"/><br/>
-                                   <Form.Control type="text" name="city" required placeholder="City"/><br/>
-                                   <Form.Control type="text" name="neighbourhood" required placeholder="Neighbourhood"/><br/>
-                                   <Form.Control type="text" name="state" required placeholder="State"/><br/>
+                                   <Form.Control type="text" name="address" required placeholder="Address"/><br/>
                                </Form.Group>
                                <Form.Group>
                                    <Button variant="primary" type="submit">

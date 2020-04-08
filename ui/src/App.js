@@ -11,8 +11,8 @@ Geocode.setLanguage("en");
 class App extends Component {
   state = {
     currentLocation : {
-      city: 'Atlanta',
-      zipcode: 30339,
+      city: '',
+      zipcode: '',
       neighbourhood: '',
       sublocality: '',
       lat: '',

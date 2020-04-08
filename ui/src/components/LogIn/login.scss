@@ -1,0 +1,55 @@
+.loginlogout {
+    text-align: center;
+    margin-right: 10px;
+    .button {
+        display: inline-block;
+        cursor: pointer;
+        width: auto;
+        text-align: center;
+        text-decoration: none;
+        color: #fff;
+        background-color: #3f51b5;
+        border-width: thin;
+        border-radius: 5px;
+        padding-top: 5px;
+        margin-left: 500px;
+        &:hover {
+            background-color: #3f51b5
+        }
+        &:active {
+            background-color: #3f51b5;
+            transform: translateY(4px);
+        }
+    }
+    .logout-button {
+        display: inline-block;
+        cursor: pointer;
+        width: auto;
+        text-align: center;
+        text-decoration: none;
+        color: #fff;
+        background-color: #3f51b5;
+        border-width: thin;
+        border-radius: 5px;
+        padding-top: 5px;
+        &:hover {
+            background-color: #3f51b5
+        }
+        &:active {
+            background-color: #3f51b5;
+            transform: translateY(4px);
+        }
+    }
+    .logout{
+        margin-left: 400px;
+    }
+}
+
+@keyframes myMove {
+    0% {
+        transform: translateY(-130%);
+    }
+    100% {
+        transform: translateY(0%);
+    }
+}

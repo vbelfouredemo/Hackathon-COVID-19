@@ -1,19 +1,19 @@
 import React, { Component } from 'react'
+import {Button, Modal, Row, Col, Form} from 'react-bootstrap'
 //import {Button} from 'react-bootstrap';
 //import Modal from 'react-modal';
-import {Button, Modal, Row, Col, Form} from 'react-bootstrap'
 //import Button from '@material-ui/core/Button';
 //import ReactPaginate from 'react-paginate';
 
 //import AddCampaign from './AddCampaign';
-import Pagination from './Pagination';
+import Pagination from '../Pagination/Pagination';
 import CampaignList from './CampaignList';
 import Icon from '@material-ui/core/Icon';
+import 'bootstrap/dist/css/bootstrap.min.css';
 class Campaigns extends Component{
 
     constructor(props){
         super(props);
-        console.log('campaign', props.currentLocation)
         this.state = {
             campaigns: [],
             currentLocation: this.props.currentLocation,
@@ -21,9 +21,10 @@ class Campaigns extends Component{
             filterModal: false,
             loading: false,
             currentPage: 1,
-            camPaignsPerPage: 3
+            camPaignsPerPage: 4
         };
-        console.log('In Campaign==>'+JSON.stringify(this.state));
+        //console.log('In Campaign==>'+JSON.stringify(this.state));
+        console.log('campaign', props.currentLocation)
     };
     onOpenFilterModal = () => { 
         this.setState({ filterModal: true });
@@ -107,18 +108,16 @@ class Campaigns extends Component{
             <>
             <div className="campaigns" >
                 <h4>Local businesses need your help</h4>
-                <span className="text-left">
+                <span className="text-right" style={{float: 'right'}}>
                     <a href="#" onClick={this.onOpenFilterModal}>
                         <img alt="donate" src="../img/filter.png" />
                     </a>
+                    &nbsp; &nbsp; &nbsp;
+                    <a href="#" onClick={this.onOpenModal}>
+                        <img alt="Add New Campaign" src="../img/plus.png" title="Add New Campaign" />
+                    </a>
                 </span>
-                <span className="text-right" style={{float: 'right'}}>
-                    <Button 
-                        variant="primary"
-                        onClick={this.onOpenModal}>
-                        Add New Campaign
-                    </Button>
-                </span>
+                <br/> <br/>
                 <CampaignList campaigns={currentCampaigns}  />
 
                 <Pagination
@@ -236,7 +235,7 @@ class Campaigns extends Component{
     }
     componentWillReceiveProps(props) {
         this.setState({ currentLocation: props.currentLocation });  
-        console.log('updating props.............'+JSON.stringify(this.state));
+        //console.log('updating props.............'+JSON.stringify(this.state));
     }
     //componentDidUpdate(prevProps){
         //console.log(this.state);

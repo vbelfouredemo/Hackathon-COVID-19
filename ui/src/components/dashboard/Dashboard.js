@@ -7,10 +7,11 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Typography from '@material-ui/core/Typography';
-import Statistics from './Statistics';
-import Campaigns from './Campaigns';
+import Statistics from '../Statistics/Statistics';
+import Campaigns from '../Campaigns/Campaigns';
 import Neededhelp from '../NeededHelp/Neededhelp';
-import Markets from './Markets';
+import Supplies from '../supplies/Supplies';
+import Markets from '../Markets/Markets';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -27,9 +28,15 @@ const useStyles = makeStyles(theme => ({
 class Dashboard extends Component{
     constructor(props){
         super(props);
-
+        this.state = {
+            currentLocation: this.props.currentLocation
+        };
     }  
-
+    componentWillReceiveProps(props) {
+        //console.log('updating props.............')
+        this.setState({ currentLocation: props.currentLocation });  
+    }
+    
     render(props){
         const classes = this.props;
         console.log('dashboard', JSON.stringify(classes));
@@ -39,7 +46,7 @@ class Dashboard extends Component{
                     <div style={{ marginTop: 20, padding: 30, backgroundColor: 'slategray' }} >
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
-                            <Card variant="outlined">
+                                <Card variant="outlined">
                                     <CardHeader
                                         title="COVID-19 Statistics"
                                     />
@@ -53,39 +60,28 @@ class Dashboard extends Component{
                             </Grid>
                             <Grid item xs={3}>
                                 <Card variant="outlined">
-                                <CardHeader
-                                        title="Market Watch "
-                                    />
-                                    <CardContent >
+                                    <CardContent style={{height:'850px'}}>
                                         <Markets />
                                     </CardContent>
                                 </Card>
                             </Grid>
                             <Grid item xs={3}>
                                 <Card  variant="outlined">
-                                    <CardHeader
-                                        title="Supplies Near You "
-                                    />
-                                    <CardContent>
-                                        <Typography color="textSecondary" gutterBottom>
-                                            Supplies Near You
-                                        </Typography>
+                                    <CardContent style={{height:'850px'}}>
+                                        <Supplies currentLocation={this.state.currentLocation}/>
                                     </CardContent>
                                 </Card>
                             </Grid>
                             <Grid item xs={3}>
                                 <Card variant="outlined">
-                                    <CardContent >
-                                        <Campaigns currentLocation={classes.currentLocation}/>
+                                    <CardContent style={{height:'850px'}}>
+                                        <Campaigns currentLocation={this.state.currentLocation}/>
                                     </CardContent>
                                 </Card>
                             </Grid>
-                            <Grid item xs={3}>
-                            <Card variant="outlined">
-                                <CardHeader
-                                        title="Needed Help"
-                                    />
-                                    <CardContent >
+                            <Grid item xs={3} >
+                                <Card variant="outlined">
+                                    <CardContent style={{height:'850px'}}>
                                         <Neededhelp />
                                     </CardContent>
                                 </Card>
