@@ -4,26 +4,23 @@ import React, { Component } from 'react'
 import {Modal, Row, Col, Form} from 'react-bootstrap'
 import Button from '@material-ui/core/Button';
 //import ReactPaginate from 'react-paginate';
+import { connect } from 'react-redux';
 
 //import AddCampaign from './AddCampaign';
 import Pagination from './Pagination';
 import CampaignList from './CampaignList';
-import Icon from '@material-ui/core/Icon';
+
 class Campaigns extends Component{
 
     constructor(props){
         super(props);
-        console.log('campaign', props.currentLocation)
         this.state = {
             campaigns: [],
-            currentLocation: this.props.currentLocation,
             modal: false,
             loading: false,
             currentPage: 1,
             camPaignsPerPage: 3
         };
-        console.log('In Campaign==>'+JSON.stringify(this.state
-            ));
     }
     onOpenModal = () => { 
         this.setState({ modal: true });
@@ -64,6 +61,7 @@ class Campaigns extends Component{
     }
     render(){
         const {modal} = this.state;
+        console.log('Props from Campaign:', this.props.currentLocation);
         //const campaigns = this.state.campaigns;
         // Get current posts
         const indexOfLastCampaign = this.state.currentPage * this.state.camPaignsPerPage;
@@ -163,10 +161,12 @@ class Campaigns extends Component{
             })
             .catch(console.log)
     }
+    /*
     componentWillReceiveProps(props) {
         this.setState({ currentLocation: props.currentLocation });  
         console.log('updating props.............'+JSON.stringify(this.state));
     }
+    */
     //componentDidUpdate(prevProps){
         //console.log(this.state);
         //console.log(prevProps.state.campaigns);
@@ -175,5 +175,10 @@ class Campaigns extends Component{
 
 }
 
+const mapStateToProps = (state) => {
+    return {
+      currentLocation: state.currentLocation
+    }
+  }
 
-export default Campaigns
+export default connect(mapStateToProps)(Campaigns)

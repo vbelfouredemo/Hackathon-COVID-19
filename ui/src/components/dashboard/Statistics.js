@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import streams from '../../support/streams';
+import { connect } from 'react-redux';
 
 
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import Typography from '@material-ui/core/Typography';
-import { JsonPatchError } from 'fast-json-patch/module/core';
+// import Card from '@material-ui/core/Card';
+// import CardContent from '@material-ui/core/CardContent';
+// import CardHeader from '@material-ui/core/CardHeader';
+// import Typography from '@material-ui/core/Typography';
+// import { JsonPatchError } from 'fast-json-patch/module/core';
 
 
 class Statistics extends Component {
@@ -62,14 +62,21 @@ class Statistics extends Component {
     }
 
     render() {
-        console.log("State: ", this.state);
+        console.log("State from Statistics: ", this.state);
+        console.log("Props from Statistics: ", this.props.currentLocation);
         return (
             <div>
-
+                Location: { this.props.currentLocation.city }
             </div>
         );
  
     }
 }
 
-export default Statistics;
+const mapStateToProps = (state) => {
+    return {
+        currentLocation: state.currentLocation
+    }
+}
+
+export default connect(mapStateToProps)(Statistics);
