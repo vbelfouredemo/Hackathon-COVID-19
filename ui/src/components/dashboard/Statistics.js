@@ -62,8 +62,6 @@ class Statistics extends Component {
     }
 
     render() {
-        console.log("State from Statistics: ", this.state);
-        console.log("Props from Statistics: ", this.props.currentLocation);
         return (
             <div>
                 Location: { this.props.currentLocation.city }

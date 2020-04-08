@@ -33,7 +33,6 @@ class Dashboard extends Component{
 
     render(props){
         const classes = this.props;
-        console.log('dashboard', JSON.stringify(classes));
         return (
             <React.Fragment>
                 <Container maxWidth="xl">

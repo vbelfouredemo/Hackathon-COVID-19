@@ -61,7 +61,6 @@ class Campaigns extends Component{
     }
     render(){
         const {modal} = this.state;
-        console.log('Props from Campaign:', this.props.currentLocation);
         //const campaigns = this.state.campaigns;
         // Get current posts
         const indexOfLastCampaign = this.state.currentPage * this.state.camPaignsPerPage;
