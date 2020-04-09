@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import {Button, Modal, Row, Col, Form} from 'react-bootstrap'
 import ReactGoogleMapLoader from "react-google-maps-loader"
 import ReactGooglePlacesSuggest from "react-google-places-suggest"
+import Pagination from '../Pagination/Pagination';
+import SupplList from './SupplyList';
  
 const MY_API_KEY = "AIzaSyB_Idu-JfFY9FeTmEJO9mihrD5MUYvgMjw"
 
@@ -14,10 +16,11 @@ class Supplies extends Component{
             currentLocation: this.props.currentLocation,
             modal: false,
             currentPage: 1,
-            camPaignsPerPage: 4,
+            suppliesPerPage: 4,
             search: "",
             value: "",
         };
+        this.addSupply = this.addSupply.bind(this)
         //console.log('In Campaign==>'+JSON.stringify(this.state));
     };
     handleInputChange = e => {
@@ -26,10 +29,36 @@ class Supplies extends Component{
  
     handleSelectSuggest = (geocodedPrediction, originalPrediction) => {
         console.log(geocodedPrediction, originalPrediction) // eslint-disable-line
+        var neighbourhood, state, city, zipcode;
+        const addressComponents = geocodedPrediction.address_components;
+            //console.log(addressComponents);
+            if(addressComponents !=null){
+                for(var i = 0; i < addressComponents.length; i++) {
+                    var obj = addressComponents[i];
+                    var types = obj.types;
+                if(types.indexOf('neighborhood') > -1){
+                    neighbourhood = obj.long_name;
+                }else if(types.indexOf('locality') > -1){
+                    city = obj.long_name;
+                }else if(types.indexOf('administrative_area_level_1') > -1){
+                    state = obj.long_name;
+                }else if(types.indexOf('postal_code') > -1){
+                    zipcode = obj.long_name;
+                }
+            } 
+        }
         this.setState({
             search: "",
             value: originalPrediction.structured_formatting.main_text,
+            formattedAddress: geocodedPrediction.formatted_address,
+            city: city,
+            state: state,
+            zipcode: zipcode,
+            neighbourhood: neighbourhood,
+            googlePlaceId: geocodedPrediction.place_id,
+            types: geocodedPrediction.types            
         })
+        
     }
  
     handleNoResult = () => {
@@ -45,41 +74,69 @@ class Supplies extends Component{
 
     onCloseModal = () => {
         this.setState({ modal: false });
-        //this.refreshlist();
+        this.getSupplies();
     };
+    componentDidMount() {
+        this.getSupplies();
+    }
+    getSupplies(){
+        fetch('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/supplies', {
+            method: "GET",
+            headers: new Headers({
+                'Accept': 'application/json',
+                'Content-Type': ' application/json',
+                'authorization': 'Apikey ae1528d0-fc6a-4235-89bd-f9d4ae46e122'
+                //'apikey': 'ae1528d0-fc6a-4235-89bd-f9d4ae46e122'
+            })
+        }).then(res => res.json())
+            .then((data) => {
+                this.setState({ supplies: data.supplies })
+            })
+            .catch(console.log)
+    }
     addSupply(event){
         event.preventDefault();
         const data = JSON.stringify({
-            name : event.target.storeName.value,
-            type : event.target.type.value,
-            city : event.target.city.value,
-            neighbourhood : event.target.neighbourhood.value,
-            state : event.target.state.value,
-            phone : event.target.phone.value,
-            charityURL : event.target.url.value,
-            statement : event.target.statement.value
+            storeName : event.target.storeName.value,
+            //types : this.state.types,
+            description : event.target.description.value,
+            //neighbourhood : this.state.neighbourhood,
+            state : this.state.state,
+            city : this.state.city,
+            zipcode : this.state.zipcode,
+            formattedAddress : this.state.formattedAddress,
+            googlePlaceId: this.state.googlePlaceId,
+            createdTime: new Date()
         });
-        fetch('http://localhost:8080/api/mongo/supplies', {
+        console.log('supplies', data)
+        fetch('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/supplies', {
             method: "POST",
             headers: new Headers({
                 'Accept': 'application/json',
                 'Content-Type': ' application/json',
-                'Authorization': 'Basic QnhnTG5OaDF4UnluOTlPdnBPaVd1SUdMZi9pL0NqZDA6'
+                'Authorization': 'Apikey ae1528d0-fc6a-4235-89bd-f9d4ae46e122'
             }),
             body: data
         }).then(function(response) {
             if(response.ok) {
-              alert('Campaign successfully added!');
-              document.getElementById("caddCampaignForm").reset();
+              alert('Local supply added successfully!');
+              //document.getElementById("caddCampaignForm").reset();
             }
          }).then(function(data) { 
            console.log(data)
          }).catch(console.log)
 
-        
     }
     render(){
         const {search, value} = this.state
+        const indexOfLastSupply = this.state.currentPage * this.state.suppliesPerPage;
+        const indexOfFirstSupply = indexOfLastSupply - this.state.suppliesPerPage;
+        const currentSupplies = this.state.supplies.slice(indexOfFirstSupply, indexOfLastSupply);
+        // currentSupplies.forEach(function (element) {
+        //     element.timeDifference = timeDiffCalc(new Date(), element.createdTime);
+        // });
+        // Change page
+        const paginate = pageNumber => this.setState({currentPage: pageNumber}) //setCurrentPage(pageNumber);
         return(
             <>
                 <div className="supplies" >
@@ -90,6 +147,13 @@ class Supplies extends Component{
                         </a>
                     </span>
                     <br/> <br/>
+                    <SupplList supplies={currentSupplies} timeDiffCalc={this.timeDiffCalc} />
+
+                    <Pagination
+                        postsPerPage={this.state.suppliesPerPage}
+                        totalPosts={this.state.supplies.length}
+                        paginate={paginate}
+                    />
                 </div>
                 <Modal
                 show={this.state.modal}
@@ -141,7 +205,7 @@ class Supplies extends Component{
                                                 )
                                             }
                                         />
-                                            <Form.Control as="textarea" rows="3" name="statement"  required  placeholder="Description, availability, count, etc. of the item"/>
+                                            <Form.Control as="textarea" rows="3" name="description"  required  placeholder="Description, availability, count, etc. of the item"/>
                                         </Form.Group>
                                         <Form.Group>
                                             <Button variant="primary" type="submit">
@@ -157,6 +221,30 @@ class Supplies extends Component{
                 </Modal>
             </>
         )
+    }
+    timeDiffCalc(dateFuture, dateNow){
+        let diffInMilliSeconds = Math.abs(dateFuture - dateNow) / 1000;
+        // calculate days
+        const days = Math.floor(diffInMilliSeconds / 86400);
+        diffInMilliSeconds -= days * 86400;
+        console.log('calculated days', days);
+        // calculate hours
+        const hours = Math.floor(diffInMilliSeconds / 3600) % 24;
+        diffInMilliSeconds -= hours * 3600;
+        console.log('calculated hours', hours);
+        // calculate minutes
+        const minutes = Math.floor(diffInMilliSeconds / 60) % 60;
+        diffInMilliSeconds -= minutes * 60;
+        console.log('minutes', minutes);
+        let difference = '';
+        if (days > 0) {
+            difference += (days === 1) ? `${days} day, ` : `${days} days, `;
+        }
+        if (hours > 0) {
+            difference += (hours === 0 || hours === 1) ? `${hours} hour, ` : `${hours} hours, `;
+        }
+        difference += (minutes === 0 || hours === 1) ? `${minutes} minutes` : `${minutes} minutes`; 
+        return difference;
     }
 }
 

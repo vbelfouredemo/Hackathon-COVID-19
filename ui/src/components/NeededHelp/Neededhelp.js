@@ -61,6 +61,31 @@ class Neededhelp extends Component {
     };
     addIds(id){ 
         console.log('addIds..', id);
+        var updatedHelp;
+        var neededHelps = this.state.result;
+        neededHelps.forEach(function (element) {
+            if(element.id == id){
+                element['offeredhelpIds'].push(this.state.loggedInUser.email);
+            }
+            updatedHelp = element;
+        });
+        fetch('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/neededHelp/'+id, {
+            method: "PUT",
+            headers: new Headers({
+                'Accept': 'application/json',
+                'Content-Type': ' application/json',
+                'Authorization': 'Apikey ae1528d0-fc6a-4235-89bd-f9d4ae46e122'
+            }),
+            body: updatedHelp
+        }).then(function(response) {
+            if(response.ok) {
+              alert('Help successfully added!');
+              this.getData();
+              //document.getElementById("caddCampaignForm").reset();
+            }
+         }).then(function(data) { 
+           //console.log(data)
+         }).catch(console.log)
     };
     componentDidMount = () => {
         this.getData();
