@@ -54,6 +54,7 @@ class NavBar extends Component {
     handleUpdateLocation(e) {
         e.preventDefault();
         this.props.updateLocation(this.state.zip);
+        this.setState({ updateLocation: false });
         //console.log("handleUpdateLocation: ", this.state.zip);
         //this.props.updateLocation(e.zip)
     }
