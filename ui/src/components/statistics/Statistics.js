@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+
 
 // import Card from '@material-ui/core/Card';
 // import CardContent from '@material-ui/core/CardContent';
@@ -30,12 +34,12 @@ class Statistics extends Component {
         var result = [];
 
         const localSetState = (data) => {
-            this.setState({data})
+            this.setState({ data })
         };
 
         eventSource
             .onOpen(function () {
-                console.log("connected!");         
+                console.log("connected!");
             })
             .onData(function (data) {
                 console.log("data received");
@@ -63,11 +67,17 @@ class Statistics extends Component {
 
     render() {
         return (
-            <div>
-                Location: { this.props.currentLocation.city }
-            </div>
+            <Card variant="outlined">
+                <CardHeader
+                    title="COVID-19 Statistics"
+                />
+                <CardContent>
+                    Location: {this.props.currentLocation.city}
+                </CardContent>
+            </Card>
+
         );
- 
+
     }
 }
 

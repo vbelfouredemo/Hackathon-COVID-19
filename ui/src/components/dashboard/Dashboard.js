@@ -1,4 +1,4 @@
-import React,{ Component } from 'react';
+import React, { Component } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 // import Paper from '@material-ui/core/Paper';
@@ -8,10 +8,11 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Typography from '@material-ui/core/Typography';
-import Statistics from './Statistics';
-import Campaigns from './Campaigns';
+import Statistics from '../statistics/Statistics';
+import Campaigns from '../campaigns/Campaigns';
 import Neededhelp from '../NeededHelp/Neededhelp';
-import Markets from './Markets';
+import Markets from '../markets/Markets';
+import Supplies from '../supplies/Supplies';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -24,14 +25,13 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-//export default function CenteredGrid({props}) {
-class Dashboard extends Component{
-    constructor(props){
+class Dashboard extends Component {
+    constructor(props) {
         super(props);
 
-    }  
+    }
 
-    render(props){
+    render(props) {
         const classes = this.props;
         return (
             <React.Fragment>
@@ -39,55 +39,20 @@ class Dashboard extends Component{
                     <div style={{ marginTop: 20, padding: 30, backgroundColor: 'slategray' }} >
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
-                            <Card variant="outlined">
-                                    <CardHeader
-                                        title="COVID-19 Statistics"
-                                    />
-                                    <CardContent>
-                                        <Statistics />
-                                    </CardContent>
-                                </Card>
+                                <Statistics />
                             </Grid>
                             <Grid item xs={3}>
-                                <Card variant="outlined">
-                                <CardHeader
-                                        title="Market Watch "
-                                    />
-                                    <CardContent >
                                         <Markets />
-                                    </CardContent>
-                                </Card>
                             </Grid>
                             <Grid item xs={3}>
-                                <Card  variant="outlined">
-                                    <CardHeader
-                                        title="Supplies Near You "
-                                    />
-                                    <CardContent>
-                                        <Typography color="textSecondary" gutterBottom>
-                                            Supplies Near You
-                                        </Typography>
-                                    </CardContent>
-                                </Card>
+                                <Supplies />
                             </Grid>
                             <Grid item xs={3}>
-                                <Card variant="outlined">
-                                    <CardContent >
-                                        <Campaigns currentLocation={classes.currentLocation}/>
-                                    </CardContent>
-                                </Card>
+                                <Campaigns />
                             </Grid>
                             <Grid item xs={3}>
-                            <Card variant="outlined">
-                                <CardHeader
-                                        title="Needed Help"
-                                    />
-                                    <CardContent >
-                                        <Neededhelp />
-                                    </CardContent>
-                                </Card>
+                                <Neededhelp />
                             </Grid>
-    
                         </Grid>
                     </div>
                 </Container>
@@ -95,7 +60,5 @@ class Dashboard extends Component{
         )
     }
 }
-
-
 
 export default Dashboard;

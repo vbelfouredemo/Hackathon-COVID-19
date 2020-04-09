@@ -3,7 +3,6 @@ import { BrowserRouter } from 'react-router-dom';
 import NavBar from './components/layout/NavBar';
 import Dashboard from './components/dashboard/Dashboard'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { usePosition } from 'use-position';
 import Geocode from "react-geocode";
 import { connect } from 'react-redux';
 import { getLocation } from './store/actions/getLocationActions'

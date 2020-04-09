@@ -7,6 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import { connect } from 'react-redux';
 import { updateLocation } from '../../store/actions/updateLocationActions';
 import { withStyles } from '@material-ui/styles';
+import Login from '../login/Login';
 // import { Modal, Row, Col, Form } from 'react-bootstrap';
 
 const styles = theme => {
@@ -68,17 +69,21 @@ class NavBar extends Component {
             <div >
                 <AppBar position="static">
                     <Toolbar>
-                        <Typography variant="h6" style={{ marginRight: 200 }}>
+                        <Typography variant="h6">
                             The Social Isolation Blues Brothers Dashboard
+                       </Typography>
+                       <Typography>
+                           <Login />
                        </Typography>
                         <Typography align="right" style={{ marginRight: 10 }}>
                             Your location:&nbsp;
                                 {this.props.currentLocation.city &&
                                 <Typography>
-                                    {this.props.currentLocation.city} , {this.props.currentLocation.sublocality}
+                                    {this.props.currentLocation.city}, {this.props.currentLocation.sublocality} { this.props.currentLocation.zipcode}
                                 </Typography>
                             }
                         </Typography>
+                        &nbsp;&nbsp;&nbsp;
                         {!this.state.updateLocation &&
                             <Button variant="outlined" color="inherit" align="right" style={{ marginLeft: 10 }} onClick={this.handleUpdateClick}>
                                 Change Location
