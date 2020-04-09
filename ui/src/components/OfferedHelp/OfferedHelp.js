@@ -122,7 +122,7 @@ class OfferedHelp extends Component {
 
         return(
             <Card variant="outlined">
-                <CardHeader title="People/organizations need help"/>
+                <CardHeader title="Locals offering help"/>
                 <Grid container alignItems="flex-start" justify="flex-end" direction="row">
                     <CardActions>
                         <Tooltip title="Add a New item">
