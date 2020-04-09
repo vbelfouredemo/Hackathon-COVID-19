@@ -1,11 +1,11 @@
 import React from 'react';
 import ShowMoreText from 'react-show-more-text';
 import Button from '@material-ui/core/Button';
-const NeededhelpItem = ({ items, loggedInUser, removeIds, addIds }) => {
+const OfferedHelpItem = ({ items, loggedInUser, removeIds, addIds }) => {
     return (
         items.map(item => (
             <div className="help-body" key={item.id} >
-                <h5 className="campaign-name">
+                <h5 className="help-name">
                     {item.name}
                 </h5>
                 <h6>Location: {item.zipcode}, P:{item.phone} </h6>
@@ -14,18 +14,12 @@ const NeededhelpItem = ({ items, loggedInUser, removeIds, addIds }) => {
                     : ''
                 }
                 <ShowMoreText lines={2} more='Show more' less='Show less' anchorClass='' expanded={false} width={window.width}>
-                    {item.missionStatement}
+                    {item.description}
                 </ShowMoreText>
                 {(item.url != '' && item.url != 'undefined')?<a href={item.url} target="_blank" ><b>Click here for more info</b></a>:''}
-                <span >
-                    {(item.signedUp)
-                        ? <Button variant="outlined" color="primary"  onClick= { () =>removeIds(item.id)}>Thank You for signing up for help</Button>
-                        : (item.moreHelpNeeded)? <Button variant="outlined" color="primary" onClick= { () =>addIds(item.id)} >Signup for help!</Button>:<Button variant="outlined" color="inherit">We have got enough help, Thank You!</Button>
-                    }
-                </span>
                 <hr></hr>
             </div>
         ))
     )
 }
-export default NeededhelpItem
+export default OfferedHelpItem

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import NeededhelpItem from './NeededhelpItem';
+import OfferedhelpItem from './OfferedhelpItem';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -14,7 +14,7 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import Pagination from '../pagination/Pagination';
 import {Button, Modal, Row, Col, Form} from 'react-bootstrap'
 
-class Neededhelp extends Component {
+class OfferedHelp extends Component {
 
     state = {
         lat: '',
@@ -40,31 +40,11 @@ class Neededhelp extends Component {
             }
         };
         
-        axios.get('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/neededHelp', options)
+        axios.get('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/offeredHelp', options)
           .then(res => {
-                var neededHelps = res.data.neededhelps;
-                // neededHelps.forEach(function (element) {
-                //     element.offeredhelpIds = ['test@gmail.com'];
-                // });
-                for(var i = 0; i < neededHelps.length; i++) {
-                    var offeredhelpIds =  neededHelps[i].offeredhelpIds;
-                    if (undefined !== offeredhelpIds){
-                        if(offeredhelpIds.indexOf(this.state.loggedInUser.email) > -1){
-                            neededHelps[i].signedUp = true;
-                        }else{
-                            neededHelps[i].signedUp = false;
-                        }
-                    }
-                    var count = parseInt(neededHelps[i].count);
-                    var offeredHelpCount = parseInt(neededHelps[i].offeredHelpCount);
-                    if(count>0 &&  count>offeredHelpCount){
-                        neededHelps[i].moreHelpNeeded = true;
-                    }else{
-                        neededHelps[i].moreHelpNeeded = false;
-                    }
-                }
-                this.setState({ result: neededHelps});
-                console.log("Neededhelp: ", neededHelps);
+                var offeredHelps = res.data.offeredhelps;
+                this.setState({ result: offeredHelps});
+                console.log("offeredHelps: ", offeredHelps);
           })
     }
     removeIds(id)  { 
@@ -74,13 +54,8 @@ class Neededhelp extends Component {
         console.log('addIds..', id);
         var updatedHelp;
         var neededHelps = this.state.result;
-        neededHelps.forEach(function (element) {
-            if(element.id == id){
-                element['offeredhelpIds'].push(this.state.loggedInUser.email);
-            }
-            updatedHelp = element;
-        });
-        fetch('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/neededHelp/'+id, {
+       
+        fetch('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/offeredHelp/'+id, {
             method: "PUT",
             headers: new Headers({
                 'Accept': 'application/json',
@@ -109,19 +84,16 @@ class Neededhelp extends Component {
         this.setState({ modal: false });
         this.getData();
     };
-    addHelp(event){
+    addOfferedHelp(event){
         event.preventDefault();
-        var count = (event.target.count.value != undefined && event.target.count.value !='0')? parseInt(event.target.count.value):0;
         const data = JSON.stringify({
             name : event.target.title.value,
-            zipcode : parseInt(event.target.zipcode.value),
+            zipcode : event.target.zipcode.value,
             phone : event.target.phone.value,
-            count : count,
-            url : event.target.url.value,
-            missionStatement : event.target.missionStatement.value,
-            offeredHelpCount:0
+            type : event.target.type.value,
+            description : event.target.description.value,
         });
-        fetch('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/neededHelp', {
+        fetch('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/offeredHelp', {
             method: "POST",
             headers: new Headers({
                 'Accept': 'application/json',
@@ -153,11 +125,6 @@ class Neededhelp extends Component {
                 <CardHeader title="People/organizations need help"/>
                 <Grid container alignItems="flex-start" justify="flex-end" direction="row">
                     <CardActions>
-                        <Tooltip title="Filter items">
-                            <IconButton aria-label="Filter Items" onClick={this.onOpenFilterModal}>
-                                <FilterListIcon />
-                            </IconButton>
-                        </Tooltip>
                         <Tooltip title="Add a New item">
                             <IconButton aria-label="Add a New item" onClick={this.onOpenModal}>
                                 <AddIcon />
@@ -167,7 +134,7 @@ class Neededhelp extends Component {
                 </Grid>
                 <CardContent>
                     <div className="neededhelp-list section">
-                        <NeededhelpItem items={currentItems} loggedInUser={this.state.loggedInUser} removeIds={this.removeIds} addIds={this.addIds}/>
+                        <OfferedhelpItem items={currentItems} loggedInUser={this.state.loggedInUser} removeIds={this.removeIds} addIds={this.addIds}/>
                         <Pagination
                             postsPerPage={this.state.itmsPerPage}
                             totalPosts={this.state.result.length}
@@ -190,14 +157,13 @@ class Neededhelp extends Component {
                         <div className="container">
                             <Row>
                                 <Col>
-                                    <Form onSubmit={this.addHelp} id="neededHelpForm">
+                                    <Form onSubmit={this.addOfferedHelp} id="neededHelpForm">
                                         <Form.Group controlId="name" >
                                             <Form.Control type="text" name="title" required placeholder="Short description of the type of help"/><br/>
-                                            <Form.Control type="number" name="zipcode" required placeholder="Zipcode where the help needed"/><br/>
+                                            <Form.Control type="number" name="zipcode" required placeholder="Zipcode if the help is associated with an area"/><br/>
                                             <Form.Control type="text" name="phone"  placeholder="Phone number to contact"/><br/>
-                                            <Form.Control type="number" name="count" placeholder="Expected count of volunteer for this job(if applicable)"/><br/>
-                                            <Form.Control type="text" name="url" placeholder="URL for more details"/><br/>
-                                            <Form.Control as="textarea" rows="3" name="missionStatement"  required  placeholder="Mission statement from the organizer"/>
+                                            <Form.Control type="text" name="type" placeholder="What type of help, e.g. grocery, tutor, etc."/><br/>
+                                            <Form.Control as="textarea" rows="3" name="description"  required  placeholder="Enter a long description of the help you are offering"/>
                                         </Form.Group>
                                         <Form.Group>
                                             <Button variant="primary" type="submit">
@@ -223,4 +189,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps)(Neededhelp);
+export default connect(mapStateToProps)(OfferedHelp);
