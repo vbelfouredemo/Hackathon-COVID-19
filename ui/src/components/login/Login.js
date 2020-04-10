@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import GoogleLogin from "react-google-login";
 import { GoogleLogout } from "react-google-login";
+import { connect } from 'react-redux';
+import { userLogin, userLogout } from '../../store/actions/userActions';
 import "./login.scss";
 class Login extends Component {
     constructor() {
@@ -13,16 +15,18 @@ class Login extends Component {
     
       responseGoogle = response => {
         this.setState({ userDetails: response.profileObj, isUserLoggedIn: true });
+        this.props.userLogin(this.state);
       };
     
       logout = () => {
-        this.setState({isUserLoggedIn: false})
+        this.setState({ userDetails: {}, isUserLoggedIn: false})
+        this.props.userLogout(this.state);
       };
     
       render() {
         return (
           <div className="loginlogout">
-            {!this.state.isUserLoggedIn && (
+            {!this.props.currentUser.isUserLoggedIn && (
               <GoogleLogin
                 clientId="39208363193-8fu7230mh4lhruik0umv2r5le48dv4q2.apps.googleusercontent.com" //TO BE CREATED
                 render={renderProps => (
@@ -38,10 +42,10 @@ class Login extends Component {
                 onFailure={this.responseGoogle}
               />
             )}
-            {this.state.isUserLoggedIn && (
+            {this.props.currentUser.isUserLoggedIn && (
                 <span className="logout">
-                    Welcome, {this.state.userDetails.givenName}{" "}
-                    {this.state.userDetails.familyName} &nbsp;&nbsp;&nbsp;
+                    Welcome, {this.props.currentUser.userDetails.givenName}{" "}
+                    {this.props.currentUser.userDetails.familyName} &nbsp;&nbsp;&nbsp;
                   <GoogleLogout
                     render={renderProps => (
                       <button
@@ -59,5 +63,17 @@ class Login extends Component {
         );
     }
 }
+const mapStateToProps = (state, ownProps) => {
+  return {
+      currentUser: state.userDetails
+  }
+}
 
-export default Login;
+const mapDispatchToProps = dispatch => {
+  return {
+      userLogin: (state) => dispatch(userLogin(state)),
+      userLogout: (state) => dispatch(userLogin(state))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

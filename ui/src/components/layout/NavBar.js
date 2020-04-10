@@ -4,9 +4,11 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import PersonIcon from '@material-ui/icons/Person';
 import { connect } from 'react-redux';
 import { updateLocation } from '../../store/actions/updateLocationActions';
 import { withStyles } from '@material-ui/styles';
+import Avatar from '@material-ui/core/Avatar';
 import Login from '../login/Login';
 // import { Modal, Row, Col, Form } from 'react-bootstrap';
 
@@ -65,7 +67,7 @@ class NavBar extends Component {
 
     render() {
         const { classes } = this.props;
-        console.log("Location from NafBar: ", this.props.currentLocation);
+        const initials = this.props.currentUser.isUserLoggedIn ? this.props.currentUser.userDetails.givenName[0] + this.props.currentUser.userDetails.familyName[0] : '';
         return (
             <div >
                 <AppBar position="static">
@@ -73,14 +75,14 @@ class NavBar extends Component {
                         <Typography variant="h6">
                             The Social Isolation Blues Brothers Dashboard
                        </Typography>
-                       <Typography>
-                           <Login />
-                       </Typography>
+                        <Typography>
+                            <Login />
+                        </Typography>
                         <Typography align="right" style={{ marginRight: 10 }}>
                             Your location:&nbsp;
                                 {this.props.currentLocation.city &&
                                 <Typography>
-                                    {this.props.currentLocation.city}, {this.props.currentLocation.sublocality} { this.props.currentLocation.zipcode}
+                                    {this.props.currentLocation.city}, {this.props.currentLocation.sublocality} {this.props.currentLocation.zipcode}
                                 </Typography>
                             }
                         </Typography>
@@ -92,13 +94,19 @@ class NavBar extends Component {
                         }
                         {this.state.updateLocation &&
                             <form className={classes.root} noValidate autoComplete="off" onSubmit={this.handleUpdateLocation}>
-                                <TextField color="primary" style={{width:100, height:5}} inputstyle={{width:100, height:5}}label="postal code" value={this.state.zip} variant="outlined" onChange={this.handleChange} />
+                                <TextField color="primary" style={{ width: 100, height: 5 }} inputstyle={{ width: 100, height: 5 }} label="postal code" value={this.state.zip} variant="outlined" onChange={this.handleChange} />
                                 <Button variant="outlined" color="inherit" style={{ marginLeft: 10 }} onClick={this.handleUpdateLocation}>
                                     Update Location
                                 </Button>
                             </form>
                         }
-
+                        <Avatar>
+                            {initials != '' ? (
+                                initials
+                            ) : (
+                                <PersonIcon />
+                            )}
+                        </Avatar>
                     </Toolbar>
                 </AppBar>
             </div>
@@ -108,7 +116,8 @@ class NavBar extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        currentLocation: state.currentLocation
+        currentLocation: state.currentLocation,
+        currentUser: state.userDetails
     }
 }
 
