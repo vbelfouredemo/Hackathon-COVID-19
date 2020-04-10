@@ -27,7 +27,7 @@ class Campaigns extends Component {
             currentPage: 1,
             camPaignsPerPage: 4
         };
-        console.log('campaign', props.currentLocation)
+        // console.log('campaign', props.currentLocation)
     };
     onOpenFilterModal = () => {
         this.setState({ filterModal: true });

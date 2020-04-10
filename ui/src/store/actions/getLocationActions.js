@@ -14,7 +14,7 @@ export const getLocation = () => {
                     response => {
                         const addressComponents = response.results[0].address_components;
                         if (addressComponents != null) {
-                            console.log("Address from getLocation: ", addressComponents);
+                            // console.log("Address from getLocation: ", addressComponents);
                             for (var i = 0; i < addressComponents.length; i++) {
                                 var obj = addressComponents[i];
                                 var types = obj.types;
