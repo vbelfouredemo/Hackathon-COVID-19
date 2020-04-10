@@ -14,6 +14,7 @@ import Neededhelp from '../NeededHelp/Neededhelp';
 import OfferedHelp from '../OfferedHelp/OfferedHelp'
 import Markets from '../markets/Markets';
 import Supplies from '../supplies/Supplies';
+import AddSupply from '../supplies/AddSupply';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -39,7 +40,7 @@ class Dashboard extends Component {
                 <Container maxWidth="xl">
                     <div style={{ marginTop: 20, padding: 30, backgroundColor: 'slategray' }} >
                         <Grid container spacing={2}>
-                            <Grid item xs={12}>
+                            {/* <Grid item xs={12}>
                                 <Statistics />
                             </Grid>
                             <Grid item xs={4}>
@@ -50,6 +51,12 @@ class Dashboard extends Component {
                             </Grid>
                             <Grid item xs={4}>
                                 <Neededhelp />
+                            </Grid> */}
+                            <Grid item xs={8}>
+                                <Supplies/>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <AddSupply />
                             </Grid>
                         </Grid>
                     </div>

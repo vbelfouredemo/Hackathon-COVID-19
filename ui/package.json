@@ -28,6 +28,7 @@
     "reactjs-popup": "^1.5.0",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
+    "simple-react-comments": "^1.1.0",
     "streamdataio-js-sdk": "^2.0.2",
     "streamdataio-js-sdk-auth": "^2.0.0",
     "use-position": "0.0.6"
