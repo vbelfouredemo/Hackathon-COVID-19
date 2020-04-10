@@ -70,7 +70,7 @@ class NavBar extends Component {
         const initials = this.props.currentUser.isUserLoggedIn ? this.props.currentUser.userDetails.givenName[0] + this.props.currentUser.userDetails.familyName[0] : '';
         return (
             <div >
-                <AppBar position="static">
+                <AppBar position="fixed">
                     <Toolbar>
                         <Typography variant="h6">
                             The Social Isolation Blues Brothers Dashboard

@@ -37,7 +37,7 @@ class Dashboard extends Component {
         return (
             <React.Fragment>
                 <Container maxWidth="xl">
-                    <div style={{ marginTop: 20, padding: 30, backgroundColor: 'slategray' }} >
+                    <div style={{ marginLeft: 120, marginTop: 5, padding: 30, backgroundColor: 'slategray' }} >
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <Statistics />

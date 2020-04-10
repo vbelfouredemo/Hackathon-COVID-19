@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import NavBar from './components/layout/NavBar';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import MainNav from './components/layout/MainNav'
+// import NavBar from './components/layout/NavBar';
 import Dashboard from './components/dashboard/Dashboard'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Geocode from "react-geocode";
@@ -13,14 +14,20 @@ Geocode.setLanguage("en");
 class App extends Component {
 
   componentDidMount() {
-      this.props.getLocation();
+    this.props.getLocation();
   }
 
   render() {
     return (
       <BrowserRouter>
+        {/*
           <NavBar />
           <Dashboard />
+      */}
+        <MainNav />
+        <Switch>
+          <Route exact path="/" component={Dashboard} />
+        </Switch>
       </BrowserRouter>
     )
   }
