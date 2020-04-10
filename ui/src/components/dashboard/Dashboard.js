@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import Statistics from '../statistics/Statistics';
 import Campaigns from '../campaigns/Campaigns';
 import Neededhelp from '../NeededHelp/Neededhelp';
+import OfferedHelp from '../OfferedHelp/OfferedHelp'
 import Markets from '../markets/Markets';
 import Supplies from '../supplies/Supplies';
 
@@ -41,16 +42,13 @@ class Dashboard extends Component {
                             <Grid item xs={12}>
                                 <Statistics />
                             </Grid>
-                            <Grid item xs={3}>
-                                        <Markets />
+                            <Grid item xs={4}>
+                                <OfferedHelp/>
                             </Grid>
-                            <Grid item xs={3}>
-                                <Supplies />
-                            </Grid>
-                            <Grid item xs={3}>
+                            <Grid item xs={4}>
                                 <Campaigns />
                             </Grid>
-                            <Grid item xs={3}>
+                            <Grid item xs={4}>
                                 <Neededhelp />
                             </Grid>
                         </Grid>
