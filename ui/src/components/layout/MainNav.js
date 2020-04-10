@@ -13,6 +13,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
+import MenuList from '@material-ui/core/MenuList';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 
@@ -31,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     },
     drawerPaper: {
         width: drawerWidth,
-        
+
     },
     drawerContainer: {
         overflow: 'auto',
@@ -75,13 +76,18 @@ const MainNav = () => {
                 <Toolbar />
                 <div classname={classes.drawerContainer}>
                     <List>
-                            <ListItem>
-                                <NavLink to="/">
-                                    <MenuItem selected="/">
-                                        <ListItemText primary="Main" />
-                                    </MenuItem>
-                                </NavLink>
-                            </ListItem>
+                        <MenuList>
+                            <NavLink to="/">
+                                <MenuItem selected="/">
+                                    <ListItemText primary="Main" />
+                                </MenuItem>
+                            </NavLink>
+                            <NavLink to="/supplies">
+                                <MenuItem>
+                                    <ListItemText primary="Local Supplies" />
+                                </MenuItem>
+                            </NavLink>
+                        </MenuList>
                     </List>
                 </div>
             </Drawer>

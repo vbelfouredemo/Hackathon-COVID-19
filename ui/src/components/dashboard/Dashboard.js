@@ -39,8 +39,11 @@ class Dashboard extends Component {
                 <Container maxWidth="xl">
                     <div style={{ marginLeft: 120, marginTop: 5, padding: 30, backgroundColor: 'slategray' }} >
                         <Grid container spacing={2}>
-                            <Grid item xs={12}>
+                            <Grid item xs={7}>
                                 <Statistics />
+                            </Grid>
+                            <Grid item xs={5}>
+                                <Markets />
                             </Grid>
                             <Grid item xs={4}>
                                 <OfferedHelp/>
