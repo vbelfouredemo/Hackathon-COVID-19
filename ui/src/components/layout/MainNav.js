@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { NavLink, withRouter } from 'react-router-dom';
+import { NavLink, withRouter, Link } from 'react-router-dom';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -15,9 +15,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 
-import CssBaseline from '@material-ui/core/CssBaseline';
-
-const drawerWidth = 120;
+const drawerWidth = 150;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -27,11 +25,11 @@ const useStyles = makeStyles((theme) => ({
         zIndex: theme.zIndex.drawer + 1,
     },
     drawer: {
-        width: drawerWidth,
         flexShrink: 0,
     },
     drawerPaper: {
         width: drawerWidth,
+        backgroundColor: theme.palette.primary.main
 
     },
     drawerContainer: {
@@ -48,10 +46,9 @@ const MainNav = () => {
     const classes = useStyles();
     return (
         <div className={classes.root}>
-            <CssBaseline />
             <AppBar position="fixed" className={classes.appBar}>
                 <Toolbar>
-                    <Grid justify="space-between" direction="row" container spacing={24}>
+                    <Grid justify="space-between" direction="row" container align-items="center" >
                         <Grid item>
                             <Typography variant="h6">
                                 The Social Isolation Blues Brothers Dashboard
@@ -73,26 +70,22 @@ const MainNav = () => {
                     paper: classes.drawerPaper
                 }}
             >
-                <Toolbar />
+
                 <div classname={classes.drawerContainer}>
+                    <Toolbar />
                     <List>
-                        <MenuList>
-                            <NavLink to="/">
-                                <MenuItem selected="/">
-                                    <ListItemText primary="Main" />
-                                </MenuItem>
-                            </NavLink>
-                            <NavLink to="/supplies">
-                                <MenuItem>
-                                    <ListItemText primary="Local Supplies" />
-                                </MenuItem>
-                            </NavLink>
-                        </MenuList>
+
+                        <ListItem key={"main"} component={Link} to="/">
+                            <ListItemText primary="Main" />
+                        </ListItem>
+                        <ListItem key={"supplies"} component={Link} to="/supplies">
+                            <ListItemText primary="Supplies" />
+                        </ListItem>
                     </List>
                 </div>
             </Drawer>
             <main className={classes.content}>
-                <Toolbar />
+
             </main>
         </div>
     )
