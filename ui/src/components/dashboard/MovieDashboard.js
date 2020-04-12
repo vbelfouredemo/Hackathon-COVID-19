@@ -12,10 +12,18 @@ import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import CardActions from '@material-ui/core/CardActions';
 import { Button, Modal, Row, Col, Form } from 'react-bootstrap'
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/styles';
 
+const styles = theme => ({
+    root: {
+        backgroundColor: theme.palette.primary.light,
+    },
+  });
+  
+  
 
 class MovieDashboard extends Component {
-
     
     constructor(props) {
         super(props);
@@ -157,7 +165,7 @@ class MovieDashboard extends Component {
                 .then(data => {
                     if(null != data.results && data.results != 'undefined' && data.results.length>0){
                         this.setState({searchedMovies:data.results});
-                        alert('Search result returns more than one movie, select the movie from dropdown or enter exact title of better result');
+                        //alert('Search result returns more than one movie, select the movie from dropdown or enter exact title of better result');
                     }else{
                         alert('No movie found matching the title, please enter different value');
                     }
@@ -257,9 +265,8 @@ class MovieDashboard extends Component {
             )
         }
         return (
-            <React.Fragment>
-                <Container maxWidth="xl">
-                    <div style={{ marginLeft: 120, marginTop: 5, padding: 30, backgroundColor: 'slategray' }} >
+                    
+                <div className={classes.root} style={{ marginLeft: 150, marginTop: 0, padding: 30}} >
                             <div style={{float:'left', marginLeft:'0px', color:'white'}}>
 
                             <h4 >Movie Suggestion by locals</h4>
@@ -277,8 +284,8 @@ class MovieDashboard extends Component {
                                         />
                                     </div>
                                 </div>
-                                <Tooltip title="Add New Campaign">
-                                    <IconButton aria-label="Add New Campaign" onClick={this.onOpenModal}>
+                                <Tooltip title="Add New Movie">
+                                    <IconButton aria-label="Add New Movie" onClick={this.onOpenModal}>
                                         <AddIcon />
                                     </IconButton>
                                 </Tooltip>
@@ -326,16 +333,14 @@ class MovieDashboard extends Component {
                             {gridRows}
                         </Grid>
                     </div>
-                </Container>
-            </React.Fragment>
         )
     }
 }
 
-// DashboardMovies.propTypes = {
-//     classes: PropTypes.object.isRequired,
-// };
+MovieDashboard.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
   
-// export default withStyles(styles)(DashboardMovies);
+export default withStyles(styles)(MovieDashboard);
 
-export default MovieDashboard;
+//export default MovieDashboard;
