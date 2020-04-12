@@ -5,6 +5,8 @@ import MainNav from './components/layout/MainNav'
 import Dashboard from './components/dashboard/Dashboard'
 import SupplyDashboard from './components/dashboard/SupplyDashboard'
 import MovieDashboard from './components/dashboard/MovieDashboard'
+import FoodDashboard from './components/dashboard/FoodDashboard'
+import AboutUsDashboard from './components/dashboard/AboutUsDashboard'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Geocode from "react-geocode";
 import { connect } from 'react-redux';
@@ -30,6 +32,8 @@ class App extends Component {
               <Route exact path="/" component={Dashboard}  />
               <Route path="/supplies" component={SupplyDashboard} />
               <Route path="/movies" component={MovieDashboard} />
+              <Route path="/foods" component={FoodDashboard} />
+              <Route path="/aboutus" component={AboutUsDashboard} />
             </Switch>
           </div>
         </BrowserRouter>

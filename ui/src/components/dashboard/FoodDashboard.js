@@ -14,7 +14,7 @@ import CardActions from '@material-ui/core/CardActions';
 import { Button, Modal, Row, Col, Form } from 'react-bootstrap'
 
 
-class MovieDashboard extends Component {
+class FoodDashboard extends Component {
 
     
     constructor(props) {
@@ -338,4 +338,4 @@ class MovieDashboard extends Component {
   
 // export default withStyles(styles)(DashboardMovies);
 
-export default MovieDashboard;
+export default FoodDashboard;
