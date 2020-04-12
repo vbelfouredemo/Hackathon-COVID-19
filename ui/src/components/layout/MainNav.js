@@ -87,6 +87,11 @@ const MainNav = () => {
                                     <ListItemText primary="Local Supplies" />
                                 </MenuItem>
                             </NavLink>
+                            <NavLink to="/movies">
+                                <MenuItem>
+                                    <ListItemText primary="Movies" />
+                                </MenuItem>
+                            </NavLink>
                         </MenuList>
                     </List>
                 </div>

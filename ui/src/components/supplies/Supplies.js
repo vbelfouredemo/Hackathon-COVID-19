@@ -61,10 +61,10 @@ class Supplies extends Component{
         const indexOfFirstSupply = indexOfLastSupply - this.state.suppliesPerPage;
         //this.setState({currentSupplies: this.state.supplies.slice(indexOfFirstSupply, indexOfLastSupply)});
         const currentSupplies = this.state.supplies.slice(indexOfFirstSupply, indexOfLastSupply);
-        var index = 0;
+        //var index = 0;
         //this.setState({currentSupplies: currentSupplies});
         currentSupplies.forEach(function (element) {
-            index++;
+            //index++;
             fetch('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/comments/query?where={"subjectId":"'+element.id+'"}', {
                 method: "GET",
                 headers: new Headers({
@@ -76,17 +76,17 @@ class Supplies extends Component{
             }).then(res => res.json())
                 .then((data) => {
                     element.comments = data.comments;
-                    var newCurrentSupplies = this.state.currentSupplies
-                    newCurrentSupplies[index] = element
-                    this.setState({
-                        ...this.state,
-                        currentSupplies: newCurrentSupplies
-                    });
+                    // var newCurrentSupplies = this.state.currentSupplies
+                    // newCurrentSupplies[index] = element
+                    // this.setState({
+                    //     ...this.state,
+                    //     currentSupplies: newCurrentSupplies
+                    // });
                 })
                 .catch(console.log)
             
         });
-        console.log('comments', this.state.currentSupplies);
+        console.log('comments', currentSupplies);
         // Change page
         const paginate = pageNumber => this.setState({currentPage: pageNumber}) //setCurrentPage(pageNumber);
 
@@ -98,7 +98,7 @@ class Supplies extends Component{
                     />
                     <CardContent>
                         <div className="supplies" >
-                            <SupplList supplies={this.state.currentSupplies} timeDiffCalc={this.timeDiffCalc} />
+                            <SupplList supplies={currentSupplies} timeDiffCalc={this.timeDiffCalc} />
 
                             <Pagination
                                 postsPerPage={this.state.suppliesPerPage}

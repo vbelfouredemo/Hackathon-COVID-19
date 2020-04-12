@@ -3,6 +3,8 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import MainNav from './components/layout/MainNav'
 // import NavBar from './components/layout/NavBar';
 import Dashboard from './components/dashboard/Dashboard'
+import LocalSupplies from './components/supplies/LocalSupplies'
+import DashboardMovies from './components/Movies/DashboardMovies'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Geocode from "react-geocode";
 import { connect } from 'react-redux';
@@ -27,6 +29,8 @@ class App extends Component {
         <MainNav />
         <Switch>
           <Route exact path="/" component={Dashboard} />
+          <Route exact path="/supplies" component={LocalSupplies} />
+          <Route exact path="/movies" component={DashboardMovies} />
         </Switch>
       </BrowserRouter>
     )
