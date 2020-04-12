@@ -24,7 +24,6 @@ const styles = theme => ({
   
 
 class MovieDashboard extends Component {
-
     
     constructor(props) {
         super(props);
