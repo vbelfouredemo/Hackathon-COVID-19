@@ -2,6 +2,7 @@ import React from 'react';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import { NavLink, withRouter, Link } from 'react-router-dom';
 import Drawer from '@material-ui/core/Drawer';
+import Divider from '@material-ui/core/Divider';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -27,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
     },
     appBar: {
         zIndex: theme.zIndex.drawer + 1,
+        boxShadow: 'none'
     },
     drawer: {
         flexShrink: 0,
@@ -47,6 +49,9 @@ const useStyles = makeStyles((theme) => ({
     icon: {
         color: 'white'
     },
+    itemText: {
+        color: 'white'
+    }
 }));
 
 
@@ -81,27 +86,28 @@ const MainNav = () => {
 
                 <div classname={classes.drawerContainer}>
                     <Toolbar />
+                    <Divider />
                     <List>
 
                         <ListItem key={"main"} component={Link} to="/">
                             <ListItemIcon className={classes.icon}>
                                 <HomeIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Main" />
+                            <ListItemText className={classes.itemText} primary="Main" />
                         </ListItem>
                         <ListItem key={"supplies"} component={Link} to="/supplies">
                             <ListItemIcon className={classes.icon}>
                                 <ShoppingCartIcon />
                             </ListItemIcon>
 
-                            <ListItemText primary="Supplies" />
+                            <ListItemText className={classes.itemText} primary="Supplies" />
 
                         </ListItem>
                         <ListItem key={"movies"} component={Link} to="/movies">
                             <ListItemIcon className={classes.icon}>
                                 <LocalMoviesIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Movies" />
+                            <ListItemText className={classes.itemText} primary="Movies" />
                         </ListItem>
                     </List>
                 </div>
