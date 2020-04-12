@@ -33,7 +33,7 @@ const AboutUsDashboard = () => {
                     Bob Barrett
                     </td>
                 </tr>
-                <tr>
+                <tr style={{border:'solid'}}>
                     <p>Our Mission</p>
                     <p>Our Mission</p>
                     <p>Our Mission</p>
