@@ -26,7 +26,7 @@ class Statistics extends Component {
 
         var streamdataio = require('streamdataio-js-sdk/dist/bundles/streamdataio-node');
         var jsonPatch = require('fast-json-patch');
-        console.log("Getting data");
+        //console.log("Getting data");
         var targetUrl = "https://corona.lmao.ninja/v2/jhucsse";
         //var targetUrl = "https://bing.com/covid/data";
         var appToken = "ZDYwNTk3NDktOGMyZi00NzcxLTk5NTMtNTYxOWM3OThhM2Ji";
@@ -41,10 +41,10 @@ class Statistics extends Component {
 
         eventSource
             .onOpen(function () {
-                console.log("connected!");
+                // console.log("connected!");
             })
             .onData(function (data) {
-                console.log("data received");
+                //console.log("data received");
                 //this.setState({data});
                 result = data;
                 localSetState(result);
@@ -114,7 +114,7 @@ class Statistics extends Component {
         */
 
         var closestData = this.getClosestData();
-        console.log("Closest data: ", closestData);
+        //console.log("Closest data: ", closestData);
         // console.log("Country List form Statistics: ", countryList);
         return (
             <Card variant="outlined">
