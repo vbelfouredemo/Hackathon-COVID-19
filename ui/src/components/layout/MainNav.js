@@ -19,6 +19,8 @@ import MenuList from '@material-ui/core/MenuList';
 import HomeIcon from '@material-ui/icons/Home';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import LocalMoviesIcon from '@material-ui/icons/LocalMovies';
+import FastfoodIcon from '@material-ui/icons/Fastfood';
+import RecentActorsIcon from '@material-ui/icons/RecentActors';
 
 const drawerWidth = 150;
 
@@ -106,6 +108,20 @@ const MainNav = () => {
                                 <LocalMoviesIcon />
                             </ListItemIcon>
                             <ListItemText className={classes.itemText} primary="Movies" />
+                        </ListItem>
+
+                        <ListItem key={"foods"} component={Link} to="/foods">
+                            <ListItemIcon className={classes.icon}>
+                                <FastfoodIcon />
+                            </ListItemIcon>
+                            <ListItemText className={classes.itemText} primary="Foods" />
+                        </ListItem>
+
+                        <ListItem key={"foods"} component={Link} to="/aboutus">
+                            <ListItemIcon className={classes.icon}>
+                                <RecentActorsIcon />
+                            </ListItemIcon>
+                            <ListItemText className={classes.itemText} primary="AboutUs" />
                         </ListItem>
                     </List>
                 </div>
