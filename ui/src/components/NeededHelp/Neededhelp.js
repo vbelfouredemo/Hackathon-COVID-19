@@ -64,14 +64,13 @@ class Neededhelp extends Component {
                     }
                 }
                 this.setState({ result: neededHelps});
-                console.log("Neededhelp: ", neededHelps);
           })
     }
     removeIds(id)  { 
-        console.log('removeIds..', id);
+        // console.log('removeIds..', id);
     };
     addIds(id){ 
-        console.log('addIds..', id);
+        // console.log('addIds..', id);
         var updatedHelp;
         var neededHelps = this.state.result;
         neededHelps.forEach(function (element) {
@@ -140,11 +139,11 @@ class Neededhelp extends Component {
     }
 
     render() {
-        console.log("this.state.result: ", this.state.result);
+        // console.log("this.state.result: ", this.state.result);
         const indexOfLastItem = this.state.currentPage * this.state.itmsPerPage;
         const indexOfFirstItem = indexOfLastItem - this.state.itmsPerPage;
         const currentItems = this.state.result.slice(indexOfFirstItem, indexOfLastItem);
-        console.log('currentItems', currentItems);  
+        // console.log('currentItems', currentItems);  
          // Change page
          const paginate = pageNumber => this.setState({currentPage: pageNumber})
 
