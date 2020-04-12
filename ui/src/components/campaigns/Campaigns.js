@@ -25,7 +25,7 @@ class Campaigns extends Component {
             filterModal: false,
             loading: false,
             currentPage: 1,
-            camPaignsPerPage: 4
+            camPaignsPerPage: 5
         };
         // console.log('campaign', props.currentLocation)
     };

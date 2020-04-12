@@ -231,12 +231,12 @@ class FoodDashboard extends Component {
                     const movie = this.state.movies[index];
                     gridRow.push(
                         <Grid item xs={4}>
-                            <div style={{backgroundColor:'black', color:'white' , minHeight:'280px'}}>
+                            <div style={{backgroundColor:'#EEEEFF',  minHeight:'280px', borderRadius:'10px', borderTopRightRadius: '10px'}} >
                                 <div style={{float:'left', width:'40%', backgroundColor:'black', height:'280px'}}>
                                     <img src={`http://image.tmdb.org/t/p/w185${movie.posterPath}`} alt="Card image" height="280px" width="180px"/>
                                 </div>
                                 <div></div>
-                                <div style={{float:'right', width:'60%', backgroundColor:'black', minHeight:'100%',  height:'100%',  paddingTop:'5px'}}>
+                                <div style={{float:'right', width:'60%', backgroundColor:'#EEEEFF', minHeight:'100%',  height:'100%',  paddingTop:'5px'}}>
                                     <ShowMoreText lines={3} more='Show more' less='Show less' anchorClass='' expanded={false} width={window.width}>
                                         {movie.overview}
                                     </ShowMoreText><br/>
@@ -274,13 +274,14 @@ class FoodDashboard extends Component {
                                 <div  style={{border:'solid', borderRadius:'10px', }}>
                                     <SearchIcon />
                                     <InputBase
-                                        placeholder="Search Movie..."
+                                        placeholder="Search recipe..."
                                         inputProps={{ 'aria-label': 'search' }}
                                         style={{color:'white'}}
                                         onKeyDown={this.keyPress}
                                     />
                                 </div>
                             </div>
+                            <img src="https://my.syncplicity.com/dl/vqcldcetaigluym/filter" ></img>
                             <Tooltip title="Add New Campaign">
                                 <IconButton aria-label="Add New Campaign" onClick={this.onOpenModal}>
                                     <AddIcon />
@@ -294,28 +295,30 @@ class FoodDashboard extends Component {
                             aria-labelledby="contained-modal-title-vcenter"
                             centered
                         >
-                            <Modal.Header closeButton style={{backgroundColor:'black', color:'white'}}>
+                            <Modal.Header closeButton style={{backgroundColor:'#17BD93', color:'white'}}>
                                 <Modal.Title id="contained-modal-title-vcenter">
-                                    Add your movie suggestion
+                                    Add your recipe suggestion
                             </Modal.Title>
                             </Modal.Header>
-                            <Modal.Body style={{backgroundColor:'black', color:'white'}}>
+                            <Modal.Body style={{backgroundColor:'#17BD93', color:'white'}}>
                                 <div className="container">
                                     <Row>
                                         <Col>
                                             <Form onSubmit={this.addMovie} id="addCampaignForm" onKeyPress={this.preventSubmit}>
                                                 <Form.Group controlId="name" >
-                                                    <Form.Control type="text" name="name" required placeholder="Search Title: type title of the movie and Hit ENTER" onKeyDown={this.searchMovie} /><br />
-                                                    <Form.Control as="select" name="id" placeholder="Type">
-                                                        <option value="">Select the movie</option>
-                                                        {this.state.searchedMovies.map((movie) => <option key={movie.id} value={movie.id}>{movie.title}</option>)}
-                                                    </Form.Control><br />
-                                                    <Form.Control type="text" name="genres" placeholder="Genres, e.g. Action, Thirller, Drama, etc. Enter comma separated" onKeyDown={this.searchMovie} /><br />
-                                                    <Form.Control type="text" name="StreamsOn" placeholder="Available on, e.g. Netflix, Hulu" /><br />
+                                                    <Form.Control type="text" name="name" required placeholder="Recipe title" /><br />
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" id="validatedCustomFile" required/>
+                                                        <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+                                                        <div class="invalid-feedback">Example invalid custom file feedback</div>
+                                                    </div><br /><br />
+                                                    <Form.Control type="text" name="foodURL" placeholder="Youtube/Website URL" /><br />
+                                                    <Form.Control as="textarea" rows="4" name="recipe" placeholder="Describe the recipe" onKeyDown={this.searchMovie} /><br />
+                                                    <Form.Control as="textarea" rows="2" name="ingredients" placeholder="Ingredients" /><br />
                                                 </Form.Group>
                                                 <Form.Group>
                                                     <Button variant="primary" variant="primary" type="submit">
-                                                        Add Movie
+                                                        Add Recipe
                                                     </Button>
                                                     <Button onClick={this.onCloseModal} variant="secondary" style={{ float: 'right' }}>Close</Button>
                                                 </Form.Group>
