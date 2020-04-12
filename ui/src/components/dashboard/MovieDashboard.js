@@ -266,73 +266,73 @@ class MovieDashboard extends Component {
         }
         return (
                     
-                <div className={classes.root} style={{ marginLeft: 150, marginTop: 0, padding: 30}} >
-                            <div style={{float:'left', marginLeft:'0px', color:'white'}}>
+            <div className={classes.root} style={{ marginLeft: 150, marginTop: 0, padding: 30}} >
+                    <div style={{float:'left', marginLeft:'0px', color:'white'}}>
 
-                            <h4 >Movie Suggestion by locals</h4>
-                            </div>
-                        <Grid container alignItems="flex-start" justify="flex-end" direction="row">
-                            <CardActions>
-                                <div>
-                                    <div  style={{border:'solid', borderRadius:'10px', }}>
-                                        <SearchIcon />
-                                        <InputBase
-                                            placeholder="Search Movie..."
-                                            inputProps={{ 'aria-label': 'search' }}
-                                            style={{color:'white'}}
-                                            onKeyDown={this.keyPress}
-                                        />
-                                    </div>
-                                </div>
-                                <Tooltip title="Add New Movie">
-                                    <IconButton aria-label="Add New Movie" onClick={this.onOpenModal}>
-                                        <AddIcon />
-                                    </IconButton>
-                                </Tooltip>
-                            </CardActions>
-                            <Modal
-                                show={this.state.modal}
-                                onHide={this.onCloseModal}
-                                size="lg"
-                                aria-labelledby="contained-modal-title-vcenter"
-                                centered
-                            >
-                                <Modal.Header closeButton style={{backgroundColor:'black', color:'white'}}>
-                                    <Modal.Title id="contained-modal-title-vcenter">
-                                        Add your movie suggestion
-                                </Modal.Title>
-                                </Modal.Header>
-                                <Modal.Body style={{backgroundColor:'black', color:'white'}}>
-                                    <div className="container">
-                                        <Row>
-                                            <Col>
-                                                <Form onSubmit={this.addMovie} id="addCampaignForm" onKeyPress={this.preventSubmit}>
-                                                    <Form.Group controlId="name" >
-                                                        <Form.Control type="text" name="name" required placeholder="Search Title: type title of the movie and Hit ENTER" onKeyDown={this.searchMovie} /><br />
-                                                        <Form.Control as="select" name="id" placeholder="Type">
-                                                            <option value="">Select the movie</option>
-                                                            {this.state.searchedMovies.map((movie) => <option key={movie.id} value={movie.id}>{movie.title}</option>)}
-                                                        </Form.Control><br />
-                                                        <Form.Control type="text" name="genres" placeholder="Genres, e.g. Action, Thirller, Drama, etc. Enter comma separated" onKeyDown={this.searchMovie} /><br />
-                                                        <Form.Control type="text" name="StreamsOn" placeholder="Available on, e.g. Netflix, Hulu" /><br />
-                                                    </Form.Group>
-                                                    <Form.Group>
-                                                        <Button variant="primary" variant="primary" type="submit">
-                                                            Add Movie
-                                                        </Button>
-                                                        <Button onClick={this.onCloseModal} variant="secondary" style={{ float: 'right' }}>Close</Button>
-                                                    </Form.Group>
-                                                </Form>
-                                            </Col>
-                                        </Row>
-                                    </div>
-                                </Modal.Body>
-                            </Modal>
-                        </Grid>
-                        <Grid container spacing={1}>
-                            {gridRows}
-                        </Grid>
+                    <h4 >Movie Suggestion by locals</h4>
                     </div>
+                <Grid container alignItems="flex-start" justify="flex-end" direction="row">
+                    <CardActions>
+                        <div>
+                            <div  style={{border:'solid', borderRadius:'10px', }}>
+                                <SearchIcon />
+                                <InputBase
+                                    placeholder="Search Movie..."
+                                    inputProps={{ 'aria-label': 'search' }}
+                                    style={{color:'white'}}
+                                    onKeyDown={this.keyPress}
+                                />
+                            </div>
+                        </div>
+                        <Tooltip title="Add New Movie">
+                            <IconButton aria-label="Add New Movie" onClick={this.onOpenModal}>
+                                <AddIcon />
+                            </IconButton>
+                        </Tooltip>
+                    </CardActions>
+                    <Modal
+                        show={this.state.modal}
+                        onHide={this.onCloseModal}
+                        size="lg"
+                        aria-labelledby="contained-modal-title-vcenter"
+                        centered
+                    >
+                        <Modal.Header closeButton style={{backgroundColor:'black', color:'white'}}>
+                            <Modal.Title id="contained-modal-title-vcenter">
+                                Add your movie suggestion
+                        </Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body style={{backgroundColor:'black', color:'white'}}>
+                            <div className="container">
+                                <Row>
+                                    <Col>
+                                        <Form onSubmit={this.addMovie} id="addCampaignForm" onKeyPress={this.preventSubmit}>
+                                            <Form.Group controlId="name" >
+                                                <Form.Control type="text" name="name" required placeholder="Search Title: type title of the movie and Hit ENTER" onKeyDown={this.searchMovie} /><br />
+                                                <Form.Control as="select" name="id" placeholder="Type">
+                                                    <option value="">Select the movie</option>
+                                                    {this.state.searchedMovies.map((movie) => <option key={movie.id} value={movie.id}>{movie.title}</option>)}
+                                                </Form.Control><br />
+                                                <Form.Control type="text" name="genres" placeholder="Genres, e.g. Action, Thriller, Drama, etc. Enter comma separated" onKeyDown={this.searchMovie} /><br />
+                                                <Form.Control type="text" name="StreamsOn" placeholder="Available on, e.g. Netflix, Hulu" /><br />
+                                            </Form.Group>
+                                            <Form.Group>
+                                                <Button variant="primary" variant="primary" type="submit">
+                                                    Add Movie
+                                                </Button>
+                                                <Button onClick={this.onCloseModal} variant="secondary" style={{ float: 'right' }}>Close</Button>
+                                            </Form.Group>
+                                        </Form>
+                                    </Col>
+                                </Row>
+                            </div>
+                        </Modal.Body>
+                    </Modal>
+                </Grid>
+                <Grid container spacing={1}>
+                    {gridRows}
+                </Grid>
+            </div>
         )
     }
 }

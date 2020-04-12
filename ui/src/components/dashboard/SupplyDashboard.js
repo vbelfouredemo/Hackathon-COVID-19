@@ -8,31 +8,25 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
     root: {
-        flexGrow: 1,
-    },
-    paper: {
-        padding: theme.spacing(2),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-    },
-}));
+        backgroundColor: theme.palette.primary.light,
+    }
+
+
+}))
 const SupplyDashboard = () =>
 {
+    const classes = useStyles();
     return(
-        <React.Fragment>
-            <Container maxWidth="xl">
-                <div style={{ marginLeft: 120, marginTop: 5, padding: 30, backgroundColor: 'slategray' }} >
-                    <Grid container spacing={2}>
-                        <Grid item xs={8}>
-                            <Supplies />
-                        </Grid>
-                        <Grid item xs={4}>
-                            <AddSupply />
-                        </Grid>
-                    </Grid>
-                </div>
-            </Container>
-        </React.Fragment>
+        <div className={classes.root} style={{ marginLeft: 150, marginTop: 0, padding: 30}} >
+            <Grid container spacing={2}>
+                <Grid item xs={8}>
+                    <Supplies />
+                </Grid>
+                <Grid item xs={4}>
+                    <AddSupply />
+                </Grid>
+            </Grid>
+        </div>
     )
 }
 
