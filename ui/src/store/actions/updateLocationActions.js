@@ -9,7 +9,6 @@ export const updateLocation = (zip) => {
             Geocode.fromAddress(zip).then(
                 response => {
                     const addressComponents = response.results[0].address_components;
-                    console.log("Address from updateLocation: ", response);
                     if (addressComponents != null) {
                         for (var i = 0; i < addressComponents.length; i++) {
                             var obj = addressComponents[i];

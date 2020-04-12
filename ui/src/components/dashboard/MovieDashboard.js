@@ -14,7 +14,11 @@ import CardActions from '@material-ui/core/CardActions';
 import { Button, Modal, Row, Col, Form } from 'react-bootstrap'
 
 
+<<<<<<< HEAD
 class MovieDashboard extends Component {
+=======
+class DashboardMovies extends Component {
+>>>>>>> 2fe048ca6f1f82b8c3c729100b3508a6d7160f69
     
     constructor(props) {
         super(props);
@@ -337,4 +341,8 @@ class MovieDashboard extends Component {
   
 // export default withStyles(styles)(DashboardMovies);
 
+<<<<<<< HEAD
 export default MovieDashboard;
+=======
+export default DashboardMovies;
+>>>>>>> 2fe048ca6f1f82b8c3c729100b3508a6d7160f69
