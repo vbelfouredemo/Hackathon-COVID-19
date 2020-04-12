@@ -3,8 +3,13 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import MainNav from './components/layout/MainNav'
 // import NavBar from './components/layout/NavBar';
 import Dashboard from './components/dashboard/Dashboard'
+<<<<<<< HEAD
+import LocalSupplies from './components/supplies/LocalSupplies'
+import DashboardMovies from './components/Movies/DashboardMovies'
+=======
 import SupplyDashboard from './components/dashboard/SupplyDashboard'
 import MovieDashboard from './components/dashboard/MovieDashboard'
+>>>>>>> 8236d2ea028bfe25241b1d04dbbdb8f500181552
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Geocode from "react-geocode";
 import { connect } from 'react-redux';

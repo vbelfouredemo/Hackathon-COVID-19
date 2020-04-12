@@ -7,6 +7,11 @@ import Campaigns from '../campaigns/Campaigns';
 import Neededhelp from '../NeededHelp/Neededhelp';
 import OfferedHelp from '../OfferedHelp/OfferedHelp'
 import Markets from '../markets/Markets';
+<<<<<<< HEAD
+import Supplies from '../supplies/Supplies';
+import AddSupply from '../supplies/AddSupply';
+=======
+>>>>>>> 8236d2ea028bfe25241b1d04dbbdb8f500181552
 
 const useStyles = makeStyles(theme => ({
 
