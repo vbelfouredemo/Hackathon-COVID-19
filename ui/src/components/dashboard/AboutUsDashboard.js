@@ -7,16 +7,20 @@ import Campaigns from '../campaigns/Campaigns';
 import Neededhelp from '../NeededHelp/Neededhelp';
 import OfferedHelp from '../OfferedHelp/OfferedHelp'
 import Markets from '../markets/Markets';
-
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/styles';
 const useStyles = makeStyles(theme => ({
-
+    root: {
+        backgroundColor: theme.palette.primary.light,
+        color: 'white'
+    }
 }))
 
 const AboutUsDashboard = () => {
 
     const classes = useStyles();
     return (
-        <div style={{ marginLeft: 150, marginTop: 0, padding: 30, backgroundColor: 'slategray' }} >
+        <div className={classes.root} style={{ marginLeft: 150, marginTop: 0, padding: 30}} >
             <Grid container spacing={2}>
                 <Grid item xs={4}>
                     Vincent Belfoure
@@ -25,7 +29,7 @@ const AboutUsDashboard = () => {
                     Krishanu Maity
                 </Grid>
                 <Grid item xs={4}>
-                    Bob Barret
+                    Bob Barrett
                 </Grid>
                 <Grid item xs={12}>
                     Our Mission

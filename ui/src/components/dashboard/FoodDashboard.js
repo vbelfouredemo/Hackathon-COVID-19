@@ -12,7 +12,14 @@ import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import CardActions from '@material-ui/core/CardActions';
 import { Button, Modal, Row, Col, Form } from 'react-bootstrap'
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/styles';
 
+const styles = theme => ({
+    root: {
+        backgroundColor: theme.palette.primary.light,
+    },
+});
 
 class FoodDashboard extends Component {
 
@@ -257,85 +264,80 @@ class FoodDashboard extends Component {
             )
         }
         return (
-            <React.Fragment>
-                <Container maxWidth="xl">
-                    <div style={{ marginLeft: 120, marginTop: 5, padding: 30, backgroundColor: 'slategray' }} >
-                            <div style={{float:'left', marginLeft:'0px', color:'white'}}>
-
-                            <h4 >Movie Suggestion by locals</h4>
-                            </div>
-                        <Grid container alignItems="flex-start" justify="flex-end" direction="row">
-                            <CardActions>
-                                <div>
-                                    <div  style={{border:'solid', borderRadius:'10px', }}>
-                                        <SearchIcon />
-                                        <InputBase
-                                            placeholder="Search Movie..."
-                                            inputProps={{ 'aria-label': 'search' }}
-                                            style={{color:'white'}}
-                                            onKeyDown={this.keyPress}
-                                        />
-                                    </div>
-                                </div>
-                                <Tooltip title="Add New Campaign">
-                                    <IconButton aria-label="Add New Campaign" onClick={this.onOpenModal}>
-                                        <AddIcon />
-                                    </IconButton>
-                                </Tooltip>
-                            </CardActions>
-                            <Modal
-                                show={this.state.modal}
-                                onHide={this.onCloseModal}
-                                size="lg"
-                                aria-labelledby="contained-modal-title-vcenter"
-                                centered
-                            >
-                                <Modal.Header closeButton style={{backgroundColor:'black', color:'white'}}>
-                                    <Modal.Title id="contained-modal-title-vcenter">
-                                        Add your movie suggestion
-                                </Modal.Title>
-                                </Modal.Header>
-                                <Modal.Body style={{backgroundColor:'black', color:'white'}}>
-                                    <div className="container">
-                                        <Row>
-                                            <Col>
-                                                <Form onSubmit={this.addMovie} id="addCampaignForm" onKeyPress={this.preventSubmit}>
-                                                    <Form.Group controlId="name" >
-                                                        <Form.Control type="text" name="name" required placeholder="Search Title: type title of the movie and Hit ENTER" onKeyDown={this.searchMovie} /><br />
-                                                        <Form.Control as="select" name="id" placeholder="Type">
-                                                            <option value="">Select the movie</option>
-                                                            {this.state.searchedMovies.map((movie) => <option key={movie.id} value={movie.id}>{movie.title}</option>)}
-                                                        </Form.Control><br />
-                                                        <Form.Control type="text" name="genres" placeholder="Genres, e.g. Action, Thirller, Drama, etc. Enter comma separated" onKeyDown={this.searchMovie} /><br />
-                                                        <Form.Control type="text" name="StreamsOn" placeholder="Available on, e.g. Netflix, Hulu" /><br />
-                                                    </Form.Group>
-                                                    <Form.Group>
-                                                        <Button variant="primary" variant="primary" type="submit">
-                                                            Add Movie
-                                                        </Button>
-                                                        <Button onClick={this.onCloseModal} variant="secondary" style={{ float: 'right' }}>Close</Button>
-                                                    </Form.Group>
-                                                </Form>
-                                            </Col>
-                                        </Row>
-                                    </div>
-                                </Modal.Body>
-                            </Modal>
-                        </Grid>
-                        <Grid container spacing={1}>
-                            {gridRows}
-                        </Grid>
+                <div className={classes.root} style={{ marginLeft: 150, marginTop: 0, padding: 30}} >
+                    <div style={{float:'left', marginLeft:'0px', color:'white'}}>
+                        <h4 >Food recipe suggestion</h4>
                     </div>
-                </Container>
-            </React.Fragment>
+                    <Grid container alignItems="flex-start" justify="flex-end" direction="row">
+                        <CardActions>
+                            <div>
+                                <div  style={{border:'solid', borderRadius:'10px', }}>
+                                    <SearchIcon />
+                                    <InputBase
+                                        placeholder="Search Movie..."
+                                        inputProps={{ 'aria-label': 'search' }}
+                                        style={{color:'white'}}
+                                        onKeyDown={this.keyPress}
+                                    />
+                                </div>
+                            </div>
+                            <Tooltip title="Add New Campaign">
+                                <IconButton aria-label="Add New Campaign" onClick={this.onOpenModal}>
+                                    <AddIcon />
+                                </IconButton>
+                            </Tooltip>
+                        </CardActions>
+                        <Modal
+                            show={this.state.modal}
+                            onHide={this.onCloseModal}
+                            size="lg"
+                            aria-labelledby="contained-modal-title-vcenter"
+                            centered
+                        >
+                            <Modal.Header closeButton style={{backgroundColor:'black', color:'white'}}>
+                                <Modal.Title id="contained-modal-title-vcenter">
+                                    Add your movie suggestion
+                            </Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body style={{backgroundColor:'black', color:'white'}}>
+                                <div className="container">
+                                    <Row>
+                                        <Col>
+                                            <Form onSubmit={this.addMovie} id="addCampaignForm" onKeyPress={this.preventSubmit}>
+                                                <Form.Group controlId="name" >
+                                                    <Form.Control type="text" name="name" required placeholder="Search Title: type title of the movie and Hit ENTER" onKeyDown={this.searchMovie} /><br />
+                                                    <Form.Control as="select" name="id" placeholder="Type">
+                                                        <option value="">Select the movie</option>
+                                                        {this.state.searchedMovies.map((movie) => <option key={movie.id} value={movie.id}>{movie.title}</option>)}
+                                                    </Form.Control><br />
+                                                    <Form.Control type="text" name="genres" placeholder="Genres, e.g. Action, Thirller, Drama, etc. Enter comma separated" onKeyDown={this.searchMovie} /><br />
+                                                    <Form.Control type="text" name="StreamsOn" placeholder="Available on, e.g. Netflix, Hulu" /><br />
+                                                </Form.Group>
+                                                <Form.Group>
+                                                    <Button variant="primary" variant="primary" type="submit">
+                                                        Add Movie
+                                                    </Button>
+                                                    <Button onClick={this.onCloseModal} variant="secondary" style={{ float: 'right' }}>Close</Button>
+                                                </Form.Group>
+                                            </Form>
+                                        </Col>
+                                    </Row>
+                                </div>
+                            </Modal.Body>
+                        </Modal>
+                    </Grid>
+                    <Grid container spacing={1}>
+                        {gridRows}
+                    </Grid>
+                </div>
         )
     }
 }
 
-// DashboardMovies.propTypes = {
-//     classes: PropTypes.object.isRequired,
-// };
+FoodDashboard.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
   
-// export default withStyles(styles)(DashboardMovies);
+export default withStyles(styles)(FoodDashboard);
 
-export default FoodDashboard;
+//export default FoodDashboard;

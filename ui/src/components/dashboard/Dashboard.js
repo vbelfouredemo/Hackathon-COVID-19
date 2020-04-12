@@ -26,7 +26,7 @@ const Dashboard = () => {
                     <Statistics />
                 </Grid>
                 <Grid item xs={5}>
-                    <Markets />
+                    {/* <Markets /> */}
                 </Grid>
                 <Grid item xs={4}>
                     <OfferedHelp />
