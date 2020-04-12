@@ -20,6 +20,7 @@ const theme = createMuiTheme({
   MuiDrawer: {
     paper: {
       backgroundColor: '#18202c',
+      textColor: 'white'
     },
   },
   icon: {
