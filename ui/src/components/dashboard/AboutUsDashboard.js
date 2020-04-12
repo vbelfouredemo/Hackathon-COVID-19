@@ -21,7 +21,26 @@ const AboutUsDashboard = () => {
     const classes = useStyles();
     return (
         <div className={classes.root} style={{ marginLeft: 150, marginTop: 0, padding: 30}} >
-            <Grid container spacing={2}>
+            <table >
+                <tr style={{border:'solid'}}>
+                    <td>
+                    Vincent Belfoure
+                    </td>
+                    <td>
+                    Krishanu Maity
+                    </td>
+                    <td>
+                    Bob Barrett
+                    </td>
+                </tr>
+                <tr>
+                    <p>Our Mission</p>
+                    <p>Our Mission</p>
+                    <p>Our Mission</p>
+                    <p>Our Mission</p>
+                </tr>
+            </table>
+            {/* <Grid container spacing={2}>
                 <Grid item xs={4}>
                     Vincent Belfoure
                 </Grid>
@@ -34,7 +53,7 @@ const AboutUsDashboard = () => {
                 <Grid item xs={12}>
                     Our Mission
                 </Grid>
-            </Grid>
+            </Grid> */}
         </div>
     )
 }
