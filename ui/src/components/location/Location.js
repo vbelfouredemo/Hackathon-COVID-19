@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Grid from '@material-ui/core/Grid';
 import { connect } from 'react-redux';
 import { updateLocation } from '../../store/actions/updateLocationActions';
 import Typography from '@material-ui/core/Typography';
@@ -36,31 +37,30 @@ class Location extends Component {
 
     render() {
         return (
-            <div>
-                <Typography>
-                    Your location:&nbsp;
-                {this.props.currentLocation.city &&
+            <Grid direction="row">
+                <Grid item>
+
+                    {this.props.currentLocation.city ?
                         <Typography>
-                            {this.props.currentLocation.city}, {this.props.currentLocation.sublocality} {this.props.currentLocation.zipcode}
-                        </Typography>
-                    }
-                </Typography>
-                {
-                    !this.state.updateLocation &&
-                    <Button variant="outlined" color="inherit" align="right" style={{ marginLeft: 10 }} onClick={this.handleUpdateClick}>
-                        Change Location
-                       </Button>
-                }
-                {
-                    this.state.updateLocation &&
-                    <form noValidate autoComplete="off" onSubmit={this.handleUpdateLocation}>
-                        <TextField color="primary" style={{ width: 100, height: 5 }} inputstyle={{ width: 100, height: 5 }} label="postal code" value={this.state.zip} variant="outlined" onChange={this.handleChange} />
-                        <Button variant="outlined" color="inherit" style={{ marginLeft: 10 }} onClick={this.handleUpdateLocation}>
-                            Update Location
+                            Your location:&nbsp;{this.props.currentLocation.city}, {this.props.currentLocation.sublocality} {this.props.currentLocation.zipcode}
+                            <TextField color="white" style={{ width: 100, height: 5 }} inputstyle={{ width: 100, height: 5 }} label="postal code" value={this.state.zip} variant="outlined" onChange={this.handleChange} />
+                            <Button variant="outlined" color="inherit" style={{ marginLeft: 10 }} onClick={this.handleUpdateLocation}>
+                                Update Location
                                 </Button>
-                    </form>
-                }
-            </div>
+                        </Typography>
+
+                        :
+                        <Typography>
+                            <TextField color="primary" style={{ width: 100, height: 5 }} inputstyle={{ width: 100, height: 5 }} label="postal code" value={this.state.zip} variant="outlined" onChange={this.handleChange} />
+                            <Button variant="outlined" color="inherit" style={{ marginLeft: 10 }} onClick={this.handleUpdateLocation}>
+                                Update Location
+                                </Button>
+                        </Typography>
+
+                    }
+                </Grid>
+
+            </Grid>
         )
     }
 }
