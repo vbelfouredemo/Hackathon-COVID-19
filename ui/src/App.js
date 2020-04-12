@@ -11,7 +11,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Geocode from "react-geocode";
 import { connect } from 'react-redux';
 import { getLocation } from './store/actions/getLocationActions'
-import { ThemeProvider } from 'react-bootstrap';
+//import { ThemeProvider } from 'react-bootstrap';
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import CssBaseline from '@material-ui/core/CssBaseline'
 import theme from './theme'
 
@@ -23,7 +24,7 @@ class App extends Component {
 
   render() {
     return (
-      <ThemeProvider theme={theme}>
+      <MuiThemeProvider theme={theme}>
         <CssBaseline />
         <BrowserRouter>
           <div className="App">
@@ -37,7 +38,7 @@ class App extends Component {
             </Switch>
           </div>
         </BrowserRouter>
-      </ThemeProvider>
+      </MuiThemeProvider>
     )
   }
 }

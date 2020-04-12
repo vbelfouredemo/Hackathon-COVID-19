@@ -9,6 +9,10 @@ import OfferedHelp from '../OfferedHelp/OfferedHelp'
 import Markets from '../markets/Markets';
 
 const useStyles = makeStyles(theme => ({
+    root: {
+        backgroundColor: theme.palette.primary.light,
+    }
+
 
 }))
 
@@ -16,7 +20,7 @@ const Dashboard = () => {
 
     const classes = useStyles();
     return (
-        <div style={{ marginLeft: 150, marginTop: 0, padding: 30, backgroundColor: 'slategray' }} >
+        <div className={classes.root} style={{ marginLeft: 150, marginTop: 0, padding: 30}} >
             <Grid container spacing={2}>
                 <Grid item xs={7}>
                     <Statistics />

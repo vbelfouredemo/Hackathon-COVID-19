@@ -88,55 +88,51 @@ class Statistics extends Component {
         return closestData;
     }
 
-    render() {
-        /*
-        const myCoords = {
-            lat: this.props.currentLocation.lat,
-            lng: this.props.currentLocation.lng
-        };
-        const countryList = [];
-        this.state.data.map(result => {
-            if (countryList.indexOf(result.country) === -1) {
-                countryList.push(result.country)
-            }
-        });
-        const coordList = [];
-        const coords = this.state.data.map((result) => {
-            coordList.push(result.coordinates);
-        });
-        console.log("Coordinates: ", coordList);
-
-
-        const closest = this.state.data.map(result => {
-            const coord = result.coordinates;
-            return { coord, dist: geolib.getDistance({}) }
+    findByProvince(province) {
+        return this.state.data.find((provinceData) => {
+            return provinceData.province === province;
         })
-        */
+    }
 
-        var closestData = this.getClosestData();
+    render() {
+
+        //var closestData = this.getClosestData();
         //console.log("Closest data: ", closestData);
         // console.log("Country List form Statistics: ", countryList);
+
+        var closestData = {
+            distance: '',
+            result: this.findByProvince(this.props.currentLocation.sublocality)
+        };
+        /*
+        pseudo: if there is no hit on sublocality then default to getClosestData
+        */
+
+        // console.log("Province Data: ", provinceData);
         return (
             <Card variant="outlined">
                 <CardHeader
                     title="COVID-19 Statistics"
                 />
                 <CardContent>
-                <div>Source: Johns Hopkins University CSSE Data</div>
+                    <div>Source: Johns Hopkins University CSSE Data</div>
                     {closestData.result ?
-                        <Grid direction="row" container spacing={5}>
-                            <Grid item>Location: {closestData.result.province}, {closestData.result.country}</Grid>
-                            <Grid item>Updated: {closestData.result.updatedAt}</Grid>
-                            <Grid item>Confirmed Cases: {closestData.result.stats.confirmed}</Grid>
-                            <Grid item>Deaths: {closestData.result.stats.deaths}</Grid>
-                            <Grid item>Recovered: {closestData.result.stats.recovered}</Grid>
-                        </Grid>
+                        <div>
+                            <Grid direction="row" container spacing={5}>
+                                <Grid item>Location: {closestData.result.province}, {closestData.result.country}</Grid>
+                                <Grid item>Updated: {closestData.result.updatedAt}</Grid>
+                            </Grid>
+                            <Grid direction="row" container spacing={5}>
+                                <Grid item>Confirmed Cases: {closestData.result.stats.confirmed}</Grid>
+                                <Grid item>Deaths: {closestData.result.stats.deaths}</Grid>
+                                <Grid item>Recovered: {closestData.result.stats.recovered}</Grid>
+                            </Grid>
+                        </div>
                         :
                         <div>
                             Location data not available
                         </div>
                     }
-
                 </CardContent>
             </Card>
 
