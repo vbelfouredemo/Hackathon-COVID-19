@@ -70,9 +70,7 @@ const MainNav = () => {
                         <Grid item>
                             <Location />
                         </Grid>
-                        <Grid item>
-                            <Login />
-                        </Grid>
+
                     </Grid>
                 </Toolbar>
             </AppBar>
