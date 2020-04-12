@@ -7,8 +7,6 @@ import Campaigns from '../campaigns/Campaigns';
 import Neededhelp from '../NeededHelp/Neededhelp';
 import OfferedHelp from '../OfferedHelp/OfferedHelp'
 import Markets from '../markets/Markets';
-import Supplies from '../supplies/Supplies';
-import AddSupply from '../supplies/AddSupply';
 
 const useStyles = makeStyles(theme => ({
     root: {

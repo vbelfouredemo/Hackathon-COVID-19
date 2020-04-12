@@ -14,7 +14,11 @@ import CardActions from '@material-ui/core/CardActions';
 import { Button, Modal, Row, Col, Form } from 'react-bootstrap'
 
 
+<<<<<<< HEAD
+class MovieDashboard extends Component {
+=======
 class DashboardMovies extends Component {
+>>>>>>> 2fe048ca6f1f82b8c3c729100b3508a6d7160f69
     
     constructor(props) {
         super(props);
@@ -258,7 +262,7 @@ class DashboardMovies extends Component {
         return (
             <React.Fragment>
                 <Container maxWidth="xl">
-                    <div style={{ marginLeft: 120, marginTop: 5, padding: 30, backgroundColor: '#282828' }} >
+                    <div style={{ marginLeft: 120, marginTop: 5, padding: 30, backgroundColor: 'slategray' }} >
                             <div style={{float:'left', marginLeft:'0px', color:'white'}}>
 
                             <h4 >Movie Suggestion by locals</h4>
@@ -337,4 +341,8 @@ class DashboardMovies extends Component {
   
 // export default withStyles(styles)(DashboardMovies);
 
+<<<<<<< HEAD
+export default MovieDashboard;
+=======
 export default DashboardMovies;
+>>>>>>> 2fe048ca6f1f82b8c3c729100b3508a6d7160f69
