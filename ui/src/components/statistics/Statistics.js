@@ -6,6 +6,11 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Grid from '@material-ui/core/Grid';
+import Divider from '@material-ui/core/Divider';
+import Avatar from '@material-ui/core/Avatar';
+import Box from '@material-ui/core/Box';
+import { Typography } from '@material-ui/core';
+import { fade } from '@material-ui/core/styles';
 
 
 // import Card from '@material-ui/core/Card';
@@ -109,32 +114,50 @@ class Statistics extends Component {
         */
 
         // console.log("Province Data: ", provinceData);
+
+        const classes = {
+            box: {
+                display: "inline",
+                bgcolor: fade("#9fa8da", 0.25),
+                pl: 2,
+                pr: 2,
+                pt: 0.5,
+                pb: 0.5
+            }
+
+        }
         return (
             <Card variant="outlined">
                 <CardHeader
-                    title="COVID-19 Statistics"
+                    avatar={ <Avatar src=" ../img/COVID-19-192.png" /> } title="COVID-19 Statistics"
                 />
                 <CardContent>
-                    <div>Source: Johns Hopkins University CSSE Data</div>
-                    {closestData.result ?
-                        <div>
-                            <Grid direction="row" container spacing={5}>
-                                <Grid item>Location: {closestData.result.province}, {closestData.result.country}</Grid>
-                                <Grid item>Updated: {closestData.result.updatedAt}</Grid>
-                            </Grid>
-                            <Grid direction="row" container spacing={5}>
-                                <Grid item>Confirmed Cases: {closestData.result.stats.confirmed}</Grid>
-                                <Grid item>Deaths: {closestData.result.stats.deaths}</Grid>
-                                <Grid item>Recovered: {closestData.result.stats.recovered}</Grid>
-                            </Grid>
+                    <Typography gutterBottom variant="h5" component="h2" display='inline' style={{ marginRight: 5}}>
+                        Source:
+                    </Typography>
+                    <Typography gutterBottom display='inline'>
+                        Johns Hopkins University CSSE Data
+                    </Typography>
+                    <Divider />
+                {closestData.result ?
+                    <div>
+                        <Grid direction="row" container spacing={5} style={{ marginTop: 5 }}>
+                            <Grid item>Location: <Box display="inline" bgcolor={ fade("#9fa8da", 0.25) } pl={2} pr={2} pt={0.5} pb={0.5}> {closestData.result.province}, {closestData.result.country}</Box></Grid>
+                            <Grid item>Last Update: <Box display="inline" bgcolor={ fade("#9fa8da", 0.25) } pl={2} pr={2} pt={0.5} pb={0.5}>{closestData.result.updatedAt}</Box></Grid>
+                        </Grid>
+                        <Grid direction="row" container spacing={5}>
+                            <Grid item>Confirmed Cases: <Box display="inline" bgcolor={ fade("#9fa8da", 0.25) } pl={2} pr={2} pt={0.5} pb={0.5}>{closestData.result.stats.confirmed}</Box></Grid>
+                            <Grid item>Deaths: <Box display="inline" bgcolor={ fade("#9fa8da", 0.25) } pl={2} pr={2} pt={0.5} pb={0.5}>{closestData.result.stats.deaths}</Box></Grid>
+                            <Grid item>Recovered: <Box display="inline" bgcolor={ fade("#9fa8da", 0.25) } pl={2} pr={2} pt={0.5} pb={0.5}>{closestData.result.stats.recovered}</Box></Grid>
+                        </Grid>
+                    </div>
+                    :
+                    <div>
+                        Location data not available
                         </div>
-                        :
-                        <div>
-                            Location data not available
-                        </div>
-                    }
+                }
                 </CardContent>
-            </Card>
+            </Card >
 
         );
 
