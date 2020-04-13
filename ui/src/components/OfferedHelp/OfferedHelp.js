@@ -23,7 +23,7 @@ class OfferedHelp extends Component {
         modal: false,
         filterModal: false,
         currentPage: 1,
-        itmsPerPage: 1,
+        itmsPerPage: 4,
         loggedInUser:{
             name: 'Krishanu Maity',
             email: 'test@gmail.com'
@@ -115,7 +115,7 @@ class OfferedHelp extends Component {
         const indexOfLastItem = this.state.currentPage * this.state.itmsPerPage;
         const indexOfFirstItem = indexOfLastItem - this.state.itmsPerPage;
         const currentItems = this.state.result.slice(indexOfFirstItem, indexOfLastItem);
-        console.log('currentItems',indexOfLastItem,  indexOfFirstItem, currentItems);  
+        //console.log('currentItems',indexOfLastItem,  indexOfFirstItem, currentItems);  
          // Change page
          const paginate = pageNumber => this.setState({currentPage: pageNumber})
 

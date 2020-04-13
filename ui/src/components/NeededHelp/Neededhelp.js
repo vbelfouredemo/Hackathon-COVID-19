@@ -128,8 +128,8 @@ class Neededhelp extends Component {
             .then(function(response) {
                 if(response.ok) {
                   //alert('Thank you the your offer to help. You will be contacted by the organizer!');
-                  this.getData();
                   //document.getElementById("caddCampaignForm").reset();
+                  this.getData();
                 }
              }).then(function(data) { 
                //console.log(data)
@@ -199,7 +199,7 @@ class Neededhelp extends Component {
                 </Grid>
                 <CardContent>
                     <div className="neededhelp-list section">
-                        <NeededhelpItem items={currentItems} loggedInUser={this.state.loggedInUser} removeIds={this.removeIds} addIds={this.addIds} />
+                        <NeededhelpItem items={currentItems} loggedInUser={this.state.loggedInUser} removeIds={this.removeIds} addIds={this.addIds}  getData={this.getData} />
                         <Pagination
                             postsPerPage={this.state.itmsPerPage}
                             totalPosts={this.state.result.length}

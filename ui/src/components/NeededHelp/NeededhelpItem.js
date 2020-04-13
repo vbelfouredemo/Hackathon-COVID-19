@@ -1,7 +1,7 @@
 import React from 'react';
 import ShowMoreText from 'react-show-more-text';
 import Button from '@material-ui/core/Button';
-const NeededhelpItem = ({ items, loggedInUser, removeIds, addIds }) => {
+const NeededhelpItem = ({ items, loggedInUser, removeIds, addIds, getData }) => {
     return (
         items.map(item => (
             <div className="help-body" key={item.id} >

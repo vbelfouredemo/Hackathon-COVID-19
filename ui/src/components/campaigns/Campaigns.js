@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { Button, Modal, Row, Col, Form } from 'react-bootstrap'
-
+import axios from 'axios';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -25,8 +25,10 @@ class Campaigns extends Component {
             filterModal: false,
             loading: false,
             currentPage: 1,
-            camPaignsPerPage: 5
+            camPaignsPerPage: 4
+            //currentLocation: props.currentLocation
         };
+        this.filterCampaign = this.filterCampaign.bind(this);
         // console.log('campaign', props.currentLocation)
     };
     onOpenFilterModal = () => {
@@ -36,28 +38,24 @@ class Campaigns extends Component {
     onCloseFilterModal = () => {
         this.setState({ filterModal: false });
     };
-    filterCampaign(event) {
+    filterCampaign = (event) => {
         event.preventDefault();
-        const data = JSON.stringify({
-            type: event.target.type.value,
-            propValue: event.target.city.value
-        });
-        fetch('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/campaigns', {
-            method: "POST",
-            headers: new Headers({
+        var type = event.target.type.value;
+        var propValue = event.target.propValue.value;
+        const newData ={};
+        newData[type] = propValue;
+        const options = {
+            headers: {
                 'Accept': 'application/json',
-                'Content-Type': ' application/json',
+                'Content-Type': 'application/json',
                 'Authorization': 'Apikey ae1528d0-fc6a-4235-89bd-f9d4ae46e122'
-            }),
-            body: data
-        }).then(function (response) {
-            if (response.ok) {
-                alert('Campaign successfully added!');
-                //document.getElementById("caddCampaignForm").reset();
             }
-        }).then(function (data) {
-            //console.log(data)
-        }).catch(console.log)
+        };
+        axios.get('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/campaigns/query?where='+JSON.stringify(newData), options)
+          .then(res => {
+                this.setState({ campaigns: res.data.campaigns });
+                this.onCloseFilterModal();
+          })
     }
     onOpenModal = () => {
         this.setState({ modal: true });
@@ -97,6 +95,7 @@ class Campaigns extends Component {
         }).catch(console.log)
     }
     render() {
+        //console.log('this.props.currentLocation', this.props.currentLocation)
         const { modal } = this.state;
         //const campaigns = this.state.campaigns;
         // Get current posts
@@ -108,6 +107,7 @@ class Campaigns extends Component {
         const paginate = pageNumber => this.setState({ currentPage: pageNumber }) //setCurrentPage(pageNumber);
         return (
             <>
+                
                 <Card variant="outlined">
                     <CardHeader
                         title="Local businesses need your help"
@@ -127,15 +127,20 @@ class Campaigns extends Component {
                         </CardActions>
                     </Grid>
                     <CardContent>
-                        <CampaignList campaigns={currentCampaigns} />
-
-                        <Pagination
-                            postsPerPage={this.state.camPaignsPerPage}
-                            totalPosts={this.state.campaigns.length}
-                            paginate={paginate}
-                        />
+                        
+                            <div>
+                                <CampaignList campaigns={currentCampaigns} />
+    
+                                <Pagination
+                                    postsPerPage={this.state.camPaignsPerPage}
+                                    totalPosts={this.state.campaigns.length}
+                                    paginate={paginate}
+                                />
+                            </div>
+                            
                     </CardContent>
                 </Card>
+                
                 <Modal
                     show={this.state.modal}
                     onHide={this.onCloseModal}
@@ -203,7 +208,6 @@ class Campaigns extends Component {
                                             <Form.Control as="select" name="type" placeholder="Type">
                                                 <option value="">Select Type of filter</option>
                                                 <option value="name">Name</option>
-                                                <option value="zipcode">Zipcode</option>
                                                 <option value="neighbourhood">Neighbourhood</option>
                                                 <option value="city">City</option>
                                                 <option value="state">State</option>
@@ -222,6 +226,7 @@ class Campaigns extends Component {
                         </div>
                     </Modal.Body>
                 </Modal>
+                
             </>
         )
     }
@@ -229,6 +234,7 @@ class Campaigns extends Component {
         this.refreshlist();
     }
     refreshlist() {
+        //const currentLocation = this.props.currentLocation;
         fetch('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/campaigns', {
             method: "GET",
             headers: new Headers({
@@ -239,7 +245,20 @@ class Campaigns extends Component {
             })
         }).then(res => res.json())
             .then((data) => {
-                this.setState({ campaigns: data.campaigns })
+                const currentLocation = this.props.currentLocation;
+                const campaigns = data.campaigns;
+                var localCampains = [];
+                campaigns.forEach(function (campaign) {
+                    if(currentLocation != 'undefined' && currentLocation.userDetails != 'undefined'){
+                        if((campaign.city == currentLocation.userDetails.city)||
+                        (campaign.neighbourhood == currentLocation.userDetails.neighbourhood)||
+                        (campaign.state == currentLocation.userDetails.sublocality)){
+                            localCampains.push(campaign);
+                        }
+                    }
+                });
+                this.setState({ campaigns: campaigns , localCampains: localCampains})
+                console.log(this.state.localCampains);
             })
             .catch(console.log)
     }
