@@ -127,7 +127,7 @@ class Statistics extends Component {
 
         }
         return (
-            <Card variant="outlined">
+            <Card variant="outlined" style={{height:'235px'}}>
                 <CardHeader
                     avatar={ <Avatar src=" ../img/COVID-19-192.png" /> } title="COVID-19 Statistics"
                 />
