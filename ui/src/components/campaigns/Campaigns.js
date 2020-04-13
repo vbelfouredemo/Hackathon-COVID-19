@@ -25,7 +25,7 @@ class Campaigns extends Component {
             filterModal: false,
             loading: false,
             currentPage: 1,
-            camPaignsPerPage: 4
+            camPaignsPerPage: 5
         };
         // console.log('campaign', props.currentLocation)
     };
@@ -243,15 +243,7 @@ class Campaigns extends Component {
             })
             .catch(console.log)
     }
-    componentWillReceiveProps(props) {
-        this.setState({ currentLocation: props.currentLocation });
-        //console.log('updating props.............'+JSON.stringify(this.state));
-    }
-    //componentDidUpdate(prevProps){
-    //console.log(this.state);
-    //console.log(prevProps.state.campaigns);
-    //this.refreshlist()
-    //}
+
 
 }
 

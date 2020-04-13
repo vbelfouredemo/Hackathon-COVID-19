@@ -4,6 +4,8 @@ import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import axios from 'axios';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import ShowMoreText from 'react-show-more-text';
 import AddIcon from '@material-ui/icons/Add';
 import SearchIcon from '@material-ui/icons/Search';
@@ -32,7 +34,8 @@ class MovieDashboard extends Component {
             originalMovies:[],
             searchedMovies:[],
             modal: false,
-            totalRow:0
+            totalRow:0,
+            name: props.currentUser.userDetails.name
         }
         this.keyPress = this.keyPress.bind(this)
         this.searchMovie = this.searchMovie.bind(this);
@@ -111,6 +114,12 @@ class MovieDashboard extends Component {
 
     addMovie(event){
         event.preventDefault();
+        var name;
+        if(this.state.name != null && this.state.name != 'undefined' && this.state.name != '' ){
+            name = this.state.name;
+        }else{
+            name = 'Anonymous'
+        }
         var selectedMovie;
         this.state.searchedMovies.forEach(function (movie) {
             if(movie.id == event.target.id.value ){
@@ -119,6 +128,7 @@ class MovieDashboard extends Component {
         })
         const data = JSON.stringify({
             tmdb_id : selectedMovie.id,
+            tmdb_rating: selectedMovie.vote_average,
             title : selectedMovie.original_title,
             genres: event.target.genres.value,
             overview: selectedMovie.overview,
@@ -128,7 +138,7 @@ class MovieDashboard extends Component {
             Likes: 0,
             Dislikes: 0,
             StreamsOn : event.target.StreamsOn.value,
-            userEnteredId : 'Bob Barret'
+            userEnteredId : name
         });
         fetch('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/movies', {
             method: "POST",
@@ -233,11 +243,11 @@ class MovieDashboard extends Component {
                     gridRow.push(
                         <Grid item xs={4}>
                             <div style={{backgroundColor:'black', color:'white' , minHeight:'280px'}}>
-                                <div style={{float:'left', width:'40%', backgroundColor:'black', height:'280px'}}>
+                                <div style={{float:'left', width:'45%', backgroundColor:'black', height:'280px'}}>
                                     <img src={`http://image.tmdb.org/t/p/w185${movie.posterPath}`} alt="Card image" height="280px" width="180px"/>
                                 </div>
                                 <div></div>
-                                <div style={{float:'right', width:'60%', backgroundColor:'black', minHeight:'100%',  height:'100%',  paddingTop:'5px'}}>
+                                <div style={{float:'right', width:'55%', backgroundColor:'black', minHeight:'100%',  height:'100%',  paddingTop:'5px'}}>
                                     <ShowMoreText lines={3} more='Show more' less='Show less' anchorClass='' expanded={false} width={window.width}>
                                         {movie.overview}
                                     </ShowMoreText><br/>
@@ -245,6 +255,7 @@ class MovieDashboard extends Component {
                                     {(movie.releaseDate !=='undefined' && movie.releaseDate !=='')?<p style={{marginTop:'-10px'}}>Release Date: {movie.releaseDate}</p>:''}
                                     {(movie.StreamsOn !=='undefined' && movie.StreamsOn !=='')?<p style={{marginTop:'-10px'}}>Streams On: {movie.StreamsOn}</p>:''}
                                     {(movie.userEnteredId !=='undefined' && movie.userEnteredId !=='')?<p style={{marginTop:'-10px'}}>Added By: {movie.userEnteredId}</p>:''}
+                                    {(movie.tmdb_rating !=='undefined' && movie.tmdb_rating !=='')?<p style={{marginTop:'-10px'}}>IMDB Rating: {movie.tmdb_rating}</p>:''}
                                     <a href="#" onClick= { () =>this.addLike(movie.id, movie.tmdb_id)}>
                                         <img src="../img/like.png" onClick= { () =>this.addLike(movie.id, movie.tmdb_id)}></img>&nbsp;&nbsp;{movie.Likes}
                                     </a>
@@ -341,6 +352,12 @@ MovieDashboard.propTypes = {
     classes: PropTypes.object.isRequired,
 };
   
-export default withStyles(styles)(MovieDashboard);
+const mapStateToProps = (state) => {
+    return {
+        currentUser: state.userDetails,
+    }
+}
+
+export default withRouter(connect(mapStateToProps)(withStyles(styles)(MovieDashboard)))
 
 //export default MovieDashboard;

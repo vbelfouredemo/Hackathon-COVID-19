@@ -41,7 +41,8 @@ export const getLocation = () => {
                     }
                 )
             }, () => {
-                reject(new Error('Permission denied'));
+                reject();
+                //reject(new Error('Permission denied'));
             });
         });
     }

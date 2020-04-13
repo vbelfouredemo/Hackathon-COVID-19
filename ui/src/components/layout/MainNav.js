@@ -1,6 +1,7 @@
 import React from 'react';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import { NavLink, withRouter, Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import AppBar from '@material-ui/core/AppBar';
@@ -21,22 +22,26 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import LocalMoviesIcon from '@material-ui/icons/LocalMovies';
 import FastfoodIcon from '@material-ui/icons/Fastfood';
 import RecentActorsIcon from '@material-ui/icons/RecentActors';
+import PersonIcon from '@material-ui/icons/Person';
+import Avatar from '@material-ui/core/Avatar';
 
-const drawerWidth = 150;
+// const drawerWidth = 150;
 
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex'
     },
     appBar: {
-        zIndex: theme.zIndex.drawer + 1,
+        // zIndex: theme.zIndex.drawer + 1,
+        width: `calc(100% - ${theme.drawer.width}px)`,
+        marginLeft: theme.drawer.width,
         boxShadow: 'none'
     },
     drawer: {
         flexShrink: 0,
     },
     drawerPaper: {
-        width: drawerWidth,
+        width: theme.drawer.width,
         backgroundColor: theme.palette.primary.main,
         textColor: 'white'
 
@@ -53,12 +58,19 @@ const useStyles = makeStyles((theme) => ({
     },
     itemText: {
         color: 'white'
+    },
+    avatar: {
+        backgroundColor: theme.palette.primary.dark,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
     }
 }));
 
 
-const MainNav = () => {
+const MainNav = (props) => {
     const classes = useStyles();
+    const initials = props.currentUser.isUserLoggedIn ? props.currentUser.userDetails.givenName[0] + props.currentUser.userDetails.familyName[0] : '';
     return (
         <div className={classes.root}>
             <AppBar position="fixed" className={classes.appBar}>
@@ -84,11 +96,23 @@ const MainNav = () => {
                 }}
             >
 
-                <div classname={classes.drawerContainer}>
+                <div className={classes.drawerContainer}>
                     <Toolbar />
                     <Divider />
+                    <div style={{ alignItems: 'center', display: 'flex', justifyContent: 'center', marginTop: 10 }}>
+                        { props.currentUser.userDetails.imageUrl ?
+                        <Avatar className={classes.avatar} src={props.currentUser.userDetails.imageUrl} />
+                        :
+                        <Avatar className={classes.avatar}>
+                            {initials != '' ? (
+                                initials
+                            ) : (
+                                    <PersonIcon />
+                                )}
+                        </Avatar>
+                    }
+                        </div>
                     <List>
-
                         <ListItem key={"main"} component={Link} to="/">
                             <ListItemIcon className={classes.icon}>
                                 <HomeIcon />
@@ -117,11 +141,18 @@ const MainNav = () => {
                             <ListItemText className={classes.itemText} primary="Foods" />
                         </ListItem>
 
-                        <ListItem key={"foods"} component={Link} to="/aboutus">
+                        <ListItem key={"about"} component={Link} to="/aboutus">
                             <ListItemIcon className={classes.icon}>
                                 <RecentActorsIcon />
                             </ListItemIcon>
                             <ListItemText className={classes.itemText} primary="AboutUs" />
+                        </ListItem>
+                        <ListItem 
+                            key={"login"} component={Link} to="/login">
+                            <ListItemIcon className={classes.icon}>
+                                <PersonIcon />
+                            </ListItemIcon>
+                            <ListItemText className={classes.itemText} primary={!props.currentUser.isUserLoggedIn ? "Login" : "Logout"} />
                         </ListItem>
                     </List>
                 </div>
@@ -134,4 +165,10 @@ const MainNav = () => {
 
 }
 
-export default withRouter(MainNav);
+const mapStateToProps = (state) => {
+    return {
+        currentUser: state.userDetails,
+    }
+}
+
+export default connect(mapStateToProps)(withRouter(MainNav));

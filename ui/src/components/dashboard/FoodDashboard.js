@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 // import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import ShowMoreText from 'react-show-more-text';
 import AddIcon from '@material-ui/icons/Add';
@@ -26,30 +28,37 @@ class FoodDashboard extends Component {
     
     constructor(props) {
         super(props);
+        //console.log(JSON.stringify(props.currentUser.userDetails.name))
         this.state = {
-            movies: [],
-            originalMovies:[],
-            searchedMovies:[],
+            recipes: [],
+            originalRecipes:[],
+            handleUploadFile:[],
             modal: false,
-            totalRow:0
+            showMoreModal: false,
+            totalRow:0,
+            error: null,
+            isUploaded: 0,
+            selectedRecipe: null,
+            name: props.currentUser.userDetails.name
         }
         this.keyPress = this.keyPress.bind(this)
-        this.searchMovie = this.searchMovie.bind(this);
-        this.addMovie = this.addMovie.bind(this);
+        this.handleUploadFile = this.handleUploadFile.bind(this);
+        this.addRecipe = this.addRecipe.bind(this);
+        this.showMore = this.showMore.bind(this);
     }
     onOpenModal = () => { 
         this.setState({ modal: true });
     };
 
-    addLike = (id, tmdb_id) => { 
+    addLike = (id) => { 
         var data;
-        this.state.movies.forEach(function (movie) {
-            if(movie.tmdb_id == parseInt(tmdb_id) ){
-                var Likes = parseInt(movie.Likes) +1
+        this.state.recipes.forEach(function (recipe) {
+            if(recipe.id == id ){
+                var liked = parseInt(recipe.liked) +1
                 data = JSON.stringify({
-                    Likes : Likes
+                    liked : liked.toString()
                 });
-                fetch('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/movies/'+id, {
+                fetch('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/foods/'+id, {
                     method: "PUT",
                     headers: new Headers({
                         'Accept': 'application/json',
@@ -59,7 +68,7 @@ class FoodDashboard extends Component {
                     body: data
                 }).then(function(response) {
                     //this.setState({movies:updatedMovies})
-                    movie.Likes = Likes;
+                    recipe.liked = liked.toString();
                 }).then(function(data) { 
                     //this.getMovies();
                     //console.log(data)
@@ -69,15 +78,15 @@ class FoodDashboard extends Component {
        
     };  
 
-    addDislike = (id, tmdb_id) => { 
+    addLove = (id) => { 
         var data;
-        this.state.movies.forEach(function (movie) {
-            if(movie.tmdb_id == parseInt(tmdb_id) ){
-                var Dislikes = parseInt(movie.Dislikes) +1
+        this.state.recipes.forEach(function (recipe) {
+            if(recipe.id == id ){
+                var loved = parseInt(recipe.loved) +1
                 data = JSON.stringify({
-                    Dislikes : Dislikes
+                    loved : loved.toString()
                 });
-                fetch('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/movies/'+id, {
+                fetch('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/foods/'+id, {
                     method: "PUT",
                     headers: new Headers({
                         'Accept': 'application/json',
@@ -87,7 +96,8 @@ class FoodDashboard extends Component {
                     body: data
                 }).then(function(response) {
                     //this.setState({movies:updatedMovies})
-                    movie.Dislikes = Dislikes;
+                    recipe.loved = loved.toString();
+
                 }).then(function(data) { 
                     //this.getMovies();
                     //console.log(data)
@@ -97,9 +107,27 @@ class FoodDashboard extends Component {
        
     }; 
 
+    showMore = (id) => { 
+        var data;
+        this.state.recipes.forEach(function (recipe) {
+            if(recipe.id == id ){
+                data = recipe;
+            }
+        })
+        this.setState({selectedRecipe: data, showMoreModal: true});
+    }; 
+
     onCloseModal = () => {
         this.setState({ modal: false });
-        this.getMovies();
+        this.getRecipes();
+    };
+
+    onOpenShowMoreModal = () => { 
+        this.setState({ showMoreModal: true });
+    };
+
+    onCloseShowMoreModal = () => {
+        this.setState({ showMoreModal: false });
     };
 
     preventSubmit(event) {
@@ -108,28 +136,25 @@ class FoodDashboard extends Component {
         }
     }
 
-    addMovie(event){
+    addRecipe(event){
         event.preventDefault();
-        var selectedMovie;
-        this.state.searchedMovies.forEach(function (movie) {
-            if(movie.id == event.target.id.value ){
-                selectedMovie = movie;
-            }
-        })
+        var name;
+        if(this.state.name != null && this.state.name != 'undefined' && this.state.name != '' ){
+            name = this.state.name;
+        }else{
+            name = 'Anonymous'
+        }
         const data = JSON.stringify({
-            tmdb_id : selectedMovie.id,
-            title : selectedMovie.original_title,
-            genres: event.target.genres.value,
-            overview: selectedMovie.overview,
-            releaseDate: selectedMovie.release_date,
-            posterPath: selectedMovie.poster_path,
-            originalLanguage: selectedMovie.original_language,
-            Likes: 0,
-            Dislikes: 0,
-            StreamsOn : event.target.StreamsOn.value,
-            userEnteredId : 'Bob Barret'
+            name : event.target.title.value,
+            enteredById: name,
+            recipeText: event.target.recipeText.value,
+            link: event.target.link.value,
+            foodImage: this.state.foodImage,
+            liked: '0',
+            loved: '0',
+            ingredients: event.target.ingredients.value
         });
-        fetch('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/movies', {
+        fetch('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/foods', {
             method: "POST",
             headers: new Headers({
                 'Accept': 'application/json',
@@ -139,7 +164,7 @@ class FoodDashboard extends Component {
             body: data
         }).then(function(response) {
             if(response.ok) {
-              alert('Movie added successfully!');
+              alert('Recipe added successfully!');
               //document.getElementById("caddCampaignForm").reset();
             }
          }).then(function(data) { 
@@ -147,59 +172,78 @@ class FoodDashboard extends Component {
          }).catch(console.log)
     }
     componentDidMount = () => {
-        this.getMovies();
+        this.getRecipes();
     }
     // handleChange(e) {
     //     //this.setState({ value: e.target.value });
     //     alert(e.target.value);
     // }
   
-    searchMovie(e){
-        if(e.keyCode == 13){
-            var value = e.target.value;
-            console.log('value', value);
-            if(value != '' && value != 'undefined' && value.length>0){
-                fetch('https://api.themoviedb.org/3/search/movie?api_key=43b748b63dd0497d13337b1ffcca25e9&query='+value)
-                .then(data => data.json())
-                .then(data => {
-                    if(null != data.results && data.results != 'undefined' && data.results.length>0){
-                        this.setState({searchedMovies:data.results});
-                        alert('Search result returns more than one movie, select the movie from dropdown or enter exact title of better result');
-                    }else{
-                        alert('No movie found matching the title, please enter different value');
-                    }
-                })
-                // put the login here
-            }else{
-                alert('Enter a movie title and hit ENTER');
-            }
+    handleUploadFile=event=>{
+        const {path} = this.props;
+        console.log(path)
+        console.log(event.target.files[0]);
+        const data = new FormData() ;
+        data.append('file', event.target.files[0]);
+        const filename=event.target.files[0].name;
+        console.log(event.target.files[0].name);
+        
+        const toJson = response => response.json()
+        const url = 'https://staging.cloud-elements.com/elements/api-v2/files?path=/Hackathon/'+filename;
+
+        console.log('url', url)
+        fetch(url, { 
+            method: 'post', 
+            headers: new Headers({
+                'Authorization': 'User EfnK8nUSgdNNhKS4ENNGqQxbU/A0XsETBx3HhQagj4Q=, Organization d1035c4dfd8d7fd1b0f500ae85709e58, Element VJ08fi+un+Y8TPsvRhrmpPP4WfK/eGNA+vuBmbT8dLw='
+            }),
+            body:data})
+        .then(response=>{
+            return response.json();
+        }).then(data => {
+            console.log(data.id);
+            this.setState({isUploaded: 2})
+            const linkURL = 'https://staging.cloud-elements.com/elements/api-v2/files/'+data.id+'/links'
+            fetch(linkURL, { 
+                method: 'post', 
+                headers: new Headers({
+                    'Content-type':'application/json',
+                    'Accept':'application/json',
+                    'Authorization': 'User EfnK8nUSgdNNhKS4ENNGqQxbU/A0XsETBx3HhQagj4Q=, Organization d1035c4dfd8d7fd1b0f500ae85709e58, Element VJ08fi+un+Y8TPsvRhrmpPP4WfK/eGNA+vuBmbT8dLw='
+                }),
+                body: '{}'})
+            .then(response=>{
+                return response.json();
+            }).then(data => {
+                console.log(JSON.stringify(data.DownloadUrl));
+                this.setState({foodImage: data.DownloadUrl});
+              });
+          });
         }
-    }
 
     keyPress(e){
         if(e.keyCode == 13){
             var value = e.target.value;
             console.log('value', value);
             if(value != '' && value != 'undefined' && value.length>0){
-                var searchedMovies = []
-                var originalMovies = this.state.originalMovies;
-                originalMovies.forEach(function (movie) {
-                    if(JSON.stringify(movie.title).toLowerCase().indexOf(value.toLowerCase()) > -1 || 
-                    (movie.genres != 'undefined' && JSON.stringify(movie.genres).toLowerCase().indexOf(value.toLowerCase())> -1)){
-                        searchedMovies.push(movie);
+                var searchedRecipes = []
+                var originalRecipes = this.state.originalRecipes;
+                originalRecipes.forEach(function (recipe) {
+                    if(JSON.stringify(recipe.name).toLowerCase().indexOf(value.toLowerCase()) > -1 ){
+                        searchedRecipes.push(recipe);
                     }
                 })
-                var totalRow =Math.ceil(searchedMovies.length/3);
-                this.setState({originalMovies: originalMovies, movies: searchedMovies, totalRow : totalRow});
+                var totalRow =Math.ceil(searchedRecipes.length/3);
+                this.setState({originalRecipes: originalRecipes, recipes: searchedRecipes, totalRow : totalRow});
                 // put the login here
             }else{
-                var totalRow =Math.ceil(this.state.originalMovies.length/3);
-                this.setState({movies: this.state.originalMovies, totalRow: totalRow});
+                var totalRow =Math.ceil(this.state.originalRecipes.length/3);
+                this.setState({recipes: this.state.originalRecipes, totalRow: totalRow});
             }
         }
     }
 
-    getMovies = () => {
+    getRecipes = () => {
         const options = {
             headers: {
                 'Accept': 'application/json',
@@ -208,12 +252,12 @@ class FoodDashboard extends Component {
             }
         };
         
-        axios.get('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/movies', options)
+        axios.get('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/foods', options)
           .then(res => {
-                var movies = res.data.movies;
-                if(movies != 'undefined' && movies.length>0){
-                    var totalRow =Math.ceil(movies.length/3);
-                    this.setState({ movies: movies, totalRow: totalRow, originalMovies: movies});
+                var recipes = res.data.foods;
+                if(recipes != 'undefined' && recipes.length>0){
+                    var totalRow =Math.ceil(recipes.length/4);
+                    this.setState({ recipes: recipes, totalRow: totalRow, originalRecipes: recipes});
                 }
           })
     }
@@ -226,43 +270,39 @@ class FoodDashboard extends Component {
         //console.log('this.state.totalRow',this.state.totalRow, this.state.movies.length)
         for (var i = 0; i < this.state.totalRow; i++) {
             var gridRow = []
-            for (var j = 0; j < 3; j++) {
-                if(index<this.state.movies.length){
-                    const movie = this.state.movies[index];
+            for (var j = 0; j < 4; j++) {
+                if(index<this.state.recipes.length){
+                    const recipe = this.state.recipes[index];
                     gridRow.push(
-                        <Grid item xs={4}>
-                            <div style={{backgroundColor:'black', color:'white' , minHeight:'280px'}}>
-                                <div style={{float:'left', width:'40%', backgroundColor:'black', height:'280px'}}>
-                                    <img src={`http://image.tmdb.org/t/p/w185${movie.posterPath}`} alt="Card image" height="280px" width="180px"/>
-                                </div>
-                                <div></div>
-                                <div style={{float:'right', width:'60%', backgroundColor:'black', minHeight:'100%',  height:'100%',  paddingTop:'5px'}}>
-                                    <ShowMoreText lines={3} more='Show more' less='Show less' anchorClass='' expanded={false} width={window.width}>
-                                        {movie.overview}
-                                    </ShowMoreText><br/>
-                                    {(movie.genres !=='undefined' && movie.genres !=='')?<p style={{marginTop:'-10px'}}>Genre: {movie.genres}</p>:''}
-                                    {(movie.releaseDate !=='undefined' && movie.releaseDate !=='')?<p style={{marginTop:'-10px'}}>Release Date: {movie.releaseDate}</p>:''}
-                                    {(movie.StreamsOn !=='undefined' && movie.StreamsOn !=='')?<p style={{marginTop:'-10px'}}>Streams On: {movie.StreamsOn}</p>:''}
-                                    {(movie.userEnteredId !=='undefined' && movie.userEnteredId !=='')?<p style={{marginTop:'-10px'}}>Added By: {movie.userEnteredId}</p>:''}
-                                    <a href="#" onClick= { () =>this.addLike(movie.id, movie.tmdb_id)}>
-                                        <img src="../img/like.png" onClick= { () =>this.addLike(movie.id, movie.tmdb_id)}></img>&nbsp;&nbsp;{movie.Likes}
+                        <Grid item xs={3}>
+                                <div style={{width:'300px', backgroundColor:'#EEEEFF', minHeight:'100%',  height:'100%',  paddingTop:'5px', borderRadius:'10px',  borderTopRightRadius: '10px'}} >
+                                    <h5 style={{marginLeft:'10px'}}>{recipe.name}</h5>
+                                    <a  href="#" onClick= {() =>this.showMore(recipe.id)}>
+                                        <img src={`${recipe.foodImage}`} alt="Card image" height="200px" width="220px"  style={{marginLeft: '40px'}}/>
                                     </a>
-                                    <a href="#" onClick= { () =>this.addDislike(movie.id, movie.tmdb_id)} style={{float:'right', marginRight:'5px'}}>
-                                        {movie.Dislikes}&nbsp;&nbsp;<img src="../img/dislike.png" onClick= { () =>this.addDislike(movie.id, movie.tmdb_id)}></img>
-                                    </a>
+                                    {(recipe.enteredById !=='undefined' && recipe.enteredById !=='')?<p style={{marginLeft:'10px'}}><br/>Added By:<b> {recipe.enteredById} </b></p>:''}
+                                    <div style={{padding: '10px'}}>
+                                        <a href="#" onClick= {() =>this.addLike(recipe.id)} style={{float:'left', marginLeft:'5px'}}>
+                                            <img src="../img/like.png" onClick= { () =>this.addLike(recipe.id)}></img>&nbsp;&nbsp;{recipe.liked}
+                                        </a>
+                                        <a href="#" onClick= {() =>this.addLove(recipe.id)} style={{float:'right', marginRight:'5px'}}>
+                                            {recipe.loved}&nbsp;&nbsp;<img src="../img/love.png" onClick= {() =>this.addLove(recipe.id)}></img>
+                                        </a>
+                                        <br/>
+                                    </div>
                                 </div>
-                            </div>
                         </Grid>
                     )
                     index++;
                 }
             }
             gridRows.push(
-            <Grid container item xs={12} spacing={3}>
+            <Grid container item xs={12} spacing={5}>
                 {gridRow}
             </Grid>
             )
         }
+        const { error, isUploaded } = this.state;
         return (
                 <div className={classes.root} style={{ marginLeft: 150, marginTop: 0, padding: 30}} >
                     <div style={{float:'left', marginLeft:'0px', color:'white'}}>
@@ -274,15 +314,15 @@ class FoodDashboard extends Component {
                                 <div  style={{border:'solid', borderRadius:'10px', }}>
                                     <SearchIcon />
                                     <InputBase
-                                        placeholder="Search Movie..."
+                                        placeholder="Search recipe..."
                                         inputProps={{ 'aria-label': 'search' }}
                                         style={{color:'white'}}
                                         onKeyDown={this.keyPress}
                                     />
                                 </div>
                             </div>
-                            <Tooltip title="Add New Campaign">
-                                <IconButton aria-label="Add New Campaign" onClick={this.onOpenModal}>
+                            <Tooltip title="Add New Recipe">
+                                <IconButton aria-label="Add New Recipe" onClick={this.onOpenModal}>
                                     <AddIcon />
                                 </IconButton>
                             </Tooltip>
@@ -294,28 +334,34 @@ class FoodDashboard extends Component {
                             aria-labelledby="contained-modal-title-vcenter"
                             centered
                         >
-                            <Modal.Header closeButton style={{backgroundColor:'black', color:'white'}}>
+                            <Modal.Header closeButton style={{backgroundColor:'#EEEEFF'}}>
                                 <Modal.Title id="contained-modal-title-vcenter">
-                                    Add your movie suggestion
+                                    Add your recipe suggestion
                             </Modal.Title>
                             </Modal.Header>
-                            <Modal.Body style={{backgroundColor:'black', color:'white'}}>
+                            <Modal.Body style={{backgroundColor:'#EEEEFF'}}>
                                 <div className="container">
                                     <Row>
                                         <Col>
-                                            <Form onSubmit={this.addMovie} id="addCampaignForm" onKeyPress={this.preventSubmit}>
+                                            <Form onSubmit={this.addRecipe} id="addCampaignForm" onKeyPress={this.preventSubmit}>
                                                 <Form.Group controlId="name" >
-                                                    <Form.Control type="text" name="name" required placeholder="Search Title: type title of the movie and Hit ENTER" onKeyDown={this.searchMovie} /><br />
-                                                    <Form.Control as="select" name="id" placeholder="Type">
-                                                        <option value="">Select the movie</option>
-                                                        {this.state.searchedMovies.map((movie) => <option key={movie.id} value={movie.id}>{movie.title}</option>)}
-                                                    </Form.Control><br />
-                                                    <Form.Control type="text" name="genres" placeholder="Genres, e.g. Action, Thirller, Drama, etc. Enter comma separated" onKeyDown={this.searchMovie} /><br />
-                                                    <Form.Control type="text" name="StreamsOn" placeholder="Available on, e.g. Netflix, Hulu" /><br />
+                                                    <Form.Control type="text" name="title" required placeholder="Recipe title" /><br />
+                                                        <div>
+                                                            <div onChange={this.handleUploadFile}>
+                                                                <label>Upload your food image</label><input type="file" name="file" placeholder="FILE UPLOAD" ref="fileUploader" />
+                                                                {isUploaded===1 &&  (<div>Uploading...</div>)}
+                                                                {isUploaded===2 && (<div>Uploaded!!</div>)}
+                                                                {error && (<div>Error: {error.message}</div>)}
+                                                            </div>               
+                                                        </div> 
+                                                   <br /><br />
+                                                    <Form.Control type="text" name="link" placeholder="Youtube/Website URL" /><br />
+                                                    <Form.Control as="textarea" rows="4" name="recipeText" placeholder="Describe the recipe" onKeyDown={this.searchMovie} /><br />
+                                                    <Form.Control as="textarea" rows="3" name="ingredients" placeholder="Ingredients" /><br />
                                                 </Form.Group>
                                                 <Form.Group>
                                                     <Button variant="primary" variant="primary" type="submit">
-                                                        Add Movie
+                                                        Add Recipe
                                                     </Button>
                                                     <Button onClick={this.onCloseModal} variant="secondary" style={{ float: 'right' }}>Close</Button>
                                                 </Form.Group>
@@ -325,6 +371,87 @@ class FoodDashboard extends Component {
                                 </div>
                             </Modal.Body>
                         </Modal>
+                        {(this.state.selectedRecipe !== null)?
+                        <Modal
+                            show={this.state.showMoreModal}
+                            onHide={this.onCloseShowMoreModal}
+                            size="lg"
+                            aria-labelledby="contained-modal-title-vcenter"
+                            centered
+                            style={{width: '100%', height: '900px'}}
+                        >
+                            <Modal.Header closeButton style={{backgroundColor:'#EEEEFF'}}>
+                                <Modal.Title id="contained-modal-title-vcenter">
+                                    {(this.state.selectedRecipe !== null)?this.state.selectedRecipe.name:''}
+                            </Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body style={{backgroundColor:'#EEEEFF'}}>
+                                <div  style={{width: '100%', height: 'auto', minHeight: '100%', backgroundImage:`${this.state.selectedRecipe.foodImage}`, backgroundBlendMode:'lighten'}}>
+                                    {(this.state.selectedRecipe !== null)?
+                                        <div>
+                                            {/* <div style={{ width:'50%', float:'left'}}>
+                                                <img src={`${this.state.selectedRecipe.foodImage}`} alt="Card image" style={{ height: '100%', width:'100%'}}/>
+                                            </div> */}
+                                            <div >
+                                                <b>Ingredients:</b><br/>
+                                                {this.state.selectedRecipe.ingredients}<br/><br/>
+                                                <p><b>Preparation: </b><br/>{this.state.selectedRecipe.recipeText}</p>
+                                            </div>
+                                        </div>
+                                    :''}
+                                    {(this.state.selectedRecipe.link == null || this.state.selectedRecipe.link == 'undefined' || this.state.selectedRecipe.link == '')?
+                                        <div>
+                                            <div style={{ width:'40%', float:'left'}}>
+                                                <img src={`${this.state.selectedRecipe.foodImage}`} alt="Card image" style={{ height: '100%', width:'100%'}}/>
+                                            </div>
+                                            <div style={{padding: '10px'}}>
+                                                <a href="#" onClick= {() =>this.addLike(this.state.selectedRecipe.id)} style={{float:'left', marginLeft:'5px'}}>
+                                                    <img src="../img/like.png" onClick= { () =>this.addLike(this.state.selectedRecipe.id)}></img>&nbsp;&nbsp;{this.state.selectedRecipe.liked}
+                                                </a>
+                                                <a href="#" onClick= {() =>this.addLove(this.state.selectedRecipe.id)} style={{float:'right', marginRight:'5px'}}>
+                                                    {this.state.selectedRecipe.loved}&nbsp;&nbsp;<img src="../img/love.png" onClick= {() =>this.addLove(this.state.selectedRecipe.id)}></img>
+                                                </a>
+                                                <br/>
+                                            </div>
+                                        </div>
+                                    :
+                                        (this.state.selectedRecipe.link.indexOf('youtube.com') > -1)?
+                                        <div>
+                                            <div style={{widith:'70%', float:'left'}}>
+                                                <iframe width="420" height="315" src={`${this.state.selectedRecipe.link}`} frameborder="0" ></iframe>
+                                            </div>
+                                            <div style={{widith:'30%', float:'right'}}>
+                                                <a href="#" onClick= {() =>this.addLike(this.state.selectedRecipe.id)} style={{float:'left'}}>
+                                                    <img src="../img/like.png" onClick= { () =>this.addLike(this.state.selectedRecipe.id)}></img>&nbsp;&nbsp;{this.state.selectedRecipe.liked}
+                                                </a>
+                                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                                <a href="#" onClick= {() =>this.addLove(this.state.selectedRecipe.id)} style={{float:'right'}}>
+                                                    {this.state.selectedRecipe.loved}&nbsp;&nbsp;<img src="../img/love.png" onClick= {() =>this.addLove(this.state.selectedRecipe.id)}></img>
+                                                </a>
+                                                <br/>
+                                            </div>
+                                        </div>
+                                        :
+                                        <div>
+                                            <div style={{ width:'40%', float:'left'}}>
+                                                <img src={`${this.state.selectedRecipe.foodImage}`} alt="Card image" style={{ height: '100%', width:'100%'}}/>
+                                            </div>
+                                            <div style={{ width:'60%', float:'right', marginTop: '50px'}}>
+                                                <a href="#" onClick= {() =>this.addLike(this.state.selectedRecipe.id)} style={{float:'left', marginLeft:'5px'}}>
+                                                    <img src="../img/like.png" onClick= { () =>this.addLike(this.state.selectedRecipe.id)}></img>&nbsp;&nbsp;{this.state.selectedRecipe.liked}
+                                                </a>
+                                                <a href="#" onClick= {() =>this.addLove(this.state.selectedRecipe.id)} style={{float:'right', marginRight:'5px'}}>
+                                                    {this.state.selectedRecipe.loved}&nbsp;&nbsp;<img src="../img/love.png" onClick= {() =>this.addLove(this.state.selectedRecipe.id)}></img>
+                                                </a>
+                                                <br/> <br/> <br/> <br/>
+                                                <a href={`${this.state.selectedRecipe.link}`} target="_blank"><b>Click here for more details</b></a>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </Modal.Body>
+                        </Modal>
+                        :''}
                     </Grid>
                     <Grid container spacing={1}>
                         {gridRows}
@@ -337,7 +464,13 @@ class FoodDashboard extends Component {
 FoodDashboard.propTypes = {
     classes: PropTypes.object.isRequired,
 };
-  
-export default withStyles(styles)(FoodDashboard);
+
+const mapStateToProps = (state) => {
+    return {
+        currentUser: state.userDetails,
+    }
+}
+
+export default withRouter(connect(mapStateToProps)(withStyles(styles)(FoodDashboard)))
 
 //export default FoodDashboard;
