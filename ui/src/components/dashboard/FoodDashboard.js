@@ -27,29 +27,31 @@ class FoodDashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            movies: [],
-            originalMovies:[],
-            searchedMovies:[],
+            recipes: [],
+            originalRecipes:[],
+            handleUploadFile:[],
             modal: false,
-            totalRow:0
+            totalRow:0,
+            error: null,
+            isUploaded: 0,
         }
         this.keyPress = this.keyPress.bind(this)
-        this.searchMovie = this.searchMovie.bind(this);
-        this.addMovie = this.addMovie.bind(this);
+        this.handleUploadFile = this.handleUploadFile.bind(this);
+        this.addRecipe = this.addRecipe.bind(this);
     }
     onOpenModal = () => { 
         this.setState({ modal: true });
     };
 
-    addLike = (id, tmdb_id) => { 
+    addLike = (id) => { 
         var data;
-        this.state.movies.forEach(function (movie) {
-            if(movie.tmdb_id == parseInt(tmdb_id) ){
-                var Likes = parseInt(movie.Likes) +1
+        this.state.recipes.forEach(function (recipe) {
+            if(recipe.id == id ){
+                var liked = parseInt(recipe.liked) +1
                 data = JSON.stringify({
-                    Likes : Likes
+                    liked : liked.toString()
                 });
-                fetch('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/movies/'+id, {
+                fetch('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/foods/'+id, {
                     method: "PUT",
                     headers: new Headers({
                         'Accept': 'application/json',
@@ -59,7 +61,7 @@ class FoodDashboard extends Component {
                     body: data
                 }).then(function(response) {
                     //this.setState({movies:updatedMovies})
-                    movie.Likes = Likes;
+                    recipe.liked = liked.toString();
                 }).then(function(data) { 
                     //this.getMovies();
                     //console.log(data)
@@ -69,15 +71,16 @@ class FoodDashboard extends Component {
        
     };  
 
-    addDislike = (id, tmdb_id) => { 
+    addLove = (id) => { 
         var data;
-        this.state.movies.forEach(function (movie) {
-            if(movie.tmdb_id == parseInt(tmdb_id) ){
-                var Dislikes = parseInt(movie.Dislikes) +1
+        alert(111);
+        this.state.recipes.forEach(function (recipe) {
+            if(recipe.id == id ){
+                var loved = parseInt(recipe.loved) +1
                 data = JSON.stringify({
-                    Dislikes : Dislikes
+                    loved : loved.toString()
                 });
-                fetch('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/movies/'+id, {
+                fetch('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/foods/'+id, {
                     method: "PUT",
                     headers: new Headers({
                         'Accept': 'application/json',
@@ -87,7 +90,9 @@ class FoodDashboard extends Component {
                     body: data
                 }).then(function(response) {
                     //this.setState({movies:updatedMovies})
-                    movie.Dislikes = Dislikes;
+                    recipe.loved = loved.toString();
+                    alert(JSON.stringify(recipe));
+
                 }).then(function(data) { 
                     //this.getMovies();
                     //console.log(data)
@@ -99,7 +104,7 @@ class FoodDashboard extends Component {
 
     onCloseModal = () => {
         this.setState({ modal: false });
-        this.getMovies();
+        //this.getMovies();
     };
 
     preventSubmit(event) {
@@ -108,28 +113,21 @@ class FoodDashboard extends Component {
         }
     }
 
-    addMovie(event){
+    addRecipe(event){
         event.preventDefault();
-        var selectedMovie;
-        this.state.searchedMovies.forEach(function (movie) {
-            if(movie.id == event.target.id.value ){
-                selectedMovie = movie;
-            }
-        })
+        alert('event.target.link.value'+event.target.link.value);
+        alert('this.state.foodImage'+this.state.foodImage);
         const data = JSON.stringify({
-            tmdb_id : selectedMovie.id,
-            title : selectedMovie.original_title,
-            genres: event.target.genres.value,
-            overview: selectedMovie.overview,
-            releaseDate: selectedMovie.release_date,
-            posterPath: selectedMovie.poster_path,
-            originalLanguage: selectedMovie.original_language,
-            Likes: 0,
-            Dislikes: 0,
-            StreamsOn : event.target.StreamsOn.value,
-            userEnteredId : 'Bob Barret'
+            name : event.target.title.value,
+            enteredById: 'Krishanu Maity',
+            recipeText: event.target.recipeText.value,
+            link: event.target.link.value,
+            foodImage: this.state.foodImage,
+            liked: '0',
+            loved: '0',
+            ingredients: event.target.ingredients.value
         });
-        fetch('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/movies', {
+        fetch('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/foods', {
             method: "POST",
             headers: new Headers({
                 'Accept': 'application/json',
@@ -139,7 +137,7 @@ class FoodDashboard extends Component {
             body: data
         }).then(function(response) {
             if(response.ok) {
-              alert('Movie added successfully!');
+              alert('Recipe added successfully!');
               //document.getElementById("caddCampaignForm").reset();
             }
          }).then(function(data) { 
@@ -154,47 +152,66 @@ class FoodDashboard extends Component {
     //     alert(e.target.value);
     // }
   
-    searchMovie(e){
-        if(e.keyCode == 13){
-            var value = e.target.value;
-            console.log('value', value);
-            if(value != '' && value != 'undefined' && value.length>0){
-                fetch('https://api.themoviedb.org/3/search/movie?api_key=43b748b63dd0497d13337b1ffcca25e9&query='+value)
-                .then(data => data.json())
-                .then(data => {
-                    if(null != data.results && data.results != 'undefined' && data.results.length>0){
-                        this.setState({searchedMovies:data.results});
-                        alert('Search result returns more than one movie, select the movie from dropdown or enter exact title of better result');
-                    }else{
-                        alert('No movie found matching the title, please enter different value');
-                    }
-                })
-                // put the login here
-            }else{
-                alert('Enter a movie title and hit ENTER');
-            }
+    handleUploadFile=event=>{
+        const {path} = this.props;
+        console.log(path)
+        console.log(event.target.files[0]);
+        const data = new FormData() ;
+        data.append('file', event.target.files[0]);
+        const filename=event.target.files[0].name;
+        console.log(event.target.files[0].name);
+        
+        const toJson = response => response.json()
+        const url = 'https://staging.cloud-elements.com/elements/api-v2/files?path=/Hackathon/'+filename;
+
+        console.log('url', url)
+        fetch(url, { 
+            method: 'post', 
+            headers: new Headers({
+                'Authorization': 'User EfnK8nUSgdNNhKS4ENNGqQxbU/A0XsETBx3HhQagj4Q=, Organization d1035c4dfd8d7fd1b0f500ae85709e58, Element VJ08fi+un+Y8TPsvRhrmpPP4WfK/eGNA+vuBmbT8dLw='
+            }),
+            body:data})
+        .then(response=>{
+            return response.json();
+        }).then(data => {
+            console.log(data.id);
+            this.setState({isUploaded: 2})
+            const linkURL = 'https://staging.cloud-elements.com/elements/api-v2/files/'+data.id+'/links'
+            fetch(linkURL, { 
+                method: 'post', 
+                headers: new Headers({
+                    'Content-type':'application/json',
+                    'Accept':'application/json',
+                    'Authorization': 'User EfnK8nUSgdNNhKS4ENNGqQxbU/A0XsETBx3HhQagj4Q=, Organization d1035c4dfd8d7fd1b0f500ae85709e58, Element VJ08fi+un+Y8TPsvRhrmpPP4WfK/eGNA+vuBmbT8dLw='
+                }),
+                body: '{}'})
+            .then(response=>{
+                return response.json();
+            }).then(data => {
+                console.log(JSON.stringify(data.DownloadUrl));
+                this.setState({foodImage: data.DownloadUrl});
+              });
+          });
         }
-    }
 
     keyPress(e){
         if(e.keyCode == 13){
             var value = e.target.value;
             console.log('value', value);
             if(value != '' && value != 'undefined' && value.length>0){
-                var searchedMovies = []
-                var originalMovies = this.state.originalMovies;
-                originalMovies.forEach(function (movie) {
-                    if(JSON.stringify(movie.title).toLowerCase().indexOf(value.toLowerCase()) > -1 || 
-                    (movie.genres != 'undefined' && JSON.stringify(movie.genres).toLowerCase().indexOf(value.toLowerCase())> -1)){
-                        searchedMovies.push(movie);
+                var searchedRecipes = []
+                var originalRecipes = this.state.originalRecipes;
+                originalRecipes.forEach(function (recipe) {
+                    if(JSON.stringify(recipe.name).toLowerCase().indexOf(value.toLowerCase()) > -1 ){
+                        searchedRecipes.push(recipe);
                     }
                 })
-                var totalRow =Math.ceil(searchedMovies.length/3);
-                this.setState({originalMovies: originalMovies, movies: searchedMovies, totalRow : totalRow});
+                var totalRow =Math.ceil(searchedRecipes.length/3);
+                this.setState({originalRecipes: originalRecipes, recipes: searchedRecipes, totalRow : totalRow});
                 // put the login here
             }else{
-                var totalRow =Math.ceil(this.state.originalMovies.length/3);
-                this.setState({movies: this.state.originalMovies, totalRow: totalRow});
+                var totalRow =Math.ceil(this.state.originalRecipes.length/3);
+                this.setState({recipes: this.state.originalRecipes, totalRow: totalRow});
             }
         }
     }
@@ -208,12 +225,12 @@ class FoodDashboard extends Component {
             }
         };
         
-        axios.get('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/movies', options)
+        axios.get('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/foods', options)
           .then(res => {
-                var movies = res.data.movies;
-                if(movies != 'undefined' && movies.length>0){
-                    var totalRow =Math.ceil(movies.length/3);
-                    this.setState({ movies: movies, totalRow: totalRow, originalMovies: movies});
+                var recipes = res.data.foods;
+                if(recipes != 'undefined' && recipes.length>0){
+                    var totalRow =Math.ceil(recipes.length/4);
+                    this.setState({ recipes: recipes, totalRow: totalRow, originalRecipes: recipes});
                 }
           })
     }
@@ -226,43 +243,34 @@ class FoodDashboard extends Component {
         //console.log('this.state.totalRow',this.state.totalRow, this.state.movies.length)
         for (var i = 0; i < this.state.totalRow; i++) {
             var gridRow = []
-            for (var j = 0; j < 3; j++) {
-                if(index<this.state.movies.length){
-                    const movie = this.state.movies[index];
+            for (var j = 0; j < 4; j++) {
+                if(index<this.state.recipes.length){
+                    const recipe = this.state.recipes[index];
                     gridRow.push(
-                        <Grid item xs={4}>
-                            <div style={{backgroundColor:'#EEEEFF',  minHeight:'280px', borderRadius:'10px', borderTopRightRadius: '10px'}} >
-                                <div style={{float:'left', width:'40%', backgroundColor:'black', height:'280px'}}>
-                                    <img src={`http://image.tmdb.org/t/p/w185${movie.posterPath}`} alt="Card image" height="280px" width="180px"/>
-                                </div>
-                                <div></div>
-                                <div style={{float:'right', width:'60%', backgroundColor:'#EEEEFF', minHeight:'100%',  height:'100%',  paddingTop:'5px'}}>
-                                    <ShowMoreText lines={3} more='Show more' less='Show less' anchorClass='' expanded={false} width={window.width}>
-                                        {movie.overview}
-                                    </ShowMoreText><br/>
-                                    {(movie.genres !=='undefined' && movie.genres !=='')?<p style={{marginTop:'-10px'}}>Genre: {movie.genres}</p>:''}
-                                    {(movie.releaseDate !=='undefined' && movie.releaseDate !=='')?<p style={{marginTop:'-10px'}}>Release Date: {movie.releaseDate}</p>:''}
-                                    {(movie.StreamsOn !=='undefined' && movie.StreamsOn !=='')?<p style={{marginTop:'-10px'}}>Streams On: {movie.StreamsOn}</p>:''}
-                                    {(movie.userEnteredId !=='undefined' && movie.userEnteredId !=='')?<p style={{marginTop:'-10px'}}>Added By: {movie.userEnteredId}</p>:''}
-                                    <a href="#" onClick= { () =>this.addLike(movie.id, movie.tmdb_id)}>
-                                        <img src="../img/like.png" onClick= { () =>this.addLike(movie.id, movie.tmdb_id)}></img>&nbsp;&nbsp;{movie.Likes}
+                        <Grid item xs={3}>
+                                <div style={{width:'300px', backgroundColor:'#EEEEFF', minHeight:'100%',  height:'100%',  paddingTop:'5px', borderRadius:'10px',  borderTopRightRadius: '10px'}} >
+                                    <h5>{recipe.name}</h5>
+                                    <img src={`${recipe.foodImage}`} alt="Card image" height="200px" width="220px"  style={{marginLeft: '40px'}}/>
+                                    {(recipe.enteredById !=='undefined' && recipe.enteredById !=='')?<p style={{marginTop:'-10px'}}><br/>Added By: {recipe.enteredById}</p>:''}
+                                    <a href="#" onClick= { () =>this.addLike(recipe.id)} style={{float:'left', marginLeft:'10px'}}>
+                                        <img src="../img/like.png" onClick= { () =>this.addLike(recipe.id)}></img>&nbsp;&nbsp;{recipe.liked}
                                     </a>
-                                    <a href="#" onClick= { () =>this.addDislike(movie.id, movie.tmdb_id)} style={{float:'right', marginRight:'5px'}}>
-                                        {movie.Dislikes}&nbsp;&nbsp;<img src="../img/dislike.png" onClick= { () =>this.addDislike(movie.id, movie.tmdb_id)}></img>
+                                    <a href="#" onClick= { () =>this.addLove(recipe.id)} style={{float:'right', marginRight:'10px'}}>
+                                        {recipe.loved}&nbsp;&nbsp;<img src="../img/love.png" onClick= { () =>this.addLove(recipe.id)}></img>
                                     </a>
                                 </div>
-                            </div>
                         </Grid>
                     )
                     index++;
                 }
             }
             gridRows.push(
-            <Grid container item xs={12} spacing={3}>
+            <Grid container item xs={12} spacing={5}>
                 {gridRow}
             </Grid>
             )
         }
+        const { error, isUploaded } = this.state;
         return (
                 <div className={classes.root} style={{ marginLeft: 150, marginTop: 0, padding: 30}} >
                     <div style={{float:'left', marginLeft:'0px', color:'white'}}>
@@ -281,9 +289,8 @@ class FoodDashboard extends Component {
                                     />
                                 </div>
                             </div>
-                            <img src="https://my.syncplicity.com/dl/vqcldcetaigluym/filter" ></img>
-                            <Tooltip title="Add New Campaign">
-                                <IconButton aria-label="Add New Campaign" onClick={this.onOpenModal}>
+                            <Tooltip title="Add New Recipe">
+                                <IconButton aria-label="Add New Recipe" onClick={this.onOpenModal}>
                                     <AddIcon />
                                 </IconButton>
                             </Tooltip>
@@ -295,26 +302,30 @@ class FoodDashboard extends Component {
                             aria-labelledby="contained-modal-title-vcenter"
                             centered
                         >
-                            <Modal.Header closeButton style={{backgroundColor:'#17BD93', color:'white'}}>
+                            <Modal.Header closeButton style={{backgroundColor:'#EEEEFF'}}>
                                 <Modal.Title id="contained-modal-title-vcenter">
                                     Add your recipe suggestion
                             </Modal.Title>
                             </Modal.Header>
-                            <Modal.Body style={{backgroundColor:'#17BD93', color:'white'}}>
+                            <Modal.Body style={{backgroundColor:'#EEEEFF'}}>
                                 <div className="container">
                                     <Row>
                                         <Col>
-                                            <Form onSubmit={this.addMovie} id="addCampaignForm" onKeyPress={this.preventSubmit}>
+                                            <Form onSubmit={this.addRecipe} id="addCampaignForm" onKeyPress={this.preventSubmit}>
                                                 <Form.Group controlId="name" >
-                                                    <Form.Control type="text" name="name" required placeholder="Recipe title" /><br />
-                                                    <div class="custom-file">
-                                                        <input type="file" class="custom-file-input" id="validatedCustomFile" required/>
-                                                        <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
-                                                        <div class="invalid-feedback">Example invalid custom file feedback</div>
-                                                    </div><br /><br />
-                                                    <Form.Control type="text" name="foodURL" placeholder="Youtube/Website URL" /><br />
-                                                    <Form.Control as="textarea" rows="4" name="recipe" placeholder="Describe the recipe" onKeyDown={this.searchMovie} /><br />
-                                                    <Form.Control as="textarea" rows="2" name="ingredients" placeholder="Ingredients" /><br />
+                                                    <Form.Control type="text" name="title" required placeholder="Recipe title" /><br />
+                                                        <div>
+                                                            <div onChange={this.handleUploadFile}>
+                                                                <label>Upload your food image</label><input type="file" name="file" placeholder="FILE UPLOAD" ref="fileUploader" />
+                                                                {isUploaded===1 &&  (<div>Uploading...</div>)}
+                                                                {isUploaded===2 && (<div>Uploaded!!</div>)}
+                                                                {error && (<div>Error: {error.message}</div>)}
+                                                            </div>               
+                                                        </div> 
+                                                   <br /><br />
+                                                    <Form.Control type="text" name="link" placeholder="Youtube/Website URL" /><br />
+                                                    <Form.Control as="textarea" rows="4" name="recipeText" placeholder="Describe the recipe" onKeyDown={this.searchMovie} /><br />
+                                                    <Form.Control as="textarea" rows="3" name="ingredients" placeholder="Ingredients" /><br />
                                                 </Form.Group>
                                                 <Form.Group>
                                                     <Button variant="primary" variant="primary" type="submit">
