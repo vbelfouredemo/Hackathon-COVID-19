@@ -34,6 +34,7 @@ class Neededhelp extends Component {
         }
         this.addIds = this.addIds.bind(this);
         this.removeIds = this.removeIds.bind(this);
+        this.getData = this.getData.bind(this);
     }
 
     getData = () => {
@@ -94,8 +95,9 @@ class Neededhelp extends Component {
             body: JSON.stringify(updatedData)})
             .then(function(response) {
                 if(response.ok) {
-                  alert('Successfully unsubscribed from the Help!');
+                  //alert('Successfully unsubscribed from the Help!');
                   //document.getElementById("caddCampaignForm").reset();
+                  this.getData();
                 }
              }).then(function(data) { 
                //console.log(data)
@@ -125,7 +127,8 @@ class Neededhelp extends Component {
             body: JSON.stringify(updatedData)})
             .then(function(response) {
                 if(response.ok) {
-                  alert('Thank you the your offer to help. You will be contacted by the organizer!');
+                  //alert('Thank you the your offer to help. You will be contacted by the organizer!');
+                  this.getData();
                   //document.getElementById("caddCampaignForm").reset();
                 }
              }).then(function(data) { 
