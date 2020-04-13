@@ -19,8 +19,8 @@ const NeededhelpItem = ({ items, loggedInUser, removeIds, addIds }) => {
                 {(item.url != '' && item.url != 'undefined')?<a href={item.url} target="_blank" ><b>Click here for more info</b><br/></a>:''}
                 <span >
                     {(item.signedUp)
-                        ? <Button variant="outlined" color="primary"  onClick= { () =>removeIds(item.id)}>Thank You for signing up for help</Button>
-                        : (item.moreHelpNeeded)? <Button variant="outlined" color="primary" onClick= { () =>addIds(item.id)} >Signup for help!</Button>:<Button variant="outlined" color="inherit">We have got enough help, Thank You!</Button>
+                        ? <Button variant="outlined" color="primary"  onClick= { () =>removeIds(item.id, loggedInUser.email)}>Thank You for signing up for help</Button>
+                        : (item.moreHelpNeeded)? <Button variant="outlined" color="primary" onClick= { () =>addIds(item.id, loggedInUser.email)} >Signup for help!</Button>:<Button variant="outlined" color="inherit">We have got enough help, Thank You!</Button>
                     }
                 </span>
                 <hr></hr>

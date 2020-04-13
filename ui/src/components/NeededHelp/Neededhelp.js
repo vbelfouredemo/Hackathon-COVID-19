@@ -32,6 +32,8 @@ class Neededhelp extends Component {
                 email: props.currentUser.userDetails.email
             }
         }
+        this.addIds = this.addIds.bind(this);
+        this.removeIds = this.removeIds.bind(this);
     }
 
     getData = () => {
@@ -47,12 +49,12 @@ class Neededhelp extends Component {
           .then(res => {
                 var neededHelps = res.data.neededhelps;
                 // neededHelps.forEach(function (element) {
-                //     element.offeredhelpIds = ['test@gmail.com'];
+                //     element.offeredHelpIds = ['test@gmail.com'];
                 // });
                 for(var i = 0; i < neededHelps.length; i++) {
-                    var offeredhelpIds =  neededHelps[i].offeredhelpIds;
-                    if (undefined !== offeredhelpIds){
-                        if(offeredhelpIds.indexOf(this.state.loggedInUser.email) > -1){
+                    var offeredHelpIds =  neededHelps[i].offeredHelpIds;
+                    if (undefined !== offeredHelpIds){
+                        if(offeredHelpIds.indexOf(this.state.loggedInUser.email) > -1){
                             neededHelps[i].signedUp = true;
                         }else{
                             neededHelps[i].signedUp = false;
@@ -69,18 +71,18 @@ class Neededhelp extends Component {
                 this.setState({ result: neededHelps});
           })
     }
-    removeIds(id)  { 
-        // console.log('removeIds..', id);
-    };
-    addIds(id){ 
-        // console.log('addIds..', id);
-        var updatedHelp;
+    removeIds= (id, email) =>{ 
+        var updatedData = new Object();
         var neededHelps = this.state.result;
         neededHelps.forEach(function (element) {
             if(element.id == id){
-                element['offeredhelpIds'].push(this.state.loggedInUser.email);
+                if(updatedData.offeredHelpIds == 'undefined'){
+                    updatedData.offeredHelpIds = ''
+                }else{
+                    updatedData.offeredHelpIds = element.offeredHelpIds.replace(email, '');
+                }
+                updatedData.offeredHelpCount = element.offeredHelpCount - 1;
             }
-            updatedHelp = element;
         });
         fetch('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/neededHelp/'+id, {
             method: "PUT",
@@ -89,16 +91,46 @@ class Neededhelp extends Component {
                 'Content-Type': ' application/json',
                 'Authorization': 'Apikey ae1528d0-fc6a-4235-89bd-f9d4ae46e122'
             }),
-            body: updatedHelp
-        }).then(function(response) {
-            if(response.ok) {
-              alert('Help successfully added!');
-              this.getData();
-              //document.getElementById("caddCampaignForm").reset();
+            body: JSON.stringify(updatedData)})
+            .then(function(response) {
+                if(response.ok) {
+                  alert('Successfully unsubscribed from the Help!');
+                  //document.getElementById("caddCampaignForm").reset();
+                }
+             }).then(function(data) { 
+               //console.log(data)
+             }).catch(console.log)
+    };
+    addIds= (id, email) =>{ 
+        // console.log('addIds..', id);
+        var updatedData = new Object();
+        var neededHelps = this.state.result;
+        neededHelps.forEach(function (element) {
+            if(element.id == id){
+                if(updatedData.offeredHelpIds == 'undefined'){
+                    updatedData.offeredHelpIds = email
+                }else{
+                    updatedData.offeredHelpIds = element.offeredHelpIds+','+email;
+                }
+                updatedData.offeredHelpCount = element.offeredHelpCount + 1;
             }
-         }).then(function(data) { 
-           //console.log(data)
-         }).catch(console.log)
+        });
+        fetch('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/neededHelp/'+id, {
+            method: "PUT",
+            headers: new Headers({
+                'Accept': 'application/json',
+                'Content-Type': ' application/json',
+                'Authorization': 'Apikey ae1528d0-fc6a-4235-89bd-f9d4ae46e122'
+            }),
+            body: JSON.stringify(updatedData)})
+            .then(function(response) {
+                if(response.ok) {
+                  alert('Thank you the your offer to help. You will be contacted by the organizer!');
+                  //document.getElementById("caddCampaignForm").reset();
+                }
+             }).then(function(data) { 
+               //console.log(data)
+             }).catch(console.log)
     };
     componentDidMount = () => {
         this.getData();
@@ -164,7 +196,7 @@ class Neededhelp extends Component {
                 </Grid>
                 <CardContent>
                     <div className="neededhelp-list section">
-                        <NeededhelpItem items={currentItems} loggedInUser={this.state.loggedInUser} removeIds={this.removeIds} addIds={this.addIds}/>
+                        <NeededhelpItem items={currentItems} loggedInUser={this.state.loggedInUser} removeIds={this.removeIds} addIds={this.addIds} />
                         <Pagination
                             postsPerPage={this.state.itmsPerPage}
                             totalPosts={this.state.result.length}
