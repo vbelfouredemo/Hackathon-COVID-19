@@ -22,10 +22,10 @@ const Dashboard = () => {
     return (
         <div className={classes.root} style={{ marginLeft: 150, marginTop: 0, padding: 30}} >
             <Grid container spacing={2}>
-                <Grid item xs={6}>
+                <Grid item xs={6} >
                     <Statistics />
                 </Grid>
-                <Grid item xs={5}>
+                <Grid item xs={5} >
                      {/* <Markets /> */}
                 </Grid>
                 <Grid item xs={4}>

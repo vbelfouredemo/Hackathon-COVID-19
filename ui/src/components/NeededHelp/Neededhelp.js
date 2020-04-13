@@ -16,18 +16,21 @@ import {Button, Modal, Row, Col, Form} from 'react-bootstrap'
 
 class Neededhelp extends Component {
 
-    state = {
-        lat: '',
-        long:'',
-        zip: '',
-        result: [],
-        modal: false,
-        filterModal: false,
-        currentPage: 1,
-        itmsPerPage: 3,
-        loggedInUser:{
-            name: 'Krishanu Maity',
-            email: 'test@gmail.com'
+    constructor(props) {
+        super(props);
+        this.state = {
+            lat: '',
+            long:'',
+            zip: '',
+            result: [],
+            modal: false,
+            filterModal: false,
+            currentPage: 1,
+            itmsPerPage: 3,
+            loggedInUser:{
+                name: props.currentUser.userDetails.name,
+                email: props.currentUser.userDetails.email
+            }
         }
     }
 
@@ -213,8 +216,10 @@ class Neededhelp extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        currentLocation: state.currentLocation
+        currentLocation: state.currentLocation,
+        currentUser: state.userDetails
     }
 }
 
 export default connect(mapStateToProps)(Neededhelp);
+
