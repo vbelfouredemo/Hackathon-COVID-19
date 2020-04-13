@@ -23,7 +23,7 @@ class OfferedHelp extends Component {
         modal: false,
         filterModal: false,
         currentPage: 1,
-        itmsPerPage: 3,
+        itmsPerPage: 5,
         loggedInUser:{
             name: 'Krishanu Maity',
             email: 'test@gmail.com'

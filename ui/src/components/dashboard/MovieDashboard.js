@@ -128,7 +128,7 @@ class MovieDashboard extends Component {
             Likes: 0,
             Dislikes: 0,
             StreamsOn : event.target.StreamsOn.value,
-            userEnteredId : 'Bob Barret'
+            userEnteredId : 'Bob Barrett'
         });
         fetch('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/movies', {
             method: "POST",

@@ -152,11 +152,6 @@ class Neededhelp extends Component {
                 <CardHeader title="People/organizations need help"/>
                 <Grid container alignItems="flex-start" justify="flex-end" direction="row">
                     <CardActions>
-                        <Tooltip title="Filter items">
-                            <IconButton aria-label="Filter Items" onClick={this.onOpenFilterModal}>
-                                <FilterListIcon />
-                            </IconButton>
-                        </Tooltip>
                         <Tooltip title="Add a New item">
                             <IconButton aria-label="Add a New item" onClick={this.onOpenModal}>
                                 <AddIcon />
