@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
 
 const MainNav = (props) => {
     const classes = useStyles();
-    const initials = props.currentUser.isUserLoggedIn ? props.currentUser.userDetails.givenName[0] + props.currentUser.userDetails.familyName[0] : '';
+    const initials = props.currentUser.isUserLoggedIn == true ? props.currentUser.userDetails.givenName[0] + props.currentUser.userDetails.familyName[0] : '';
     return (
         <div className={classes.root}>
             <AppBar position="fixed" className={classes.appBar}>
