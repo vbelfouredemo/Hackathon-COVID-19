@@ -100,6 +100,9 @@ const MainNav = (props) => {
                     <Toolbar />
                     <Divider />
                     <div style={{ alignItems: 'center', display: 'flex', justifyContent: 'center', marginTop: 10 }}>
+                        { props.currentUser.userDetails.imageUrl ?
+                        <Avatar className={classes.avatar} src={props.currentUser.userDetails.imageUrl} />
+                        :
                         <Avatar className={classes.avatar}>
                             {initials != '' ? (
                                 initials
@@ -107,6 +110,7 @@ const MainNav = (props) => {
                                     <PersonIcon />
                                 )}
                         </Avatar>
+                    }
                         </div>
                     <List>
                         <ListItem key={"main"} component={Link} to="/">
