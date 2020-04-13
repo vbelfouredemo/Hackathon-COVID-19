@@ -40,6 +40,7 @@ class Login extends Component {
   logout = () => {
     this.setState({ userDetails: {}, isUserLoggedIn: false })
     this.props.userLogout(this.state);
+    console.log("Logout clicked...");
     if (this.state.isUserLoggedIn == false) {
       this.setState({ redirect: "/" });
     }
@@ -81,7 +82,7 @@ class Login extends Component {
                 render={renderProps => (
                   <button
                     className="logout-button"
-                    onClick={renderProps.onClick}
+                    onClick={this.logout}
                   >
                     Log Out
                   </button>
