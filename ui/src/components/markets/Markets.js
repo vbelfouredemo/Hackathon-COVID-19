@@ -83,7 +83,7 @@ class Markets extends Component {
     render() {
 
         return (
-            <Card style={{height:'235px'}}>
+            <Card style={{height:'235px'}} elevation={4}>
                 <CardHeader
                     title="Market Watch"
                 />
