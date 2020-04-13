@@ -2,12 +2,19 @@ import React, { Component } from 'react'
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
-import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
 
 
 class Markets extends Component {
 
-    
+
     constructor(props) {
         super(props);
         this.state = {
@@ -17,21 +24,21 @@ class Markets extends Component {
                 "02. open": "0.000",
                 "03. high": "0.00",
                 "04. low": "0.00"
-            },    
-            sp500data:{
+            },
+            sp500data: {
                 "01. symbol": "^SPX",
                 "05. price": "0.00",
                 "02. open": "0.000",
                 "03. high": "0.00",
                 "04. low": "0.00"
-            },     
+            },
             russ2000data: {
                 "01. symbol": "^RUT",
                 "05. price": "0.00",
                 "02. open": "0.000",
                 "03. high": "0.00",
                 "04. low": "0.00"
-            }  
+            }
         };
         this.getTicker("^SPX");
         //this.getTicker("^DJI");
@@ -53,78 +60,76 @@ class Markets extends Component {
             })
         }).then(response => response.json())
             .then((data) => {
-                //              this.setState({ djiadata: data })
-                
-                if ( data["Global Quote"]["01. symbol"] != null) {
-                    if (index === "^SPX" ) {
+
+                if (data["Global Quote"]["01. symbol"] != null) {
+                    if (index === "^SPX") {
                         this.setState({ sp500data: data["Global Quote"] });
                         console.log(' In getTicker sp500data', this.state.sp500data);
                     } else if (index === "^DJI") {
                         this.setState({ djiadata: data["Global Quote"] });
                         console.log('In getTicker djiadata', this.state.djiadata);
-                    }  
-                    else  if (index === "^RUT") {
+                    }
+                    else if (index === "^RUT") {
                         this.setState({ russ2000data: data["Global Quote"] });
                         console.log('In getTicker russ2000data', this.state.russ2000data);
-                    }  
+                    }
                 }
             })
             .catch(console.log)
 
-}
+    }
 
 
-render() {
-    //const DJIA = new Markets();
-    return (
-        <Card>
-            <CardHeader
-                title="Market Watch"
-            />
-            <CardContent>
-                <div>Source: Alphavantage</div>
-                { this.state.sp500data ?
-               // (this.state.djiadata || this.state.sp500data || this.state.nasdaqdata) ?
-                    <Grid container>
-                        <Grid direction="row" container spacing={7}>
-                            <Grid item >Index</Grid>
-                            <Grid item>Current</Grid>
-                            <Grid item>Open</Grid>
-                            <Grid item>High</Grid>
-                            <Grid item>Low</Grid>
-                        </Grid>
-                        <Grid direction="row" container spacing={5}>
-                            <Grid item>{this.state.sp500data["01. symbol"]}</Grid>
-                            <Grid item>{Number(this.state.sp500data["05. price"]).toFixed(2)}</Grid>
-                            <Grid item>{Number(this.state.sp500data["02. open"]).toFixed(2)}</Grid>
-                            <Grid item>{Number(this.state.sp500data["03. high"]).toFixed(2)}</Grid>
-                            <Grid item>{Number(this.state.sp500data["04. low"]).toFixed(2)}</Grid>
-                        </Grid>
-                        <Grid direction="row" container spacing={5}>
-                            <Grid item>{this.state.djiadata["01. symbol"]}</Grid>
-                            <Grid item>{Number(this.state.djiadata["05. price"]).toFixed(2)}</Grid>
-                            <Grid item>{Number(this.state.djiadata["02. open"]).toFixed(2)}</Grid>
-                            <Grid item>{Number(this.state.djiadata["03. high"]).toFixed(2)}</Grid>
-                            <Grid item>{Number(this.state.djiadata["04. low"]).toFixed(2)}</Grid>
-                        </Grid>
-                        <Grid direction="row" container spacing={5}>
-                            <Grid item>{this.state.russ2000data["01. symbol"]}</Grid>
-                            <Grid item>{Number(this.state.russ2000data["05. price"]).toFixed(2)}</Grid>
-                            <Grid item>{Number(this.state.russ2000data["02. open"]).toFixed(2)}</Grid>
-                            <Grid item>{Number(this.state.russ2000data["03. high"]).toFixed(2)}</Grid>
-                            <Grid item>{Number(this.state.russ2000data["04. low"]).toFixed(2)}</Grid>
-                        </Grid>
-                    </Grid>
-                    :
-                    <div>
-                        Data not available
+    render() {
+
+        return (
+            <Card style={{height:'235px'}}>
+                <CardHeader
+                    title="Market Watch"
+                />
+                <CardContent>
+                    <div>Source: Alphavantage</div>
+                    { //this.state.sp500data ?
+                        (this.state.djiadata || this.state.sp500data || this.state.nasdaqdata) ?
+                            <TableContainer component={Paper}>
+                                <Table size="small" aria-label="a dense table">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>Index</TableCell>
+                                            <TableCell>Current</TableCell>
+                                            <TableCell>Open</TableCell>
+                                            <TableCell>High</TableCell>
+                                            <TableCell>Low</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        <TableRow>
+                                            <TableCell>S&P500</TableCell>
+                                            <TableCell>{Number(this.state.sp500data["05. price"]).toFixed(2)}</TableCell>
+                                            <TableCell>{Number(this.state.sp500data["02. open"]).toFixed(2)}</TableCell>
+                                            <TableCell>{Number(this.state.sp500data["03. high"]).toFixed(2)}</TableCell>
+                                            <TableCell>{Number(this.state.sp500data["04. low"]).toFixed(2)}</TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                            <TableCell>Russell 2000</TableCell>
+                                            <TableCell>{Number(this.state.russ2000data["05. price"]).toFixed(2)}</TableCell>
+                                            <TableCell>{Number(this.state.russ2000data["02. open"]).toFixed(2)}</TableCell>
+                                            <TableCell>{Number(this.state.russ2000data["03. high"]).toFixed(2)}</TableCell>
+                                            <TableCell>{Number(this.state.russ2000data["04. low"]).toFixed(2)}</TableCell>
+                                        </TableRow>
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                            :
+                            <div>
+                                Data not available
                     </div>
-                }
+                    }
 
-            </CardContent>
-        </Card>
-    )
-}
+                </CardContent>
+            </Card>
+        )
+    }
 }
 
 export default Markets;

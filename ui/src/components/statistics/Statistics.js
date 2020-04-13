@@ -110,7 +110,7 @@ class Statistics extends Component {
 
         // console.log("Province Data: ", provinceData);
         return (
-            <Card variant="outlined">
+            <Card variant="outlined" style={{height:'235px'}}>
                 <CardHeader
                     title="COVID-19 Statistics"
                 />
