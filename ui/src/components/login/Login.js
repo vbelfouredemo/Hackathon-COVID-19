@@ -28,8 +28,10 @@ class Login extends Component {
   }
 
   responseGoogle = response => {
-    this.setState({ userDetails: response.profileObj, isUserLoggedIn: true });
-    this.props.userLogin(this.state);
+    if (response.profileObj) {
+      this.setState({ userDetails: response.profileObj, isUserLoggedIn: true });
+      this.props.userLogin(this.state);
+    }
     if (this.state.isUserLoggedIn == true) {
       this.setState({ redirect: "/" });
     }
@@ -51,27 +53,27 @@ class Login extends Component {
     }
 
     return (
-      <div className={classes.root} style={{ marginLeft: 0, marginTop: 0, padding: 30}}>
+      <div className={classes.root} style={{ marginLeft: 0, marginTop: 0, padding: 30 }}>
         <div className="loginlogout">
           {!this.props.currentUser.isUserLoggedIn && (
             <GoogleLogin
               clientId="39208363193-8fu7230mh4lhruik0umv2r5le48dv4q2.apps.googleusercontent.com" //TO BE CREATED
               render={renderProps => (
-                  <button
-                    className="button"
-                    onClick={renderProps.onClick}
-                    disabled={renderProps.disabled}
-                  >
-                    Log in with Google
-                  </button>
-                )}
+                <button
+                  className="button"
+                  onClick={renderProps.onClick}
+                  disabled={renderProps.disabled}
+                >
+                  Log in with Google
+                </button>
+              )}
               onSuccess={this.responseGoogle}
               onFailure={this.responseGoogle}
               cookiePolicy={'single_host_origin'}
               isSignedIn={true}
             />
           )}
-          {this.props.currentUser.isUserLoggedIn && (
+          {this.props.currentUser.isUserLoggedIn ?
             <span className="logout">
               Logged in as: {this.props.currentUser.userDetails.givenName}{" "}
               {this.props.currentUser.userDetails.familyName} &nbsp;&nbsp;&nbsp;
@@ -87,7 +89,9 @@ class Login extends Component {
                 onLogoutSuccess={this.logout}
               />
             </span>
-          )}
+            :
+            <div>Not logged in</div>
+          }
         </div>
       </div>
     );
