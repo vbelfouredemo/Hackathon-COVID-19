@@ -233,11 +233,11 @@ class MovieDashboard extends Component {
                     gridRow.push(
                         <Grid item xs={4}>
                             <div style={{backgroundColor:'black', color:'white' , minHeight:'280px'}}>
-                                <div style={{float:'left', width:'40%', backgroundColor:'black', height:'280px'}}>
+                                <div style={{float:'left', width:'45%', backgroundColor:'black', height:'280px'}}>
                                     <img src={`http://image.tmdb.org/t/p/w185${movie.posterPath}`} alt="Card image" height="280px" width="180px"/>
                                 </div>
                                 <div></div>
-                                <div style={{float:'right', width:'60%', backgroundColor:'black', minHeight:'100%',  height:'100%',  paddingTop:'5px'}}>
+                                <div style={{float:'right', width:'55%', backgroundColor:'black', minHeight:'100%',  height:'100%',  paddingTop:'5px'}}>
                                     <ShowMoreText lines={3} more='Show more' less='Show less' anchorClass='' expanded={false} width={window.width}>
                                         {movie.overview}
                                     </ShowMoreText><br/>
