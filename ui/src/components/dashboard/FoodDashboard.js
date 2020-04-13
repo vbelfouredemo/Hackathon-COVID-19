@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 // import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import ShowMoreText from 'react-show-more-text';
 import AddIcon from '@material-ui/icons/Add';
@@ -26,18 +28,23 @@ class FoodDashboard extends Component {
     
     constructor(props) {
         super(props);
+        //console.log(JSON.stringify(props.currentUser.userDetails.name))
         this.state = {
             recipes: [],
             originalRecipes:[],
             handleUploadFile:[],
             modal: false,
+            showMoreModal: false,
             totalRow:0,
             error: null,
             isUploaded: 0,
+            selectedRecipe: null,
+            name: props.currentUser.userDetails.name
         }
         this.keyPress = this.keyPress.bind(this)
         this.handleUploadFile = this.handleUploadFile.bind(this);
         this.addRecipe = this.addRecipe.bind(this);
+        this.showMore = this.showMore.bind(this);
     }
     onOpenModal = () => { 
         this.setState({ modal: true });
@@ -73,7 +80,6 @@ class FoodDashboard extends Component {
 
     addLove = (id) => { 
         var data;
-        alert(111);
         this.state.recipes.forEach(function (recipe) {
             if(recipe.id == id ){
                 var loved = parseInt(recipe.loved) +1
@@ -91,7 +97,6 @@ class FoodDashboard extends Component {
                 }).then(function(response) {
                     //this.setState({movies:updatedMovies})
                     recipe.loved = loved.toString();
-                    alert(JSON.stringify(recipe));
 
                 }).then(function(data) { 
                     //this.getMovies();
@@ -102,9 +107,27 @@ class FoodDashboard extends Component {
        
     }; 
 
+    showMore = (id) => { 
+        var data;
+        this.state.recipes.forEach(function (recipe) {
+            if(recipe.id == id ){
+                data = recipe;
+            }
+        })
+        this.setState({selectedRecipe: data, showMoreModal: true});
+    }; 
+
     onCloseModal = () => {
         this.setState({ modal: false });
-        //this.getMovies();
+        this.getRecipes();
+    };
+
+    onOpenShowMoreModal = () => { 
+        this.setState({ showMoreModal: true });
+    };
+
+    onCloseShowMoreModal = () => {
+        this.setState({ showMoreModal: false });
     };
 
     preventSubmit(event) {
@@ -115,11 +138,16 @@ class FoodDashboard extends Component {
 
     addRecipe(event){
         event.preventDefault();
-        alert('event.target.link.value'+event.target.link.value);
-        alert('this.state.foodImage'+this.state.foodImage);
+        var name;
+        alert(this.state.name)
+        if(this.state.name != null && this.state.name != 'undefined' && this.state.name != '' ){
+            name = this.state.name;
+        }else{
+            name = 'Anonymous'
+        }
         const data = JSON.stringify({
             name : event.target.title.value,
-            enteredById: 'Krishanu Maity',
+            enteredById: name,
             recipeText: event.target.recipeText.value,
             link: event.target.link.value,
             foodImage: this.state.foodImage,
@@ -145,7 +173,7 @@ class FoodDashboard extends Component {
          }).catch(console.log)
     }
     componentDidMount = () => {
-        this.getMovies();
+        this.getRecipes();
     }
     // handleChange(e) {
     //     //this.setState({ value: e.target.value });
@@ -216,7 +244,7 @@ class FoodDashboard extends Component {
         }
     }
 
-    getMovies = () => {
+    getRecipes = () => {
         const options = {
             headers: {
                 'Accept': 'application/json',
@@ -249,15 +277,20 @@ class FoodDashboard extends Component {
                     gridRow.push(
                         <Grid item xs={3}>
                                 <div style={{width:'300px', backgroundColor:'#EEEEFF', minHeight:'100%',  height:'100%',  paddingTop:'5px', borderRadius:'10px',  borderTopRightRadius: '10px'}} >
-                                    <h5>{recipe.name}</h5>
-                                    <img src={`${recipe.foodImage}`} alt="Card image" height="200px" width="220px"  style={{marginLeft: '40px'}}/>
-                                    {(recipe.enteredById !=='undefined' && recipe.enteredById !=='')?<p style={{marginTop:'-10px'}}><br/>Added By: {recipe.enteredById}</p>:''}
-                                    <a href="#" onClick= { () =>this.addLike(recipe.id)} style={{float:'left', marginLeft:'10px'}}>
-                                        <img src="../img/like.png" onClick= { () =>this.addLike(recipe.id)}></img>&nbsp;&nbsp;{recipe.liked}
+                                    <h5 style={{marginLeft:'10px'}}>{recipe.name}</h5>
+                                    <a  href="#" onClick= {() =>this.showMore(recipe.id)}>
+                                        <img src={`${recipe.foodImage}`} alt="Card image" height="200px" width="220px"  style={{marginLeft: '40px'}}/>
                                     </a>
-                                    <a href="#" onClick= { () =>this.addLove(recipe.id)} style={{float:'right', marginRight:'10px'}}>
-                                        {recipe.loved}&nbsp;&nbsp;<img src="../img/love.png" onClick= { () =>this.addLove(recipe.id)}></img>
-                                    </a>
+                                    {(recipe.enteredById !=='undefined' && recipe.enteredById !=='')?<p style={{marginLeft:'10px'}}><br/>Added By:<b> {recipe.enteredById} </b></p>:''}
+                                    <div style={{padding: '10px'}}>
+                                        <a href="#" onClick= {() =>this.addLike(recipe.id)} style={{float:'left', marginLeft:'5px'}}>
+                                            <img src="../img/like.png" onClick= { () =>this.addLike(recipe.id)}></img>&nbsp;&nbsp;{recipe.liked}
+                                        </a>
+                                        <a href="#" onClick= {() =>this.addLove(recipe.id)} style={{float:'right', marginRight:'5px'}}>
+                                            {recipe.loved}&nbsp;&nbsp;<img src="../img/love.png" onClick= {() =>this.addLove(recipe.id)}></img>
+                                        </a>
+                                        <br/>
+                                    </div>
                                 </div>
                         </Grid>
                     )
@@ -339,6 +372,87 @@ class FoodDashboard extends Component {
                                 </div>
                             </Modal.Body>
                         </Modal>
+                        {(this.state.selectedRecipe !== null)?
+                        <Modal
+                            show={this.state.showMoreModal}
+                            onHide={this.onCloseShowMoreModal}
+                            size="lg"
+                            aria-labelledby="contained-modal-title-vcenter"
+                            centered
+                            style={{width: '100%', height: '900px'}}
+                        >
+                            <Modal.Header closeButton style={{backgroundColor:'#EEEEFF'}}>
+                                <Modal.Title id="contained-modal-title-vcenter">
+                                    {(this.state.selectedRecipe !== null)?this.state.selectedRecipe.name:''}
+                            </Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body style={{backgroundColor:'#EEEEFF'}}>
+                                <div  style={{width: '100%', height: 'auto', minHeight: '100%', backgroundImage:`${this.state.selectedRecipe.foodImage}`, backgroundBlendMode:'lighten'}}>
+                                    {(this.state.selectedRecipe !== null)?
+                                        <div>
+                                            {/* <div style={{ width:'50%', float:'left'}}>
+                                                <img src={`${this.state.selectedRecipe.foodImage}`} alt="Card image" style={{ height: '100%', width:'100%'}}/>
+                                            </div> */}
+                                            <div >
+                                                <b>Ingredients:</b><br/>
+                                                {this.state.selectedRecipe.ingredients}<br/><br/>
+                                                <p><b>Preparation: </b><br/>{this.state.selectedRecipe.recipeText}</p>
+                                            </div>
+                                        </div>
+                                    :''}
+                                    {(this.state.selectedRecipe.link == null || this.state.selectedRecipe.link == 'undefined' || this.state.selectedRecipe.link == '')?
+                                        <div>
+                                            <div style={{ width:'40%', float:'left'}}>
+                                                <img src={`${this.state.selectedRecipe.foodImage}`} alt="Card image" style={{ height: '100%', width:'100%'}}/>
+                                            </div>
+                                            <div style={{padding: '10px'}}>
+                                                <a href="#" onClick= {() =>this.addLike(this.state.selectedRecipe.id)} style={{float:'left', marginLeft:'5px'}}>
+                                                    <img src="../img/like.png" onClick= { () =>this.addLike(this.state.selectedRecipe.id)}></img>&nbsp;&nbsp;{this.state.selectedRecipe.liked}
+                                                </a>
+                                                <a href="#" onClick= {() =>this.addLove(this.state.selectedRecipe.id)} style={{float:'right', marginRight:'5px'}}>
+                                                    {this.state.selectedRecipe.loved}&nbsp;&nbsp;<img src="../img/love.png" onClick= {() =>this.addLove(this.state.selectedRecipe.id)}></img>
+                                                </a>
+                                                <br/>
+                                            </div>
+                                        </div>
+                                    :
+                                        (this.state.selectedRecipe.link.indexOf('youtube.com') > -1)?
+                                        <div>
+                                            <div style={{widith:'70%', float:'left'}}>
+                                                <iframe width="420" height="315" src={`${this.state.selectedRecipe.link}`} frameborder="0" ></iframe>
+                                            </div>
+                                            <div style={{widith:'30%', float:'right'}}>
+                                                <a href="#" onClick= {() =>this.addLike(this.state.selectedRecipe.id)} style={{float:'left'}}>
+                                                    <img src="../img/like.png" onClick= { () =>this.addLike(this.state.selectedRecipe.id)}></img>&nbsp;&nbsp;{this.state.selectedRecipe.liked}
+                                                </a>
+                                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                                <a href="#" onClick= {() =>this.addLove(this.state.selectedRecipe.id)} style={{float:'right'}}>
+                                                    {this.state.selectedRecipe.loved}&nbsp;&nbsp;<img src="../img/love.png" onClick= {() =>this.addLove(this.state.selectedRecipe.id)}></img>
+                                                </a>
+                                                <br/>
+                                            </div>
+                                        </div>
+                                        :
+                                        <div>
+                                            <div style={{ width:'40%', float:'left'}}>
+                                                <img src={`${this.state.selectedRecipe.foodImage}`} alt="Card image" style={{ height: '100%', width:'100%'}}/>
+                                            </div>
+                                            <div style={{ width:'60%', float:'right', marginTop: '50px'}}>
+                                                <a href="#" onClick= {() =>this.addLike(this.state.selectedRecipe.id)} style={{float:'left', marginLeft:'5px'}}>
+                                                    <img src="../img/like.png" onClick= { () =>this.addLike(this.state.selectedRecipe.id)}></img>&nbsp;&nbsp;{this.state.selectedRecipe.liked}
+                                                </a>
+                                                <a href="#" onClick= {() =>this.addLove(this.state.selectedRecipe.id)} style={{float:'right', marginRight:'5px'}}>
+                                                    {this.state.selectedRecipe.loved}&nbsp;&nbsp;<img src="../img/love.png" onClick= {() =>this.addLove(this.state.selectedRecipe.id)}></img>
+                                                </a>
+                                                <br/> <br/> <br/> <br/>
+                                                <a href={`${this.state.selectedRecipe.link}`} target="_blank"><b>Click here for more details</b></a>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </Modal.Body>
+                        </Modal>
+                        :''}
                     </Grid>
                     <Grid container spacing={1}>
                         {gridRows}
@@ -351,7 +465,13 @@ class FoodDashboard extends Component {
 FoodDashboard.propTypes = {
     classes: PropTypes.object.isRequired,
 };
-  
-export default withStyles(styles)(FoodDashboard);
+
+const mapStateToProps = (state) => {
+    return {
+        currentUser: state.userDetails,
+    }
+}
+
+export default withRouter(connect(mapStateToProps)(withStyles(styles)(FoodDashboard)))
 
 //export default FoodDashboard;
