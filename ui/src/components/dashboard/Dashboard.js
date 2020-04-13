@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Container from '@material-ui/core/Container';
 import Statistics from '../statistics/Statistics';
 import Campaigns from '../campaigns/Campaigns';
 import Neededhelp from '../NeededHelp/Neededhelp';
@@ -11,7 +10,10 @@ import Markets from '../markets/Markets';
 const useStyles = makeStyles(theme => ({
     root: {
         backgroundColor: theme.palette.primary.light,
-    }
+    },
+    paper: {
+        height: 100
+      }
 
 
 }))

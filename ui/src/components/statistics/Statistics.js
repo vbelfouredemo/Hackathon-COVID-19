@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getDistance } from 'geolib';
-
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -11,6 +9,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import { Typography } from '@material-ui/core';
 import { fade } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 
 
 // import Card from '@material-ui/core/Card';
@@ -110,7 +109,7 @@ class Statistics extends Component {
             result: this.findByProvince(this.props.currentLocation.sublocality)
         };
         /*
-        pseudo: if there is no hit on sublocality then default to getClosestData
+        pseudo: if there is no hit on sublocality then default to getClosestData <== need to implement
         */
 
         // console.log("Province Data: ", provinceData);
@@ -127,9 +126,9 @@ class Statistics extends Component {
 
         }
         return (
-            <Card variant="outlined" style={{height:'235px'}}>
+            <Card style={{height:'235px'}} elevation={4}>
                 <CardHeader
-                    avatar={ <Avatar src=" ../img/COVID-19-192.png" /> } title="COVID-19 Statistics"
+                    title="COVID-19 Statistics" titleTypographyProps={{variant:'h5' }} avatar={ <Avatar src=" ../img/COVID-19-192.png" /> }
                 />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h2" display='inline' style={{ marginRight: 5}}>

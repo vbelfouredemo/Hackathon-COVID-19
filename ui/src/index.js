@@ -8,7 +8,28 @@ import { Provider } from 'react-redux';
 import rootReducer from './store/reducers/rootReducer';
 import thunk from 'redux-thunk';
 
-const store = createStore(rootReducer, applyMiddleware(thunk));
+const persistedState = localStorage.getItem('reduxState') ? JSON.parse(localStorage.getItem('reduxState')) :
+  {
+    
+    currentLocation: {
+      city: '',
+      zipcode: '',
+      neighbourhood: '',
+      sublocality: '',
+      lat: '',
+      lng: ''
+  },
+  userDetails: {
+      userDetails: '',
+      isUserloggedIn: false
+  }
+}
+
+const store = createStore(rootReducer, persistedState, applyMiddleware(thunk));
+
+store.subscribe(() => {
+  localStorage.setItem('reduxState', JSON.stringify(store.getState()))
+})
 
 ReactDOM.render(
   <React.StrictMode>

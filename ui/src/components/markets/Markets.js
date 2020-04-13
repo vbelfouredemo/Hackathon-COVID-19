@@ -40,9 +40,9 @@ class Markets extends Component {
                 "04. low": "0.00"
             }
         };
-        this.getTicker("^SPX");
+        //this.getTicker("^SPX");
         //this.getTicker("^DJI");
-        this.getTicker("^RUT");
+        //this.getTicker("^RUT");
 
 
         console.log('campaign', props.currentLocation)
@@ -83,7 +83,7 @@ class Markets extends Component {
     render() {
 
         return (
-            <Card style={{height:'235px'}}>
+            <Card style={{height:'235px'}} elevation={4}>
                 <CardHeader
                     title="Market Watch"
                 />
@@ -105,17 +105,17 @@ class Markets extends Component {
                                     <TableBody>
                                         <TableRow>
                                             <TableCell>S&P500</TableCell>
-                                            <TableCell>{Number(this.state.sp500data["05. price"]).toFixed(2)}</TableCell>
-                                            <TableCell>{Number(this.state.sp500data["02. open"]).toFixed(2)}</TableCell>
-                                            <TableCell>{Number(this.state.sp500data["03. high"]).toFixed(2)}</TableCell>
-                                            <TableCell>{Number(this.state.sp500data["04. low"]).toFixed(2)}</TableCell>
+                                            <TableCell>{(Number(this.state.sp500data["05. price"]).toFixed(2) > 0) ? Number(this.state.sp500data["05. price"]).toFixed(2):"-------"} </TableCell>
+                                            <TableCell>{(Number(this.state.sp500data["02. open"]).toFixed(2) > 0) ? Number(this.state.sp500data["02. open"]).toFixed(2):"-------"} </TableCell>
+                                            <TableCell>{(Number(this.state.sp500data["03. high"]).toFixed(2) > 0) ? Number(this.state.sp500data["03. high"]).toFixed(2):"-------"} </TableCell>
+                                            <TableCell>{(Number(this.state.sp500data["04. low"]).toFixed(2) > 0) ? Number(this.state.sp500data["04. low"]).toFixed(2):"-------"} </TableCell>
                                         </TableRow>
                                         <TableRow>
                                             <TableCell>Russell 2000</TableCell>
-                                            <TableCell>{Number(this.state.russ2000data["05. price"]).toFixed(2)}</TableCell>
-                                            <TableCell>{Number(this.state.russ2000data["02. open"]).toFixed(2)}</TableCell>
-                                            <TableCell>{Number(this.state.russ2000data["03. high"]).toFixed(2)}</TableCell>
-                                            <TableCell>{Number(this.state.russ2000data["04. low"]).toFixed(2)}</TableCell>
+                                            <TableCell>{(Number(this.state.russ2000data["05. price"]).toFixed(2) > 0) ? Number(this.state.russ2000data["05. price"]).toFixed(2):"-------"} </TableCell>
+                                            <TableCell>{(Number(this.state.russ2000data["02. open"]).toFixed(2) > 0) ? Number(this.state.russ2000data["02. open"]).toFixed(2):"-------"} </TableCell>
+                                            <TableCell>{(Number(this.state.russ2000data["03. high"]).toFixed(2) > 0) ? Number(this.state.russ2000data["03. high"]).toFixed(2):"-------"} </TableCell>
+                                            <TableCell>{(Number(this.state.russ2000data["04. low"]).toFixed(2) > 0) ? Number(this.state.russ2000data["04. low"]).toFixed(2):"-------"} </TableCell>
                                         </TableRow>
                                     </TableBody>
                                 </Table>
@@ -125,7 +125,7 @@ class Markets extends Component {
                                 Data not available
                     </div>
                     }
-
+                    <div>* Data will be dashes if service unavailable</div>
                 </CardContent>
             </Card>
         )

@@ -38,7 +38,7 @@ class Location extends Component {
 
     render() {
         return (
-            <Grid container direction="row">
+            <Grid container alignItems='baseline' direction="row">
                 <Grid item>
 
                     {this.props.currentLocation.city ?

@@ -120,7 +120,7 @@ class OfferedHelp extends Component {
          const paginate = pageNumber => this.setState({currentPage: pageNumber})
 
         return(
-            <Card variant="outlined">
+            <Card elevation={4}>
                 <CardHeader title="Locals offering help"/>
                 <Grid container alignItems="flex-start" justify="flex-end" direction="row">
                     <CardActions>

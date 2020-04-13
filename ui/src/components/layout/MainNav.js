@@ -70,7 +70,14 @@ const useStyles = makeStyles((theme) => ({
 
 const MainNav = (props) => {
     const classes = useStyles();
-    const initials = props.currentUser.isUserLoggedIn ? props.currentUser.userDetails.givenName[0] + props.currentUser.userDetails.familyName[0] : '';
+    const initials = props.currentUser.isUserLoggedIn == true ? props.currentUser.userDetails.givenName[0] + props.currentUser.userDetails.familyName[0] : '';
+    
+    const [selectedIndex, setSelectedIndex] = React.useState(0);
+    
+    const handleListItemClick = (event, index) => {
+        setSelectedIndex(index);
+      };
+
     return (
         <div className={classes.root}>
             <AppBar position="fixed" className={classes.appBar}>
@@ -113,13 +120,22 @@ const MainNav = (props) => {
                     }
                         </div>
                     <List>
-                        <ListItem key={"main"} component={Link} to="/">
+                        <ListItem 
+                            button
+                            key={"main"}
+                            selected={selectedIndex === 0}
+                            onClick={(event) => handleListItemClick(event, 0)}
+                            component={Link} to="/">
                             <ListItemIcon className={classes.icon}>
                                 <HomeIcon />
                             </ListItemIcon>
                             <ListItemText className={classes.itemText} primary="Main" />
                         </ListItem>
-                        <ListItem key={"supplies"} component={Link} to="/supplies">
+                        <ListItem 
+                            key={"supplies"}
+                            selected={selectedIndex === 1}
+                            onClick={(event) => handleListItemClick(event, 1)}
+                            component={Link} to="/supplies">
                             <ListItemIcon className={classes.icon}>
                                 <ShoppingCartIcon />
                             </ListItemIcon>
@@ -127,28 +143,43 @@ const MainNav = (props) => {
                             <ListItemText className={classes.itemText} primary="Supplies" />
 
                         </ListItem>
-                        <ListItem key={"movies"} component={Link} to="/movies">
+                        <ListItem 
+                            key={"movies"}
+                            selected={selectedIndex === 2}
+                            onClick={(event) => handleListItemClick(event, 2)}
+                            component={Link} to="/movies">
                             <ListItemIcon className={classes.icon}>
                                 <LocalMoviesIcon />
                             </ListItemIcon>
                             <ListItemText className={classes.itemText} primary="Movies" />
                         </ListItem>
 
-                        <ListItem key={"foods"} component={Link} to="/foods">
+                        <ListItem
+                        key={"foods"}
+                        selected={selectedIndex === 3}
+                            onClick={(event) => handleListItemClick(event, 3)}
+                        component={Link} to="/foods">
                             <ListItemIcon className={classes.icon}>
                                 <FastfoodIcon />
                             </ListItemIcon>
                             <ListItemText className={classes.itemText} primary="Foods" />
                         </ListItem>
 
-                        <ListItem key={"about"} component={Link} to="/aboutus">
+                        <ListItem
+                            key={"about"}
+                            selected={selectedIndex === 4}
+                            onClick={(event) => handleListItemClick(event, 4)}
+                            component={Link} to="/aboutus">
                             <ListItemIcon className={classes.icon}>
                                 <RecentActorsIcon />
                             </ListItemIcon>
                             <ListItemText className={classes.itemText} primary="AboutUs" />
                         </ListItem>
                         <ListItem 
-                            key={"login"} component={Link} to="/login">
+                            key={"login"}
+                            selected={selectedIndex === 5}
+                            onClick={(event) => handleListItemClick(event, 5)}
+                            component={Link} to="/login">
                             <ListItemIcon className={classes.icon}>
                                 <PersonIcon />
                             </ListItemIcon>
