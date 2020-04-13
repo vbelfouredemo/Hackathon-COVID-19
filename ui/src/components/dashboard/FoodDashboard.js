@@ -139,7 +139,6 @@ class FoodDashboard extends Component {
     addRecipe(event){
         event.preventDefault();
         var name;
-        alert(this.state.name)
         if(this.state.name != null && this.state.name != 'undefined' && this.state.name != '' ){
             name = this.state.name;
         }else{

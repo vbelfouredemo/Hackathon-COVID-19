@@ -16,7 +16,7 @@ const NeededhelpItem = ({ items, loggedInUser, removeIds, addIds }) => {
                 <ShowMoreText lines={2} more='Show more' less='Show less' anchorClass='' expanded={false} width={window.width}>
                     {item.missionStatement}
                 </ShowMoreText>
-                {(item.url != '' && item.url != 'undefined')?<a href={item.url} target="_blank" ><b>Click here for more info</b></a>:''}
+                {(item.url != '' && item.url != 'undefined')?<a href={item.url} target="_blank" ><b>Click here for more info</b><br/></a>:''}
                 <span >
                     {(item.signedUp)
                         ? <Button variant="outlined" color="primary"  onClick= { () =>removeIds(item.id)}>Thank You for signing up for help</Button>
