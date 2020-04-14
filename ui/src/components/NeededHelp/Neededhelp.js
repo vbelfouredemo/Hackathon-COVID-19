@@ -81,7 +81,7 @@ class Neededhelp extends Component {
                 // });
                 for(var i = 0; i < neededHelps.length; i++) {
                     var offeredHelpIds =  neededHelps[i].offeredHelpIds;
-                    if (undefined !== offeredHelpIds){
+                    if ('undefined' !== offeredHelpIds && null !== offeredHelpIds){
                         if(offeredHelpIds.indexOf(this.state.loggedInUser.email) > -1){
                             neededHelps[i].signedUp = true;
                         }else{
