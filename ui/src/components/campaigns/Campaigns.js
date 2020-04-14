@@ -138,7 +138,7 @@ class Campaigns extends Component {
         return (
             <>
                 
-                <Card variant="outlined">
+                <Card elevation={4}>
                     <CardHeader
                         title="Local businesses need your help"
                     />
