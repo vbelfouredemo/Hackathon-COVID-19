@@ -245,20 +245,21 @@ class Campaigns extends Component {
             })
         }).then(res => res.json())
             .then((data) => {
-                const currentLocation = this.props.currentLocation;
-                const campaigns = data.campaigns;
-                var localCampains = [];
-                campaigns.forEach(function (campaign) {
-                    if(currentLocation != 'undefined' && currentLocation.userDetails != 'undefined'){
-                        if((campaign.city == currentLocation.userDetails.city)||
-                        (campaign.neighbourhood == currentLocation.userDetails.neighbourhood)||
-                        (campaign.state == currentLocation.userDetails.sublocality)){
-                            localCampains.push(campaign);
-                        }
-                    }
-                });
-                this.setState({ campaigns: campaigns , localCampains: localCampains})
-                console.log(this.state.localCampains);
+                this.setState({ campaigns: data.campaigns});
+                //const currentLocation = this.props.currentLocation;
+                //const campaigns = data.campaigns;
+                //var localCampains = [];
+                // campaigns.forEach(function (campaign) {
+                //     if(currentLocation != 'undefined' && currentLocation.userDetails != 'undefined'){
+                //         if((campaign.city == currentLocation.userDetails.city)||
+                //         (campaign.neighbourhood == currentLocation.userDetails.neighbourhood)||
+                //         (campaign.state == currentLocation.userDetails.sublocality)){
+                //             localCampains.push(campaign);
+                //         }
+                //     }
+                // });
+                //this.setState({ campaigns: campaigns , localCampains: localCampains})
+                //console.log(this.state.localCampains);
             })
             .catch(console.log)
     }
