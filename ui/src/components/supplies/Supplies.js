@@ -148,8 +148,8 @@ class Supplies extends Component{
                                     paginate={paginate}
                                 />
                             </div>
-                        :<div><br/><br/><br/><p>Sorry, there is no item in your local area. Either remove filter to see the entire list 
-                        or change your current location</p></div>
+                        :<div><p>Sorry, there is no item in your local area. Either remove filter to see the entire list 
+                        or change your current location</p><br/><br/><br/><br/><br/><br/></div>
                         }
                     </CardContent>
                 </Card>
