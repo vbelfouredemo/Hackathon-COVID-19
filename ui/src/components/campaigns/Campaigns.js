@@ -167,7 +167,7 @@ class Campaigns extends Component {
                         </CardActions>
                     </Grid>
                     <CardContent>
-                        
+                    {(this.state.campaigns != 'undefined' && this.state.campaigns.length>0)?
                             <div>
                                 <CampaignList campaigns={currentCampaigns} />
     
@@ -177,7 +177,9 @@ class Campaigns extends Component {
                                     paginate={paginate}
                                 />
                             </div>
-                            
+                        :<p>Sorry, there is no item in your local area. Either remove filter to see the entire list 
+                        or change your current location</p>
+                    }
                     </CardContent>
                 </Card>
                 

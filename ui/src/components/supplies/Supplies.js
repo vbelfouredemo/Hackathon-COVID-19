@@ -135,13 +135,19 @@ class Supplies extends Component{
                                     <LocalOfferIcon />
                                 </IconButton>
                             </Tooltip>
-                            <SupplList supplies={currentSupplies} timeDiffCalc={this.timeDiffCalc} />
+                            {(this.state.supplies != 'undefined' && this.state.supplies.length>0)?
+                                <div>
+                                    <SupplList supplies={currentSupplies} timeDiffCalc={this.timeDiffCalc} />
 
-                            <Pagination
-                                postsPerPage={this.state.suppliesPerPage}
-                                totalPosts={this.state.supplies.length}
-                                paginate={paginate}
-                            />
+                                    <Pagination
+                                        postsPerPage={this.state.suppliesPerPage}
+                                        totalPosts={this.state.supplies.length}
+                                        paginate={paginate}
+                                    />
+                                </div>
+                            :<div><br/><br/><br/><p>Sorry, there is no item in your local area. Either remove filter to see the entire list 
+                            or change your current location</p></div>
+                        }
                         </div>
                     </CardContent>
                 </Card>
