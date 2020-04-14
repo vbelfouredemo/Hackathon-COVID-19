@@ -123,8 +123,8 @@ class Supplies extends Component{
                     <CardHeader
                         title="Local Supplies"
                     />
-                    <CardContent>
-                        <div className="supplies" >
+                    <Grid container alignItems="flex-start" justify="flex-end" direction="row">
+                        <CardActions>
                             <Tooltip title="Clear local supplies filter">
                                 <IconButton aria-label="Clear local supplies filter" onClick={this.clearLocal}>
                                     <ClearIcon/>
@@ -135,20 +135,22 @@ class Supplies extends Component{
                                     <LocalOfferIcon />
                                 </IconButton>
                             </Tooltip>
-                            {(this.state.supplies != 'undefined' && this.state.supplies.length>0)?
-                                <div>
-                                    <SupplList supplies={currentSupplies} timeDiffCalc={this.timeDiffCalc} />
+                        </CardActions>
+                    </Grid>
+                    <CardContent>
+                        {(this.state.supplies != 'undefined' && this.state.supplies.length>0)?
+                            <div>
+                                <SupplList supplies={currentSupplies} timeDiffCalc={this.timeDiffCalc} />
 
-                                    <Pagination
-                                        postsPerPage={this.state.suppliesPerPage}
-                                        totalPosts={this.state.supplies.length}
-                                        paginate={paginate}
-                                    />
-                                </div>
-                            :<div><br/><br/><br/><p>Sorry, there is no item in your local area. Either remove filter to see the entire list 
-                            or change your current location</p></div>
+                                <Pagination
+                                    postsPerPage={this.state.suppliesPerPage}
+                                    totalPosts={this.state.supplies.length}
+                                    paginate={paginate}
+                                />
+                            </div>
+                        :<div><br/><br/><br/><p>Sorry, there is no item in your local area. Either remove filter to see the entire list 
+                        or change your current location</p></div>
                         }
-                        </div>
                     </CardContent>
                 </Card>
             </>
