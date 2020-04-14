@@ -47,8 +47,6 @@ class Neededhelp extends Component {
         originalResults.forEach(function (result) {
             if(currentLocation != 'undefined'){
                 if((result.city == currentLocation.city)||
-                (result.city == currentLocation.neighbourhood)||
-                (result.neighbourhood == currentLocation.neighbourhood)||
                 (result.neighbourhood == currentLocation.city)||
                 (result.zipcode == parseInt(currentLocation.zipcode))){
                     localResults.push(result);

@@ -40,8 +40,6 @@ class OfferedHelp extends Component {
         originalResults.forEach(function (result) {
             if(currentLocation != 'undefined'){ 
                 if((result.city == currentLocation.city)||
-                (result.city == currentLocation.neighbourhood)||
-                (result.neighbourhood == currentLocation.neighbourhood)||
                 (result.neighbourhood == currentLocation.city)||
                 (result.zipcode == currentLocation.zipcode)){
                     localResults.push(result);
@@ -49,7 +47,7 @@ class OfferedHelp extends Component {
             }
         });
         this.setState({ result: localResults})
-        //console.log(localCampains);
+        console.log("localResults: ", localResults);
     }
 
     clearLocal = () =>{
