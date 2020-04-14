@@ -90,10 +90,14 @@ class Neededhelp extends Component {
                     }
                     var count = parseInt(neededHelps[i].count);
                     var offeredHelpCount = parseInt(neededHelps[i].offeredHelpCount);
-                    if(count>0 &&  count>offeredHelpCount){
-                        neededHelps[i].moreHelpNeeded = true;
+                    if(count>0){
+                        if(count>offeredHelpCount){
+                            neededHelps[i].moreHelpNeeded = true;
+                        }else{
+                            neededHelps[i].moreHelpNeeded = false;
+                        }
                     }else{
-                        neededHelps[i].moreHelpNeeded = false;
+                        neededHelps[i].noCount = true
                     }
                 }
                 this.setState({ result: neededHelps, originalResults: neededHelps});
@@ -175,7 +179,7 @@ class Neededhelp extends Component {
     };
     addHelp(event){
         event.preventDefault();
-        var count = (event.target.count.value != undefined && event.target.count.value !='0')? parseInt(event.target.count.value):0;
+        var count = (event.target.count.value != 'undefined' && event.target.count.value != undefined && event.target.count.value !='0' && event.target.count.value !='')? parseInt(event.target.count.value):0;
         const data = JSON.stringify({
             name : event.target.title.value,
             zipcode : parseInt(event.target.zipcode.value),
