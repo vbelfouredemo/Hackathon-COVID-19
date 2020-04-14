@@ -12,6 +12,8 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardActions from '@material-ui/core/CardActions';
 import Grid from '@material-ui/core/Grid';
 import AddIcon from '@material-ui/icons/Add';
+import LocalOfferIcon from '@material-ui/icons/LocalOffer';
+import ClearIcon from '@material-ui/icons/Clear';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
  
@@ -22,6 +24,7 @@ class Supplies extends Component{
     constructor(props){
         super(props);
         this.state = {
+            originalSupplies:[],
             supplies: [],
             currentLocation: this.props.currentLocation,
             modal: false,
@@ -33,6 +36,30 @@ class Supplies extends Component{
         //console.log('In Campaign==>'+JSON.stringify(this.state));
     };
     
+    showLocalOnly = () =>{
+        var currentLocation = this.props.currentLocation;
+        var originalSupplies = this.state.originalSupplies;
+        console.log(originalSupplies, currentLocation);
+        var localSupplies = [];
+        originalSupplies.forEach(function (supply) {
+            if(currentLocation != 'undefined'){ 
+                if((supply.state == currentLocation.state)||
+                (supply.formattedAddress.indexOf(currentLocation.neighbourhood) > -1)||
+                (supply.formattedAddress.indexOf(currentLocation.city)> -1)||
+                (supply.formattedAddress.indexOf(currentLocation.zipcode)> -1)){
+                    localSupplies.push(supply);
+                }
+            }
+        });
+        this.setState({ supplies: localSupplies})
+        //console.log(localCampains);
+    }
+
+    clearLocal = () =>{
+        var originalSupplies = this.state.originalSupplies;
+        this.setState({ supplies: originalSupplies})
+    }
+
     componentDidMount() {
         this.getSupplies();
     }
@@ -47,7 +74,7 @@ class Supplies extends Component{
             })
         }).then(res => res.json())
             .then((data) => {
-                this.setState({ supplies: data.supplies })
+                this.setState({ supplies: data.supplies, originalSupplies: data.supplies })
             })
             .catch(console.log)
     }
@@ -98,6 +125,16 @@ class Supplies extends Component{
                     />
                     <CardContent>
                         <div className="supplies" >
+                            <Tooltip title="Clear local supplies filter">
+                                <IconButton aria-label="Clear local supplies filter" onClick={this.clearLocal}>
+                                    <ClearIcon/>
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Filter only local supplies">
+                                <IconButton aria-label="Filter only supplies helps" onClick={this.showLocalOnly}>
+                                    <LocalOfferIcon />
+                                </IconButton>
+                            </Tooltip>
                             <SupplList supplies={currentSupplies} timeDiffCalc={this.timeDiffCalc} />
 
                             <Pagination

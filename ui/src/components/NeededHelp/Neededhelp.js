@@ -10,7 +10,8 @@ import AddIcon from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import Grid from '@material-ui/core/Grid';
-import FilterListIcon from '@material-ui/icons/FilterList';
+import ClearIcon from '@material-ui/icons/Clear';
+import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import Pagination from '../pagination/Pagination';
 import {Button, Modal, Row, Col, Form} from 'react-bootstrap'
 
@@ -23,6 +24,7 @@ class Neededhelp extends Component {
             long:'',
             zip: '',
             result: [],
+            originalResults:[],
             modal: false,
             filterModal: false,
             currentPage: 1,
@@ -35,6 +37,31 @@ class Neededhelp extends Component {
         this.addIds = this.addIds.bind(this);
         this.removeIds = this.removeIds.bind(this);
         this.getData = this.getData.bind(this);
+    }
+
+    showLocalOnly = () =>{
+        var currentLocation = this.props.currentLocation;
+        var originalResults = this.state.originalResults;
+        //console.log(originalCampaigns);
+        var localResults = [];
+        originalResults.forEach(function (result) {
+            if(currentLocation != 'undefined'){
+                if((result.city == currentLocation.city)||
+                (result.city == currentLocation.neighbourhood)||
+                (result.neighbourhood == currentLocation.neighbourhood)||
+                (result.neighbourhood == currentLocation.city)||
+                (result.zipcode == parseInt(currentLocation.zipcode))){
+                    localResults.push(result);
+                }
+            }
+        });
+        this.setState({ result: localResults})
+        //console.log(localCampains);
+    }
+
+    clearLocal = () =>{
+        var originalResults = this.state.originalResults;
+        this.setState({ result: originalResults})
     }
 
     getData = () => {
@@ -69,7 +96,7 @@ class Neededhelp extends Component {
                         neededHelps[i].moreHelpNeeded = false;
                     }
                 }
-                this.setState({ result: neededHelps});
+                this.setState({ result: neededHelps, originalResults: neededHelps});
           })
     }
     removeIds= (id, email) =>{ 
@@ -190,6 +217,16 @@ class Neededhelp extends Component {
                 <CardHeader title="People/organizations need help"/>
                 <Grid container alignItems="flex-start" justify="flex-end" direction="row">
                     <CardActions>
+                        <Tooltip title="Clear local help filter">
+                            <IconButton aria-label="Clear local help filter" onClick={this.clearLocal}>
+                                <ClearIcon/>
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Filter only local helps">
+                            <IconButton aria-label="Filter only local helps" onClick={this.showLocalOnly}>
+                                <LocalOfferIcon />
+                            </IconButton>
+                        </Tooltip>
                         <Tooltip title="Add a New item">
                             <IconButton aria-label="Add a New item" onClick={this.onOpenModal}>
                                 <AddIcon />

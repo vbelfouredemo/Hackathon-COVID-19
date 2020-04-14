@@ -11,6 +11,8 @@ import AddIcon from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import LocalOfferIcon from '@material-ui/icons/LocalOffer';
+import ClearIcon from '@material-ui/icons/Clear';
 import CardActions from '@material-ui/core/CardActions';
 import Grid from '@material-ui/core/Grid';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -20,6 +22,7 @@ class Campaigns extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            originalCampaigns: [],
             campaigns: [],
             modal: false,
             filterModal: false,
@@ -29,8 +32,35 @@ class Campaigns extends Component {
             //currentLocation: props.currentLocation
         };
         this.filterCampaign = this.filterCampaign.bind(this);
+        //this.showLocalOnly = this.showLocalOnly.bind(this);
         // console.log('campaign', props.currentLocation)
     };
+
+    showLocalOnly = () =>{
+        var currentLocation = this.props.currentLocation;
+        var originalCampaigns = this.state.originalCampaigns;
+        //console.log(originalCampaigns);
+        var localCampains = [];
+        originalCampaigns.forEach(function (campaign) {
+            if(currentLocation != 'undefined'){ 
+                if((campaign.city == currentLocation.city)||
+                (campaign.city == currentLocation.neighbourhood)||
+                (campaign.neighbourhood == currentLocation.neighbourhood)||
+                (campaign.neighbourhood == currentLocation.city)||
+                (campaign.zipcode == currentLocation.zipcode)){
+                    localCampains.push(campaign);
+                }
+            }
+        });
+        this.setState({ campaigns: localCampains})
+        //console.log(localCampains);
+    }
+
+    clearLocal = () =>{
+        var originalCampaigns = this.state.originalCampaigns;
+        this.setState({ campaigns: originalCampaigns})
+    }
+
     onOpenFilterModal = () => {
         this.setState({ filterModal: true });
     };
@@ -114,6 +144,16 @@ class Campaigns extends Component {
                     />
                     <Grid container alignItems="flex-start" justify="flex-end" direction="row">
                         <CardActions>
+                            <Tooltip title="Clear local Campaigns filter">
+                                <IconButton aria-label="Clear local Campaigns filter" onClick={this.clearLocal}>
+                                    <ClearIcon/>
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Filter only local Campaigns ">
+                                <IconButton aria-label="Filter only local Campaigns" onClick={this.showLocalOnly}>
+                                    <LocalOfferIcon />
+                                </IconButton>
+                            </Tooltip>
                             <Tooltip title="Filter Campaigns">
                                 <IconButton aria-label="Filter Campaigns" onClick={this.onOpenFilterModal}>
                                     <FilterListIcon />
@@ -245,21 +285,9 @@ class Campaigns extends Component {
             })
         }).then(res => res.json())
             .then((data) => {
-                this.setState({ campaigns: data.campaigns});
-                //const currentLocation = this.props.currentLocation;
-                //const campaigns = data.campaigns;
-                //var localCampains = [];
-                // campaigns.forEach(function (campaign) {
-                //     if(currentLocation != 'undefined' && currentLocation.userDetails != 'undefined'){
-                //         if((campaign.city == currentLocation.userDetails.city)||
-                //         (campaign.neighbourhood == currentLocation.userDetails.neighbourhood)||
-                //         (campaign.state == currentLocation.userDetails.sublocality)){
-                //             localCampains.push(campaign);
-                //         }
-                //     }
-                // });
-                //this.setState({ campaigns: campaigns , localCampains: localCampains})
-                //console.log(this.state.localCampains);
+                const campaigns = data.campaigns;
+                this.setState({ campaigns: campaigns, originalCampaigns: campaigns});
+                console.log(campaigns);
             })
             .catch(console.log)
     }

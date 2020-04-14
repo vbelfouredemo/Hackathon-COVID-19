@@ -9,25 +9,52 @@ import CardActions from '@material-ui/core/CardActions';
 import AddIcon from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
+import ClearIcon from '@material-ui/icons/Clear';
+import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import Grid from '@material-ui/core/Grid';
 import Pagination from '../pagination/Pagination';
 import {Button, Modal, Row, Col, Form} from 'react-bootstrap'
 
 class OfferedHelp extends Component {
 
-    state = {
-        lat: '',
-        long:'',
-        zip: '',
-        result: [],
-        modal: false,
-        filterModal: false,
-        currentPage: 1,
-        itmsPerPage: 4,
-        loggedInUser:{
-            name: 'Krishanu Maity',
-            email: 'test@gmail.com'
+    constructor(props) {
+        super(props);
+        this.state = {
+            lat: '',
+            long:'',
+            zip: '',
+            result: [],
+            originalResults: [],
+            modal: false,
+            filterModal: false,
+            currentPage: 1,
+            itmsPerPage: 4
         }
+    }
+
+    showLocalOnly = () =>{
+        var currentLocation = this.props.currentLocation;
+        var originalResults = this.state.originalResults;
+        //console.log(originalCampaigns);
+        var localResults = [];
+        originalResults.forEach(function (result) {
+            if(currentLocation != 'undefined'){ 
+                if((result.city == currentLocation.city)||
+                (result.city == currentLocation.neighbourhood)||
+                (result.neighbourhood == currentLocation.neighbourhood)||
+                (result.neighbourhood == currentLocation.city)||
+                (result.zipcode == currentLocation.zipcode)){
+                    localResults.push(result);
+                }
+            }
+        });
+        this.setState({ result: localResults})
+        //console.log(localCampains);
+    }
+
+    clearLocal = () =>{
+        var originalResults = this.state.originalResults;
+        this.setState({ result: originalResults})
     }
 
     getData = () => {
@@ -42,7 +69,7 @@ class OfferedHelp extends Component {
         axios.get('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/offeredHelp', options)
           .then(res => {
                 var offeredHelps = res.data.offeredhelps;
-                this.setState({ result: offeredHelps});
+                this.setState({ result: offeredHelps, originalResults: offeredHelps});
                 // console.log("offeredHelps: ", offeredHelps);
           })
     }
@@ -124,6 +151,16 @@ class OfferedHelp extends Component {
                 <CardHeader title="Locals offering help"/>
                 <Grid container alignItems="flex-start" justify="flex-end" direction="row">
                     <CardActions>
+                        <Tooltip title="Clear local help filter">
+                            <IconButton aria-label="Clear local help filter" onClick={this.clearLocal}>
+                                <ClearIcon/>
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Filter only local helps">
+                            <IconButton aria-label="Filter only local helps" onClick={this.showLocalOnly}>
+                                <LocalOfferIcon />
+                            </IconButton>
+                        </Tooltip>
                         <Tooltip title="Add a New item">
                             <IconButton aria-label="Add a New item" onClick={this.onOpenModal}>
                                 <AddIcon />
@@ -133,7 +170,7 @@ class OfferedHelp extends Component {
                 </Grid>
                 <CardContent>
                     <div className="neededhelp-list section">
-                        <OfferedhelpItem items={currentItems} loggedInUser={this.state.loggedInUser} removeIds={this.removeIds} addIds={this.addIds}/>
+                        <OfferedhelpItem items={currentItems} />
                         <Pagination
                             postsPerPage={this.state.itmsPerPage}
                             totalPosts={this.state.result.length}
