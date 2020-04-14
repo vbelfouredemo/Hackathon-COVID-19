@@ -208,7 +208,7 @@ class Neededhelp extends Component {
     }
 
     render() {
-        // console.log("this.state.result: ", this.state.result);
+        //console.log("this.state.result: ", this.state.result);
         const indexOfLastItem = this.state.currentPage * this.state.itmsPerPage;
         const indexOfFirstItem = indexOfLastItem - this.state.itmsPerPage;
         const currentItems = this.state.result.slice(indexOfFirstItem, indexOfLastItem);
@@ -239,14 +239,18 @@ class Neededhelp extends Component {
                     </CardActions>
                 </Grid>
                 <CardContent>
-                    <div className="neededhelp-list section">
-                        <NeededhelpItem items={currentItems} loggedInUser={this.state.loggedInUser} removeIds={this.removeIds} addIds={this.addIds}  getData={this.getData} />
-                        <Pagination
-                            postsPerPage={this.state.itmsPerPage}
-                            totalPosts={this.state.result.length}
-                            paginate={paginate}
-                        />
-                    </div>
+                    {(this.state.result != 'undefined' && this.state.result.length>0)?
+                        <div className="neededhelp-list section">
+                            <NeededhelpItem items={currentItems} loggedInUser={this.state.loggedInUser} removeIds={this.removeIds} addIds={this.addIds}  getData={this.getData} />
+                            <Pagination
+                                postsPerPage={this.state.itmsPerPage}
+                                totalPosts={this.state.result.length}
+                                paginate={paginate}
+                            />
+                        </div>
+                        :<p>Sorry, there is no item in your local area. Either remove filter to see the entire list 
+                            or change your current location</p>
+                    }
                     <Modal
                     show={this.state.modal}
                     onHide={this.onCloseModal}

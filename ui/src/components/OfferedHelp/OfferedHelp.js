@@ -169,6 +169,7 @@ class OfferedHelp extends Component {
                     </CardActions>
                 </Grid>
                 <CardContent>
+                {(this.state.result != 'undefined' && this.state.result.length>0)?
                     <div className="neededhelp-list section">
                         <OfferedhelpItem items={currentItems} />
                         <Pagination
@@ -177,6 +178,9 @@ class OfferedHelp extends Component {
                             paginate={paginate}
                         />
                     </div>
+                    :<p>Sorry, there is no item in your local area. Either remove filter to see the entire list 
+                        or change your current location</p>
+                    }
                     <Modal
                     show={this.state.modal}
                     onHide={this.onCloseModal}
