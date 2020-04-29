@@ -1,7 +1,7 @@
 import React from 'react';
 import ShowMoreText from 'react-show-more-text';
 import Button from '@material-ui/core/Button';
-const NeededhelpItem = ({ items, loggedInUser, removeIds, addIds }) => {
+const NeededhelpItem = ({ items, loggedInUser, removeIds, addIds, getData }) => {
     return (
         items.map(item => (
             <div className="help-body" key={item.id} >
@@ -20,7 +20,8 @@ const NeededhelpItem = ({ items, loggedInUser, removeIds, addIds }) => {
                 <span >
                     {(item.signedUp)
                         ? <Button variant="outlined" color="primary"  onClick= { () =>removeIds(item.id, loggedInUser.email)}>Thank You for signing up for help</Button>
-                        : (item.moreHelpNeeded)? <Button variant="outlined" color="primary" onClick= { () =>addIds(item.id, loggedInUser.email)} >Signup for help!</Button>:<Button variant="outlined" color="inherit">We have got enough help, Thank You!</Button>
+                        : (item.moreHelpNeeded)? <Button variant="outlined" color="primary" onClick= { () =>addIds(item.id, loggedInUser.email)} >Signup for help!</Button>:
+                        (item.noCount)? <Button variant="outlined" color="primary" onClick= { () =>addIds(item.id, loggedInUser.email)} >Signup for help!</Button>: <Button variant="outlined" color="inherit">We have got enough help, Thank You!</Button>
                     }
                 </span>
                 <hr></hr>

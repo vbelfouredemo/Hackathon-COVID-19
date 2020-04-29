@@ -25,6 +25,9 @@ const theme = createMuiTheme({
   },
   icon: {
     color: 'white',
-  }
+  },
+  card: {
+    elevation: 4
+  },
 })
 export default theme

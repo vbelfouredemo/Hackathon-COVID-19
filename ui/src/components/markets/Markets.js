@@ -40,9 +40,15 @@ class Markets extends Component {
                 "04. low": "0.00"
             }
         };
+
         //this.getTicker("^SPX");
         //this.getTicker("^DJI");
         //this.getTicker("^RUT");
+
+        this.getTicker("^SPX");
+        this.getTicker("^DJI");
+        this.getTicker("^RUT");
+
 
 
         console.log('campaign', props.currentLocation)
@@ -83,7 +89,7 @@ class Markets extends Component {
     render() {
 
         return (
-            <Card style={{height:'235px'}}>
+            <Card style={{height:'235px'}} elevation={4}>
                 <CardHeader
                     title="Market Watch"
                 />

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { Button, Modal, Row, Col, Form } from 'react-bootstrap'
-
+import axios from 'axios';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -11,6 +11,8 @@ import AddIcon from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import LocalOfferIcon from '@material-ui/icons/LocalOffer';
+import ClearIcon from '@material-ui/icons/Clear';
 import CardActions from '@material-ui/core/CardActions';
 import Grid from '@material-ui/core/Grid';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -20,15 +22,45 @@ class Campaigns extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            originalCampaigns: [],
             campaigns: [],
             modal: false,
             filterModal: false,
             loading: false,
             currentPage: 1,
-            camPaignsPerPage: 5
+            camPaignsPerPage: 4
+            //currentLocation: props.currentLocation
         };
+        this.filterCampaign = this.filterCampaign.bind(this);
+        //this.showLocalOnly = this.showLocalOnly.bind(this);
         // console.log('campaign', props.currentLocation)
     };
+
+    showLocalOnly = () =>{
+        var currentLocation = this.props.currentLocation;
+        var originalCampaigns = this.state.originalCampaigns;
+        //console.log(originalCampaigns);
+        var localCampains = [];
+        originalCampaigns.forEach(function (campaign) {
+            if(currentLocation != 'undefined'){ 
+                if((campaign.city == currentLocation.city)||
+                (campaign.city == currentLocation.neighbourhood)||
+                (campaign.neighbourhood == currentLocation.neighbourhood)||
+                (campaign.neighbourhood == currentLocation.city)||
+                (campaign.zipcode == currentLocation.zipcode)){
+                    localCampains.push(campaign);
+                }
+            }
+        });
+        this.setState({ campaigns: localCampains})
+        //console.log(localCampains);
+    }
+
+    clearLocal = () =>{
+        var originalCampaigns = this.state.originalCampaigns;
+        this.setState({ campaigns: originalCampaigns})
+    }
+
     onOpenFilterModal = () => {
         this.setState({ filterModal: true });
     };
@@ -36,28 +68,24 @@ class Campaigns extends Component {
     onCloseFilterModal = () => {
         this.setState({ filterModal: false });
     };
-    filterCampaign(event) {
+    filterCampaign = (event) => {
         event.preventDefault();
-        const data = JSON.stringify({
-            type: event.target.type.value,
-            propValue: event.target.city.value
-        });
-        fetch('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/campaigns', {
-            method: "POST",
-            headers: new Headers({
+        var type = event.target.type.value;
+        var propValue = event.target.propValue.value;
+        const newData ={};
+        newData[type] = propValue;
+        const options = {
+            headers: {
                 'Accept': 'application/json',
-                'Content-Type': ' application/json',
+                'Content-Type': 'application/json',
                 'Authorization': 'Apikey ae1528d0-fc6a-4235-89bd-f9d4ae46e122'
-            }),
-            body: data
-        }).then(function (response) {
-            if (response.ok) {
-                alert('Campaign successfully added!');
-                //document.getElementById("caddCampaignForm").reset();
             }
-        }).then(function (data) {
-            //console.log(data)
-        }).catch(console.log)
+        };
+        axios.get('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/campaigns/query?where='+JSON.stringify(newData), options)
+          .then(res => {
+                this.setState({ campaigns: res.data.campaigns });
+                this.onCloseFilterModal();
+          })
     }
     onOpenModal = () => {
         this.setState({ modal: true });
@@ -97,6 +125,7 @@ class Campaigns extends Component {
         }).catch(console.log)
     }
     render() {
+        //console.log('this.props.currentLocation', this.props.currentLocation)
         const { modal } = this.state;
         //const campaigns = this.state.campaigns;
         // Get current posts
@@ -108,12 +137,23 @@ class Campaigns extends Component {
         const paginate = pageNumber => this.setState({ currentPage: pageNumber }) //setCurrentPage(pageNumber);
         return (
             <>
-                <Card variant="outlined">
+                
+                <Card elevation={4}>
                     <CardHeader
                         title="Local businesses need your help"
                     />
                     <Grid container alignItems="flex-start" justify="flex-end" direction="row">
                         <CardActions>
+                            <Tooltip title="Clear local Campaigns filter">
+                                <IconButton aria-label="Clear local Campaigns filter" onClick={this.clearLocal}>
+                                    <ClearIcon/>
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Filter only local Campaigns ">
+                                <IconButton aria-label="Filter only local Campaigns" onClick={this.showLocalOnly}>
+                                    <LocalOfferIcon />
+                                </IconButton>
+                            </Tooltip>
                             <Tooltip title="Filter Campaigns">
                                 <IconButton aria-label="Filter Campaigns" onClick={this.onOpenFilterModal}>
                                     <FilterListIcon />
@@ -127,15 +167,22 @@ class Campaigns extends Component {
                         </CardActions>
                     </Grid>
                     <CardContent>
-                        <CampaignList campaigns={currentCampaigns} />
-
-                        <Pagination
-                            postsPerPage={this.state.camPaignsPerPage}
-                            totalPosts={this.state.campaigns.length}
-                            paginate={paginate}
-                        />
+                    {(this.state.campaigns != 'undefined' && this.state.campaigns.length>0)?
+                            <div>
+                                <CampaignList campaigns={currentCampaigns} />
+    
+                                <Pagination
+                                    postsPerPage={this.state.camPaignsPerPage}
+                                    totalPosts={this.state.campaigns.length}
+                                    paginate={paginate}
+                                />
+                            </div>
+                        :<p>Sorry, there is no item in your local area. Either remove filter to see the entire list 
+                        or change your current location</p>
+                    }
                     </CardContent>
                 </Card>
+                
                 <Modal
                     show={this.state.modal}
                     onHide={this.onCloseModal}
@@ -203,7 +250,6 @@ class Campaigns extends Component {
                                             <Form.Control as="select" name="type" placeholder="Type">
                                                 <option value="">Select Type of filter</option>
                                                 <option value="name">Name</option>
-                                                <option value="zipcode">Zipcode</option>
                                                 <option value="neighbourhood">Neighbourhood</option>
                                                 <option value="city">City</option>
                                                 <option value="state">State</option>
@@ -222,6 +268,7 @@ class Campaigns extends Component {
                         </div>
                     </Modal.Body>
                 </Modal>
+                
             </>
         )
     }
@@ -229,6 +276,7 @@ class Campaigns extends Component {
         this.refreshlist();
     }
     refreshlist() {
+        //const currentLocation = this.props.currentLocation;
         fetch('https://test-e4ec6c3369cdafa50169d681096207de.apicentral.axwayamplify.com/hackathon/mongo/campaigns', {
             method: "GET",
             headers: new Headers({
@@ -239,7 +287,9 @@ class Campaigns extends Component {
             })
         }).then(res => res.json())
             .then((data) => {
-                this.setState({ campaigns: data.campaigns })
+                const campaigns = data.campaigns;
+                this.setState({ campaigns: campaigns, originalCampaigns: campaigns});
+                console.log(campaigns);
             })
             .catch(console.log)
     }

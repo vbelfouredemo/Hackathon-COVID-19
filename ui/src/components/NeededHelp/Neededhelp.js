@@ -10,7 +10,8 @@ import AddIcon from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import Grid from '@material-ui/core/Grid';
-import FilterListIcon from '@material-ui/icons/FilterList';
+import ClearIcon from '@material-ui/icons/Clear';
+import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import Pagination from '../pagination/Pagination';
 import {Button, Modal, Row, Col, Form} from 'react-bootstrap'
 
@@ -23,6 +24,7 @@ class Neededhelp extends Component {
             long:'',
             zip: '',
             result: [],
+            originalResults:[],
             modal: false,
             filterModal: false,
             currentPage: 1,
@@ -35,6 +37,29 @@ class Neededhelp extends Component {
         this.addIds = this.addIds.bind(this);
         this.removeIds = this.removeIds.bind(this);
         this.getData = this.getData.bind(this);
+    }
+
+    showLocalOnly = () =>{
+        var currentLocation = this.props.currentLocation;
+        var originalResults = this.state.originalResults;
+        //console.log(originalCampaigns);
+        var localResults = [];
+        originalResults.forEach(function (result) {
+            if(currentLocation != 'undefined'){
+                if((result.city == currentLocation.city)||
+                (result.neighbourhood == currentLocation.city)||
+                (result.zipcode == parseInt(currentLocation.zipcode))){
+                    localResults.push(result);
+                }
+            }
+        });
+        this.setState({ result: localResults})
+        //console.log(localCampains);
+    }
+
+    clearLocal = () =>{
+        var originalResults = this.state.originalResults;
+        this.setState({ result: originalResults})
     }
 
     getData = () => {
@@ -54,7 +79,7 @@ class Neededhelp extends Component {
                 // });
                 for(var i = 0; i < neededHelps.length; i++) {
                     var offeredHelpIds =  neededHelps[i].offeredHelpIds;
-                    if (undefined !== offeredHelpIds){
+                    if ('undefined' !== offeredHelpIds && null !== offeredHelpIds){
                         if(offeredHelpIds.indexOf(this.state.loggedInUser.email) > -1){
                             neededHelps[i].signedUp = true;
                         }else{
@@ -63,13 +88,17 @@ class Neededhelp extends Component {
                     }
                     var count = parseInt(neededHelps[i].count);
                     var offeredHelpCount = parseInt(neededHelps[i].offeredHelpCount);
-                    if(count>0 &&  count>offeredHelpCount){
-                        neededHelps[i].moreHelpNeeded = true;
+                    if(count>0){
+                        if(count>offeredHelpCount){
+                            neededHelps[i].moreHelpNeeded = true;
+                        }else{
+                            neededHelps[i].moreHelpNeeded = false;
+                        }
                     }else{
-                        neededHelps[i].moreHelpNeeded = false;
+                        neededHelps[i].noCount = true
                     }
                 }
-                this.setState({ result: neededHelps});
+                this.setState({ result: neededHelps, originalResults: neededHelps});
           })
     }
     removeIds= (id, email) =>{ 
@@ -128,8 +157,8 @@ class Neededhelp extends Component {
             .then(function(response) {
                 if(response.ok) {
                   //alert('Thank you the your offer to help. You will be contacted by the organizer!');
-                  this.getData();
                   //document.getElementById("caddCampaignForm").reset();
+                  this.getData();
                 }
              }).then(function(data) { 
                //console.log(data)
@@ -148,7 +177,7 @@ class Neededhelp extends Component {
     };
     addHelp(event){
         event.preventDefault();
-        var count = (event.target.count.value != undefined && event.target.count.value !='0')? parseInt(event.target.count.value):0;
+        var count = (event.target.count.value != 'undefined' && event.target.count.value != undefined && event.target.count.value !='0' && event.target.count.value !='')? parseInt(event.target.count.value):0;
         const data = JSON.stringify({
             name : event.target.title.value,
             zipcode : parseInt(event.target.zipcode.value),
@@ -177,7 +206,7 @@ class Neededhelp extends Component {
     }
 
     render() {
-        // console.log("this.state.result: ", this.state.result);
+        //console.log("this.state.result: ", this.state.result);
         const indexOfLastItem = this.state.currentPage * this.state.itmsPerPage;
         const indexOfFirstItem = indexOfLastItem - this.state.itmsPerPage;
         const currentItems = this.state.result.slice(indexOfFirstItem, indexOfLastItem);
@@ -186,10 +215,20 @@ class Neededhelp extends Component {
          const paginate = pageNumber => this.setState({currentPage: pageNumber})
 
         return(
-            <Card variant="outlined">
+            <Card elevation={4}>
                 <CardHeader title="People/organizations need help"/>
                 <Grid container alignItems="flex-start" justify="flex-end" direction="row">
                     <CardActions>
+                        <Tooltip title="Clear local help filter">
+                            <IconButton aria-label="Clear local help filter" onClick={this.clearLocal}>
+                                <ClearIcon/>
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Filter only local helps">
+                            <IconButton aria-label="Filter only local helps" onClick={this.showLocalOnly}>
+                                <LocalOfferIcon />
+                            </IconButton>
+                        </Tooltip>
                         <Tooltip title="Add a New item">
                             <IconButton aria-label="Add a New item" onClick={this.onOpenModal}>
                                 <AddIcon />
@@ -198,14 +237,18 @@ class Neededhelp extends Component {
                     </CardActions>
                 </Grid>
                 <CardContent>
-                    <div className="neededhelp-list section">
-                        <NeededhelpItem items={currentItems} loggedInUser={this.state.loggedInUser} removeIds={this.removeIds} addIds={this.addIds} />
-                        <Pagination
-                            postsPerPage={this.state.itmsPerPage}
-                            totalPosts={this.state.result.length}
-                            paginate={paginate}
-                        />
-                    </div>
+                    {(this.state.result != 'undefined' && this.state.result.length>0)?
+                        <div className="neededhelp-list section">
+                            <NeededhelpItem items={currentItems} loggedInUser={this.state.loggedInUser} removeIds={this.removeIds} addIds={this.addIds}  getData={this.getData} />
+                            <Pagination
+                                postsPerPage={this.state.itmsPerPage}
+                                totalPosts={this.state.result.length}
+                                paginate={paginate}
+                            />
+                        </div>
+                        :<p>Sorry, there is no item in your local area. Either remove filter to see the entire list 
+                            or change your current location</p>
+                    }
                     <Modal
                     show={this.state.modal}
                     onHide={this.onCloseModal}
