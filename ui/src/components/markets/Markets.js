@@ -40,9 +40,9 @@ class Markets extends Component {
                 "04. low": "0.00"
             }
         };
-        this.getTicker("^SPX");
+        //this.getTicker("^SPX");
         //this.getTicker("^DJI");
-        this.getTicker("^RUT");
+        //this.getTicker("^RUT");
 
 
         console.log('campaign', props.currentLocation)
